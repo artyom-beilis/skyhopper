@@ -1,0 +1,513 @@
+<!DOCTYPE>
+<html>
+<head>
+<!-- <meta HTTP-EQUIV="REFRESH" content="0; url=/uploader"> -->
+</head>
+<style>
+body { font-size: 300% ; color:red }
+button { width: 15% ; height:80px; font-size:30px }
+</style>
+<body>
+<canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
+<p>
+	<button onclick="global_fov=90;">FOV 90&deg;</button>
+	<button onclick="global_fov=60;">FOV 60&deg;</button>
+	<button onclick="global_fov=30;">FOV 30&deg;</button>
+	<button onclick="global_mag=3;">MAG 3</button>
+	<button onclick="global_mag=4;">MAG 4</button>
+	<button onclick="global_mag=5;">MAG 5</button>
+</p>
+<p>
+	<button onclick="align();">Align</button>
+	<button onclick="global_expecting_select=selectTaret;" >Target</button>
+	<button onclick="resetAll();">Reset</button>
+	<span id="alignment"></span>
+</p>
+<p id="orient"></p>
+<p id="orientN"></p>
+<script src='jsdb.js' ></script>
+<script>
+
+var global_targets_list = [];
+var global_target_index = -1;
+var global_align_index = -1;
+var global_expecting_select = null;
+
+var global_fov = 60;
+var global_mag = 4;
+var gdata = {
+	"lat" : 31.8804575,
+	"lon" : 34.8046192,
+	"alpha" : 24.900000000000002,
+	"alpha_gyro" : 0,
+	"alpha_diff" : 0,
+	"beta" : 177.9,
+	"gamma" : 68,
+	"time" : Date.now(), //1614716453109
+}
+
+var align_matrix = [1,0,0,0,1,0,0,0,1];
+var use_gyro = false;
+
+console.log('!!!')
+
+/// taken from https://www.w3.org/TR/2016/CR-orientation-event-20160818/#worked-example-2
+
+var degtorad = Math.PI / 180; // Degree-to-Radian conversion
+
+function resetAll()
+{
+	global_expecting_select = null;
+	global_target_index = -1;
+	global_align_index = -1;
+	use_gyro=false;
+}
+
+function align()
+{
+	use_gyro=false;
+	global_expecting_select = selectAlign;
+}
+
+function normV(v)
+{
+	var len = Math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+	return [v[0]/len,v[1]/len,v[2]/len];
+}
+
+function matMul(A,B)
+{
+	var v1 = mvec(A,[B[0],B[3],B[6]]);
+	var v2 = mvec(A,[B[1],B[4],B[7]]);
+	var v3 = mvec(A,[B[2],B[5],B[8]]);
+	return [v1[0],v2[0],v3[0],
+		v1[1],v2[1],v3[1],
+		v1[2],v2[2],v3[2]];
+}
+
+function matAdd(A,alpha,B,beta)
+{
+	var res = [];
+	for(var i=0;i<9;i++) {
+		res.push(A[i]*alpha + B[i]*beta);
+	}
+	return res;
+}
+
+function matEye()
+{
+	return [1,0,0, 0,1,0, 0,0,1];
+}
+
+function selectAlign(index)
+{
+	var camRays =  getCameraRays();
+	var st = allstars[index];
+	var tr = rayFromPos(st.RA,st.DE);
+	var fw = camRays[2];
+	var left = camRays[1];
+	var dAZ = Math.asin(crossProd(normV([tr[0],tr[1],0]),normV([fw[0],fw[1],0]))[2]);
+	var dAlt = Math.asin(tr[2]) - Math.asin(fw[2]);
+	// rotate around AZ axis
+	var daz_mat =  [  Math.cos(dAZ), Math.sin(dAZ), 0,
+			 -Math.sin(dAZ), Math.cos(dAZ), 0,
+			 0,		 0,		1];
+	// rotate around up/dwn - axis of the camera
+	var u0 = left[0];
+	var u1 = left[1];
+	var u2 = left[2];
+	var W = [ 0, -u2, u1,   u2, 0, -u0,  -u1, u0, 0 ]
+	var dalt_mat = matAdd(matEye(),1,W,Math.sin(-dAlt));
+	dalt_mat = matAdd(dalt_mat,1,matMul(W,W),2*Math.sin(-dAlt/2)*Math.sin(-dAlt/2));
+	
+	//align_matrix = daz_mat;
+	align_matrix = matMul(daz_mat,dalt_mat); 
+	
+	use_gyro = true;
+	global_align_index = index;
+	gdata.alpha_diff = gdata.alpha - gdata.alpha_gyro;
+	global_expecting_select = null;
+}
+
+function getRotationMatrix( alpha, beta, gamma ) {
+
+  var _x = beta  ? beta  * degtorad : 0; // beta value
+  var _y = gamma ? gamma * degtorad : 0; // gamma value
+  var _z = alpha ? alpha * degtorad : 0; // alpha value
+
+  var cX = Math.cos( _x );
+  var cY = Math.cos( _y );
+  var cZ = Math.cos( _z );
+  var sX = Math.sin( _x );
+  var sY = Math.sin( _y );
+  var sZ = Math.sin( _z );
+
+  //
+  // ZXY rotation matrix construction.
+  //
+
+  var m11 = cZ * cY - sZ * sX * sY;
+  var m12 = - cX * sZ;
+  var m13 = cY * sZ * sX + cZ * sY;
+
+  var m21 = cY * sZ + cZ * sX * sY;
+  var m22 = cZ * cX;
+  var m23 = sZ * sY - cZ * cY * sX;
+
+  var m31 = - cX * sY;
+  var m32 = sX;
+  var m33 = cX * cY;
+
+  return [
+    m11,    m12,    m13,
+    m21,    m22,    m23,
+    m31,    m32,    m33
+  ];
+
+};
+
+function mvec(m,v)
+{
+	return [ m[0] * v[0] + m[1] * v[1] + m[2] * v[2],
+		 m[3] * v[0] + m[4] * v[1] + m[5] * v[2],
+		 m[6] * v[0] + m[7] * v[1] + m[8] * v[2] ];
+}
+
+function crossProd(a,b)
+{
+	return [ a[1]*b[2] - a[2]*b[1],
+		 a[2]*b[0] - a[0]*b[2],
+		 a[0]*b[1] - a[1]*b[0] ];
+}
+
+function getCameraRays()
+{
+	// zxy
+	// after Mul comonents are [S,E,D]
+	var alpha = use_gyro ? gdata.alpha_gyro + gdata.alpha_diff : gdata.alpha;
+	var M = getRotationMatrix(alpha,gdata.beta,gdata.gamma);
+	//var top = mvec(M,[1,0,0]);
+	//var lft = mvec(M,[0,1,0]);
+	//var fwd = mvec(M,[0,0,-1]);
+	
+	
+
+	var fwd = mvec(M,[0,1,0]);
+
+	// make sure left  is horizontal
+
+	var fwd_hlen = Math.sqrt(fwd[0]*fwd[0] + fwd[1]*fwd[1])
+	var fwd_hor = [fwd[0]/fwd_hlen,fwd[1]/fwd_hlen,0.0];
+
+	var lft = [-fwd_hor[1],fwd_hor[0],0.0]
+	var top = crossProd(fwd,lft);
+
+	if(use_gyro) {
+		return [
+			mvec(align_matrix,top),
+			mvec(align_matrix,lft),
+			mvec(align_matrix,fwd)
+		];
+	}
+	else {
+		return [top,lft,fwd];
+	}
+}
+
+function rayFromPos(RAd,DEd)
+{
+	var deg2rad = Math.PI / 180;
+	RA = RAd * deg2rad;
+	DE = DEd * deg2rad;
+	var jd = gdata.time * 1e-3 / 86400.0 + 2440587.5;
+	var tu = jd - 2451545.0;
+	var angle = Math.PI * 2 * (0.7790572732640+1.00273781191135448 * tu);
+	var q = angle + gdata.lon*deg2rad;
+	var H = q - RA;
+	var f = deg2rad * gdata.lat;
+
+	var az_y = Math.sin(H);
+	var az_x = (Math.cos(H) * Math.sin(f) - Math.tan(DE) * Math.cos(f));
+	var az = Math.atan2(az_y,az_x)
+	var sinH = Math.sin(f) * Math.sin(DE) + Math.cos(f) * Math.cos(DE) * Math.cos(H);
+	var hz = Math.asin(sinH)
+	if(RAd == 0 && DEd == 90)
+		console.log(az_y,az_x,"AZ:",az / deg2rad,"HZ",hz / deg2rad)
+	var ray_n = -Math.cos(az) * Math.cos(hz);
+	var ray_e = -Math.sin(az) * Math.cos(hz);
+	var ray_u = Math.sin(hz);
+	return [ ray_e, ray_n, ray_u ];
+}
+
+function sprod(v1,v2)
+{
+	return v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2];
+}
+
+function cameraBearing(RAd,DEd,cameraRays)
+{
+	var ray = rayFromPos(RAd,DEd);
+	var top = cameraRays[0];
+	var lft = cameraRays[1];
+	var fwd = cameraRays[2];
+	var x = -sprod(lft,ray);
+	var y = sprod(top,ray);
+	var z = sprod(fwd,ray);
+	return {"x":x,"y":y,"z":z};
+}
+
+function projectToCamera(RAd,DEd,cameraRays,in_fov=true)
+{
+	var deg2rad = Math.PI / 180;
+	var fov_td = global_fov / 2 * deg2rad;
+	var ratio = canvas.width / canvas.height;
+	var fov_lr = fov_td * ratio;
+	var xyz = cameraBearing(RAd,DEd,cameraRays)
+	var x=xyz.x; var y=xyz.y;  var z=xyz.z;
+	if(z<=0)
+		return null;
+	var lim_x = Math.tan(fov_lr);
+	var lim_y = Math.tan(fov_td);
+	if(in_fov) {
+		if(x < -lim_x || x > lim_x)
+			return null;
+		if(y < -lim_y || y > lim_y)
+			return null;
+	}
+	return { x:(x + lim_x) / (lim_x*2), y: 1 - (y + lim_y) / (lim_y * 2) };
+}
+
+function plotStar(star,camRays,highlight)
+{
+	var pos = projectToCamera(star.RA,star.DE,camRays);
+	if(!pos)
+		return null;
+	context.beginPath();	
+	var size = 6.5 - star.AM;
+	if(size < 1)
+		size = 1;
+	var color;
+	if(highlight) {
+		color = highlight;
+		size = 10;
+	}
+	else {
+		color = 'white';
+	}
+	if(star.t == 'S')
+		context.fillStyle = color;
+	else
+		context.fillStyle = 'black';
+	var pix_x = pos.x * canvas.width;
+	var pix_y = pos.y * canvas.height;
+	if(star.t != 'Ca') {
+		context.strokeStyle = color;
+		context.lineWidth = 1;
+		context.arc(pix_x,pix_y,size,0,2*Math.PI,false);
+		context.fill();
+		context.stroke();
+	}
+	if(star.name) {
+		if(star.t == 'Ca') {
+			color = 'yellow';
+		}
+		context.strokeStyle = color;
+		context.fillStyle = color;
+		if(star.t == 'Ca') {
+			context.font = "30px Sans"
+			context.textBaseline = 'middle';
+			context.textAlign = 'center';
+			context.fillText(star.name,pix_x,pix_y)
+		}
+		else {
+			context.font = "20px Sans";
+			context.textBaseline = 'bottom';
+			context.textAlign = 'start';
+			context.fillText(star.name,pix_x + size + 1,pix_y - size - 1)
+		}
+	}
+	return { x: pix_x, y:pix_y , index:-1};
+}
+
+function plotLines(camRays)
+{
+	for(var i=0;i<constellation_lines.length;i++) {
+		line = constellation_lines[i];
+		var p1 = projectToCamera(line.r0,line.d0,camRays,false);
+		var p2 = projectToCamera(line.r1,line.d1,camRays,false);
+		if(!p1 || !p2)
+			continue;
+		context.beginPath();	
+		context.strokeStyle = 'yellow';
+		context.lineWidth = 1;
+		context.moveTo(p1.x*canvas.width,p1.y*canvas.height);
+		context.lineTo(p2.x*canvas.width,p2.y*canvas.height);
+		context.stroke();
+	}
+}
+
+
+function plotBearing(xyz)
+{
+	context.beginPath();
+	context.strokeStyle = "green";
+	context.fillStyle = "green";
+	context.lineWidth = 5;
+	context.arc(canvas.width/2,canvas.height/2,10,0,2*Math.PI,false);
+	context.moveTo(canvas.width/2,canvas.height/2);
+	var dx = xyz.x;
+	var dy = -xyz.y;
+	var r = 1 / Math.sqrt(dx*dx+dy*dy);
+	dx = dx*r;
+	dy = dy*r;
+	context.lineTo(canvas.width/2 + dx * 100,canvas.height/2 + dy * 100);
+	var updn = (dy > 0 ? 'Down' : 'Up' ) + ' ' + Math.abs(Math.atan2(-xyz.y,xyz.z) / Math.PI * 180).toFixed(1) + '\u00b0';
+	var left = (dx > 0 ? 'Right' : 'Left' ) + ' ' + Math.abs(Math.round(Math.atan2(xyz.x,xyz.z) / Math.PI * 180)).toFixed(1) + '\u00b0';
+	context.stroke();
+	context.lineWidth = 0;
+	context.font = "50px Serif";
+	context.strokeStyle = "green";
+	context.fillStyle = "green";
+	context.textBaseline = 'middle';
+	context.textAlign = 'end';
+	context.fillText(updn,canvas.width - 50,canvas.height / 2)
+	context.textAlign = 'center';
+	context.textBaseline = 'bottom';
+	context.fillText(left,canvas.width/2,canvas.height - 50)
+}			
+
+
+
+
+function plotStars()
+{
+	global_targets_list=[];
+	gdata.time = Date.now();
+	//console.log(JSON.stringify(rayFromPos(0,90)))
+	var camRays = getCameraRays();
+	context.fillStyle = "black";
+	context.fillRect(0, 0, canvas.width, canvas.height);
+	context.fillStyle = 'white';
+
+	//console.log('Sirius ' + allstars[0].AM + ' ' + JSON.stringify(rayFromPos(allstars[0].RA,allstars[0].DE)))
+
+	for(var i=0;i<allstars.length;i++) {
+		if(allstars[i].AM > global_mag)
+			break;
+		var highlight = null;
+		if(i == global_target_index)
+			highlight = 'yellow';
+		else if(i == global_align_index)
+			highlight = 'magenta';
+		var  pos = plotStar(allstars[i],camRays,highlight);
+		if(pos && allstars[i].t!='Ca') {
+			pos.index = i;
+			global_targets_list.push(pos);
+		}
+	}
+	if(global_target_index >= 0) {
+		var star = allstars[global_target_index];
+		var xyz = cameraBearing(star.RA,star.DE,camRays);
+		plotBearing(xyz);
+
+	}
+	plotLines(camRays);
+	setTimeout(plotStars,200)
+}
+
+function selectTaret(index)
+{
+	global_target_index = index;
+	global_expecting_select = null;
+}
+
+function selectionEvent(e)
+{
+	let x = e.clientX;
+	let y = e.clientY;
+	let min_dist = 1e100;
+	let min_index = -1;
+	for(var i=0;i<global_targets_list.length;i++) {
+		let dx = global_targets_list[i].x - x;
+		let dy = global_targets_list[i].y - y;
+		let dist = dx*dx + dy*dy;
+		if(min_dist > dist) {
+			min_dist = dist;
+			min_index = global_targets_list[i].index;
+		}
+	}
+	if(global_expecting_select) {
+		global_expecting_select(min_index);
+	}
+}
+
+function showpos(position)
+{
+	var latlon = position.coords.latitude + "," + position.coords.longitude;
+	gdata.lat = position.coords.latitude;
+	gdata.lon = position.coords.longitude;
+
+	//console.log(latlon)
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showpos);
+  }
+}
+
+function gyroListener(event)
+{
+	gdata.alpha_gyro = event.alpha;
+}
+
+function deviceOrientationListener(event) {
+	if(!(event.alpha === null)) {
+		gdata.alpha = event.alpha;
+		gdata.beta = event.beta;
+		gdata.gamma = event.gamma;
+	}
+	var status=use_gyro ? "Aligned" : "Not Aligned";
+	document.getElementById("alignment").innerHTML = status
+
+	var M = getRotationMatrix(gdata.alpha,gdata.beta,gdata.gamma);
+
+	return;
+
+	var rz = getCameraRays();
+	var extra = "Aligned=" + use_gyro + "</br><table>"
+	for(var i=0;i<3;i++) {
+		extra += "<tr>"
+		for (var j=0;j<3;j++) {
+			extra+= "<td>" + Math.round(rz[i][j]*100) + "</td>";
+		}
+		extra += "</tr>";
+	}
+
+	document.getElementById("orient").innerHTML = "a=" + Math.round(gdata.alpha*10)/10 + " b=" + Math.round(gdata.beta*10)/10 + " g=" + Math.round(gdata.gamma*10)/10 + " <br>" + extra;
+}
+
+
+if (window.DeviceOrientationEvent) {
+	window.addEventListener("deviceorientationabsolute", deviceOrientationListener);
+	window.addEventListener("deviceorientation",gyroListener);
+} else {
+	alert("Sorry, your browser doesn't support Device Orientation");
+}
+
+// Elements for taking the snapshot
+var canvas = document.getElementById('myCanvas');
+canvas.width = document.body.clientWidth;
+canvas.height = document.body.clientHeight;
+var context = canvas.getContext('2d');
+setTimeout(getLocation,500)
+setTimeout(plotStars,1000)
+document.body.addEventListener('mousedown',selectionEvent);
+
+});
+
+</script>
+
+
+</body>
+</html>
