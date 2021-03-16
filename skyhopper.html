@@ -35,9 +35,24 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
 </p>
 <p>
+	<button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
 </p>
 <p id="orient"></p>
 <p id="orientN"></p>
+<div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
+<p><b>Settings</b>
+<button class="incdec_but" style="float:right" onclick="showConfig('none');">X</button>
+</p>
+<p>
+DSO Magnitude &leq;<span id="dso_level_val">8</span><br/>
+<input style="width:100%" type="range" id="dso_level" name="dso_level" min="5" max="20" value="8" step="1" onchange="setDSOMag(this.value)" />
+</p>
+<p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
+<p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
+<p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
+<p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
+<p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
+</div>
 <script src='jsdb.js' ></script>
 <script>
 
@@ -49,6 +64,15 @@ var global_day_style = {
 	altaz		: 'red',
 	target		: 'cyan',
 	align		: 'magenta'
+};
+
+var global_show_obj = {
+	'S': true,
+	'Oc': true,
+	'Gc': true,
+	'Ca': true,
+	'Ga':true,
+	'Ne':true
 };
 
 var global_night_style = {
@@ -73,6 +97,7 @@ var global_expecting_select = null;
 var global_camera_projection = true;
 var global_expected_frame_rate_ms = 66;
 var global_use_compass = false;
+var global_dso_mag = parseInt(document.getElementById('dso_level_val').innerHTML);
 
 var global_fov = 60;
 var global_mag = 4;
@@ -93,6 +118,11 @@ var global_align_matrix = [1,0,0,0,1,0,0,0,1];
 var global_use_gyro = false;
 var global_full_screen = false;
 
+
+function showConfig(v)
+{
+	document.getElementById('config').style.display = v;
+}
 function toggleFS()
 {
 	var fs = document.getElementById('req_fs');
@@ -420,7 +450,7 @@ function plotStar(star,camRays,highlight)
 	if(!pos)
 		return null;
 	context.beginPath();	
-	var size = 6.5 - star.AM;
+	var size = star.t == 'S' ? 6.5 - star.AM : 6 ;
 	if(size < 1)
 		size = 1;
 	var color;
@@ -440,9 +470,57 @@ function plotStar(star,camRays,highlight)
 	if(star.t != 'Ca') {
 		context.strokeStyle = color;
 		context.lineWidth = 1;
-		context.arc(pix_x,pix_y,size,0,2*Math.PI,false);
-		context.fill();
-		context.stroke();
+		if(star.t == 'Ga') {
+			context.ellipse(pix_x,pix_y,size*1.5,size/1.5,Math.PI/4,0,2*Math.PI,false);
+			context.fill();
+			context.stroke();
+			context.beginPath();	
+			context.arc(pix_x,pix_y,size/3,0,2*Math.PI,false);
+			context.fillStyle = color;
+			context.fill();
+			context.stroke();
+		}
+		else if(star.t == 'Gc') {
+			context.lineWidth = 2;
+			context.setLineDash([1,3])
+			context.arc(pix_x,pix_y,size,2*Math.PI,false);
+			context.stroke();
+			context.beginPath();	
+			context.setLineDash([])
+			context.fillStyle = color;
+			context.arc(pix_x,pix_y,size/3,0,2*Math.PI,false);
+			context.fill();
+			context.stroke();
+		}
+		else if(star.t == 'Oc') {
+			context.lineWidth = 2;
+			context.setLineDash([1,3])
+			context.arc(pix_x,pix_y,size,2*Math.PI,false);
+			context.stroke();
+			context.beginPath();	
+			context.setLineDash([1,3])
+			context.arc(pix_x,pix_y,size/3,0,2*Math.PI,false);
+			context.fill();
+			context.stroke();
+			context.setLineDash([])
+		}
+		else if(star.t == 'Ne') {
+			context.lineWidth = 1;
+			context.moveTo(pix_x - size,pix_y - size);
+			var f = 4;
+			context.bezierCurveTo(pix_x + f*size,pix_y - size,pix_x -f*size,pix_y + size,pix_x+size,pix_y + size)
+			context.stroke();
+			context.beginPath();
+			context.fillStyle=color;
+			context.arc(pix_x,pix_y,size/3,0,2*Math.PI,false);
+			context.fill();
+			context.stroke();
+		}
+		else {
+			context.arc(pix_x,pix_y,size,0,2*Math.PI,false);
+			context.fill();
+			context.stroke();
+		}
 	}
 	if(star.name) {
 		if(star.t == 'Ca') {
@@ -468,6 +546,8 @@ function plotStar(star,camRays,highlight)
 
 function plotLines(camRays)
 {
+	if(!global_show_obj.Ca)
+		return;
 	for(var i=0;i<constellation_lines.length;i++) {
 		line = constellation_lines[i];
 		var p1 = projectToCamera(line.r0,line.d0,camRays,false);
@@ -550,10 +630,14 @@ function plotStars()
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	context.fillStyle = global_style.star;
 
-
 	for(var i=0;i<allstars.length;i++) {
-		if(allstars[i].AM > global_mag)
-			break;
+		var st = allstars[i].t;
+		var mag = allstars[i].AM;
+		if((st == 'S' && mag > global_mag) || (st != 'S' && mag > global_dso_mag) || !global_show_obj[st])
+		{
+			i=allstars_index[st] - 1;
+			continue
+		}
 		var highlight = null;
 		if(i == global_target_index)
 			highlight = global_style.target;
@@ -562,7 +646,7 @@ function plotStars()
 		var  pos = plotStar(allstars[i],camRays,highlight);
 		// select only stars if not aligned
 		// if aligned select all but constellations
-		if(pos && allstars[i].t!='Ca' && (allstars[i].t == 'S' || global_use_gyro)) {
+		if(pos && st!='Ca' && (st == 'S' || global_use_gyro)) {
 			pos.index = i;
 			global_targets_list.push(pos);
 		}
@@ -586,6 +670,7 @@ function plotStars()
 		setTimeout(plotStars,global_expected_frame_rate_ms-passed);
 	}
 }
+
 
 function plotAltAz(fwd)
 {
@@ -765,6 +850,12 @@ function switchMode()
 	}
 }
 
+function setDSOMag(val)
+{
+	global_dso_mag = parseInt(val);
+	document.getElementById('dso_level_val').innerHTML = '' + global_dso_mag;
+}
+
 setupOrientationEvents();
 // global drawing stuff
 var canvas = document.getElementById('myCanvas');
@@ -778,7 +869,7 @@ document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);
 document.body.addEventListener('touchcancel',manualUp);
 document.body.addEventListener('touchmove',manualMove);
-dontPropMouseDown(["ui_but","incdec_but"]);
+dontPropMouseDown(["ui_but","incdec_but","config_div"]);
 </script>
 
 

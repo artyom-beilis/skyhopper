@@ -1,0 +1,6 @@
+[submodule "OpenNGC"]
+	path = OpenNGC
+	url = https://github.com/mattiaverga/OpenNGC.git
+[submodule "western_constellations_atlas_of_space"]
+	path = western_constellations_atlas_of_space
+	url = https://github.com/eleanorlutz/western_constellations_atlas_of_space.git
