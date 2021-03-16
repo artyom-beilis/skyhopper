@@ -1,71 +1,169 @@
 <!DOCTYPE>
 <html>
 <head>
-<!-- <meta HTTP-EQUIV="REFRESH" content="0; url=/uploader"> -->
+<title>Sky Hopper - Web Application for Sky Navigation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <style>
-body { font-size: 300% ; color:red }
-button { width: 15% ; height:80px; font-size:30px }
+body { font-size: 5mm ; color:red ; font-family: sans }
+button { height:10mm; font-size:5mm ; text-align:center; background-color:black; color:red; border: 2px solid red }
+.comp_but, .incdec_but { width: 10mm ; height:10mm; font-size:5mm }
+.comp_but { float:right }
 </style>
 <body>
 <canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
 <p>
-	<button onclick="global_fov=90;">FOV 90&deg;</button>
-	<button onclick="global_fov=60;">FOV 60&deg;</button>
-	<button onclick="global_fov=30;">FOV 30&deg;</button>
-	<button onclick="global_mag=3;">MAG 3</button>
-	<button onclick="global_mag=4;">MAG 4</button>
-	<button onclick="global_mag=5;">MAG 5</button>
+		<button class="incdec_but" onclick="decFOV();">-</button>
+		<button class="incdec_but" onclick="incFOV();">+</button>
+		&angle;<span id="fov_val">60&deg;</span><span style="font-size:16px" id="rtime"></span>
+		<span style="float:right">
+			<button class="incdec_but" id="night_mode" onclick="switchMode();">N</button>
+			<button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
+		</span>
 </p>
 <p>
-	<button onclick="align();">Align</button>
-	<button onclick="global_expecting_select=selectTaret;" >Target</button>
-	<button onclick="resetAll();">Reset</button>
+		<button class="incdec_but" onclick="decMAG();">-</button>
+		<button class="incdec_but" onclick="incMAG();">+</button>
+		<i>m&leq;</i><span id="mag_val">4</span>
+		<button id="req_fs" class="incdec_but" style="float:right" onclick="toggleFS();">&#x2725;</button>
+</p>
+<p>
+	<button class="ui_but" onclick="align();">Align</button>
 	<span id="alignment"></span>
+	<button class="comp_but" id="nocompass_button" style="display:none"><strike>&#x238b;</strike></button>
+	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
+	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
+</p>
+<p>
 </p>
 <p id="orient"></p>
 <p id="orientN"></p>
 <script src='jsdb.js' ></script>
 <script>
 
+var global_day_style = {
+	cross 		: 'blue',
+	constelations 	: 'yellow',
+	bearing 	: 'green',
+	star		: 'white',
+	altaz		: 'red',
+	target		: 'cyan',
+	align		: 'magenta'
+};
+
+var global_night_style = {
+	cross 		: 'red',
+	constelations 	: '#880000',
+	bearing 	: 'red',
+	star		: 'red',
+	altaz		: 'red',
+	target		: '#AA0000',
+	align		: '#AA0000'
+};
+
+
+
+var global_style = global_day_style;
+
 var global_targets_list = [];
+var global_prev_xy=null;
 var global_target_index = -1;
 var global_align_index = -1;
 var global_expecting_select = null;
+var global_camera_projection = true;
+var global_expected_frame_rate_ms = 66;
+var global_use_compass = false;
 
 var global_fov = 60;
 var global_mag = 4;
 var gdata = {
-	"lat" : 31.8804575,
-	"lon" : 34.8046192,
-	"alpha" : 24.900000000000002,
+	"lat" : 31.9,
+	"lon" : 34.8,
+	"compass_alpha" : 0,
+	"alpha" : 0,
+	"alpha_user_offset" : 0,
 	"alpha_gyro" : 0,
 	"alpha_diff" : 0,
-	"beta" : 177.9,
-	"gamma" : 68,
+	"beta" : 0,
+	"gamma" : 0,
 	"time" : Date.now(), //1614716453109
 }
 
-var align_matrix = [1,0,0,0,1,0,0,0,1];
-var use_gyro = false;
+var global_align_matrix = [1,0,0,0,1,0,0,0,1];
+var global_use_gyro = false;
+var global_full_screen = false;
 
-console.log('!!!')
+function toggleFS()
+{
+	var fs = document.getElementById('req_fs');
+	if(!global_full_screen) {
+		document.documentElement.requestFullscreen({navigationUI:'hide'});
+		fs.innerHTML = '&#x2193';
+		global_full_screen = true;
+	}
+	else {
+		document.exitFullscreen();
+		fs.innerHTML = '&#x2725;'
+		global_full_screen = false;
+	}
+}
 
-/// taken from https://www.w3.org/TR/2016/CR-orientation-event-20160818/#worked-example-2
+function incMAG()
+{
+	if(global_mag < 6)
+		global_mag += 1;
+	updateMAG()
+}
+function decMAG()
+{
+	if(global_mag > 1)
+		global_mag -=1;
+	updateMAG();
+}
+function updateMAG()
+{
+	document.getElementById("mag_val").innerHTML = global_mag + "";
+}
 
-var degtorad = Math.PI / 180; // Degree-to-Radian conversion
+function incFOV()
+{
+	if(global_fov < 150)
+		global_fov += 30;
+	updateFOV()
+}
+function decFOV()
+{
+	if(global_fov > 30)
+		global_fov -=30;
+	updateFOV();
+}
+function updateFOV()
+{
+	document.getElementById("fov_val").innerHTML = global_fov + "&deg;";
+}
+
+function setUseGyro(val,message=null)
+{
+	global_use_gyro = val;
+	if(message)
+		var status = message;
+	else
+		var status= global_use_gyro ? "Aligned" : "Not Aligned";
+	document.getElementById("alignment").innerHTML = status
+}
 
 function resetAll()
 {
 	global_expecting_select = null;
 	global_target_index = -1;
 	global_align_index = -1;
-	use_gyro=false;
+	setUseGyro(false);
 }
 
 function align()
 {
-	use_gyro=false;
+	setUseGyro(false,"Select Star");
+	global_align_index = -1;
 	global_expecting_select = selectAlign;
 }
 
@@ -120,14 +218,20 @@ function selectAlign(index)
 	var dalt_mat = matAdd(matEye(),1,W,Math.sin(-dAlt));
 	dalt_mat = matAdd(dalt_mat,1,matMul(W,W),2*Math.sin(-dAlt/2)*Math.sin(-dAlt/2));
 	
-	//align_matrix = daz_mat;
-	align_matrix = matMul(daz_mat,dalt_mat); 
+	//global_align_matrix = daz_mat;
+	global_align_matrix = matMul(daz_mat,dalt_mat); 
 	
-	use_gyro = true;
+	setUseGyro(true);
+	gdata.alpha_diff = (gdata.alpha + gdata.alpha_user_offset) - gdata.alpha_gyro;
 	global_align_index = index;
-	gdata.alpha_diff = gdata.alpha - gdata.alpha_gyro;
-	global_expecting_select = null;
+	global_expecting_select = selectTaret;
 }
+
+/// rotation matrix is 
+/// taken from https://www.w3.org/TR/2016/CR-orientation-event-20160818/#worked-example-2
+
+var degtorad = Math.PI / 180; // Degree-to-Radian conversion
+
 
 function getRotationMatrix( alpha, beta, gamma ) {
 
@@ -184,7 +288,7 @@ function getCameraRays()
 {
 	// zxy
 	// after Mul comonents are [S,E,D]
-	var alpha = use_gyro ? gdata.alpha_gyro + gdata.alpha_diff : gdata.alpha;
+	var alpha = global_use_gyro ? gdata.alpha_gyro + gdata.alpha_diff : gdata.alpha + gdata.alpha_user_offset;
 	var M = getRotationMatrix(alpha,gdata.beta,gdata.gamma);
 	//var top = mvec(M,[1,0,0]);
 	//var lft = mvec(M,[0,1,0]);
@@ -202,11 +306,11 @@ function getCameraRays()
 	var lft = [-fwd_hor[1],fwd_hor[0],0.0]
 	var top = crossProd(fwd,lft);
 
-	if(use_gyro) {
+	if(global_use_gyro) {
 		return [
-			mvec(align_matrix,top),
-			mvec(align_matrix,lft),
-			mvec(align_matrix,fwd)
+			mvec(global_align_matrix,top),
+			mvec(global_align_matrix,lft),
+			mvec(global_align_matrix,fwd)
 		];
 	}
 	else {
@@ -231,8 +335,6 @@ function rayFromPos(RAd,DEd)
 	var az = Math.atan2(az_y,az_x)
 	var sinH = Math.sin(f) * Math.sin(DE) + Math.cos(f) * Math.cos(DE) * Math.cos(H);
 	var hz = Math.asin(sinH)
-	if(RAd == 0 && DEd == 90)
-		console.log(az_y,az_x,"AZ:",az / deg2rad,"HZ",hz / deg2rad)
 	var ray_n = -Math.cos(az) * Math.cos(hz);
 	var ray_e = -Math.sin(az) * Math.cos(hz);
 	var ray_u = Math.sin(hz);
@@ -256,18 +358,43 @@ function cameraBearing(RAd,DEd,cameraRays)
 	return {"x":x,"y":y,"z":z};
 }
 
-function projectToCamera(RAd,DEd,cameraRays,in_fov=true)
+function getFOV()
+{
+	var ratio = canvas.width / canvas.height;
+	var fov_td,fov_lr;
+	if(ratio < 1) {
+		fov_td = global_fov;
+		fov_lr = fov_td * ratio;
+	}
+	else {
+		fov_lr = global_fov;
+		fov_td = fov_lr / ratio;
+	}
+	return {"lr":fov_lr,"td":fov_td};
+}
+
+
+function xyzTo2d(xyz,in_fov=true)
 {
 	var deg2rad = Math.PI / 180;
-	var fov_td = global_fov / 2 * deg2rad;
-	var ratio = canvas.width / canvas.height;
-	var fov_lr = fov_td * ratio;
-	var xyz = cameraBearing(RAd,DEd,cameraRays)
+	var fov = getFOV();
+	var fov_td = fov.td * deg2rad / 2;
+	var fov_lr = fov.lr * deg2rad / 2;
 	var x=xyz.x; var y=xyz.y;  var z=xyz.z;
+
 	if(z<=0)
 		return null;
-	var lim_x = Math.tan(fov_lr);
-	var lim_y = Math.tan(fov_td);
+	if(global_camera_projection) {
+		var lim_x = Math.sin(fov_lr);
+		var lim_y = Math.sin(fov_td);
+	}
+	else {
+		x = Math.asin(x);
+		y = Math.asin(y)
+		var lim_x = fov_lr;
+		var lim_y = fov_td;
+
+	}
 	if(in_fov) {
 		if(x < -lim_x || x > lim_x)
 			return null;
@@ -276,9 +403,19 @@ function projectToCamera(RAd,DEd,cameraRays,in_fov=true)
 	}
 	return { x:(x + lim_x) / (lim_x*2), y: 1 - (y + lim_y) / (lim_y * 2) };
 }
+function projectToCamera(RAd,DEd,cameraRays,in_fov=true)
+{
+	var xyz = cameraBearing(RAd,DEd,cameraRays)
+	return xyzTo2d(xyz,in_fov);
+}
 
 function plotStar(star,camRays,highlight)
 {
+	if(canvas.width != document.body.clientWidth || canvas.height != document.body.clientHeight) {
+		canvas.width = document.body.clientWidth;
+		canvas.height = document.body.clientHeight;
+	}
+	
 	var pos = projectToCamera(star.RA,star.DE,camRays);
 	if(!pos)
 		return null;
@@ -292,7 +429,7 @@ function plotStar(star,camRays,highlight)
 		size = 10;
 	}
 	else {
-		color = 'white';
+		color = global_style.star;
 	}
 	if(star.t == 'S')
 		context.fillStyle = color;
@@ -309,18 +446,18 @@ function plotStar(star,camRays,highlight)
 	}
 	if(star.name) {
 		if(star.t == 'Ca') {
-			color = 'yellow';
+			color = global_style.constelations;
 		}
 		context.strokeStyle = color;
 		context.fillStyle = color;
 		if(star.t == 'Ca') {
-			context.font = "30px Sans"
+			context.font = "4mm Sans"
 			context.textBaseline = 'middle';
 			context.textAlign = 'center';
 			context.fillText(star.name,pix_x,pix_y)
 		}
 		else {
-			context.font = "20px Sans";
+			context.font = "3mm Sans";
 			context.textBaseline = 'bottom';
 			context.textAlign = 'start';
 			context.fillText(star.name,pix_x + size + 1,pix_y - size - 1)
@@ -338,7 +475,7 @@ function plotLines(camRays)
 		if(!p1 || !p2)
 			continue;
 		context.beginPath();	
-		context.strokeStyle = 'yellow';
+		context.strokeStyle = global_style.constelations;
 		context.lineWidth = 1;
 		context.moveTo(p1.x*canvas.width,p1.y*canvas.height);
 		context.lineTo(p2.x*canvas.width,p2.y*canvas.height);
@@ -347,11 +484,26 @@ function plotLines(camRays)
 }
 
 
+function plotCross()
+{
+	context.strokeStyle = global_style.cross;
+	context.fillStyle = global_style.cross;
+	context.lineWidth = 3;
+	var dirs = [[1,0],[0,1],[-1,0],[0,-1]];
+	var length = 50;
+	var offset =10;
+	for(var i=0;i<dirs.length;i++) {
+		context.moveTo(canvas.width/2 + offset*dirs[i][0],canvas.height/2 + offset*dirs[i][1]);
+		context.lineTo(canvas.width/2 + length*dirs[i][0],canvas.height/2 + length*dirs[i][1]);
+	}
+	context.stroke();
+}
+
 function plotBearing(xyz)
 {
 	context.beginPath();
-	context.strokeStyle = "green";
-	context.fillStyle = "green";
+	context.strokeStyle = global_style.bearing;
+	context.fillStyle = global_style.bearing;
 	context.lineWidth = 5;
 	context.arc(canvas.width/2,canvas.height/2,10,0,2*Math.PI,false);
 	context.moveTo(canvas.width/2,canvas.height/2);
@@ -360,20 +512,29 @@ function plotBearing(xyz)
 	var r = 1 / Math.sqrt(dx*dx+dy*dy);
 	dx = dx*r;
 	dy = dy*r;
-	context.lineTo(canvas.width/2 + dx * 100,canvas.height/2 + dy * 100);
+	var length = 100;
+	var pos = xyzTo2d(xyz);
+	if(pos) {
+		var px = canvas.width * (pos.x - 0.5); 
+		var py = canvas.height * (pos.y - 0.5);
+		var dist = Math.sqrt(px*px + py*py);
+		if(dist < length)
+			length = dist;
+	}
+	context.lineTo(canvas.width/2 + dx * length,canvas.height/2 + dy * length);
 	var updn = (dy > 0 ? 'Down' : 'Up' ) + ' ' + Math.abs(Math.atan2(-xyz.y,xyz.z) / Math.PI * 180).toFixed(1) + '\u00b0';
-	var left = (dx > 0 ? 'Right' : 'Left' ) + ' ' + Math.abs(Math.round(Math.atan2(xyz.x,xyz.z) / Math.PI * 180)).toFixed(1) + '\u00b0';
+	var left = (dx > 0 ? 'Right' : 'Left' ) + ' ' + Math.abs(Math.atan2(xyz.x,xyz.z) / Math.PI * 180).toFixed(1) + '\u00b0';
 	context.stroke();
 	context.lineWidth = 0;
-	context.font = "50px Serif";
-	context.strokeStyle = "green";
-	context.fillStyle = "green";
+	context.font = "6mm Serif";
+	context.strokeStyle = global_style.bearing;
+	context.fillStyle = global_style.bearing;
 	context.textBaseline = 'middle';
 	context.textAlign = 'end';
-	context.fillText(updn,canvas.width - 50,canvas.height / 2)
+	context.fillText(updn,canvas.width - 5,canvas.height / 2)
 	context.textAlign = 'center';
 	context.textBaseline = 'bottom';
-	context.fillText(left,canvas.width/2,canvas.height - 50)
+	context.fillText(left,canvas.width/2,canvas.height - 5)
 }			
 
 
@@ -381,26 +542,27 @@ function plotBearing(xyz)
 
 function plotStars()
 {
+	var start=Date.now();
 	global_targets_list=[];
 	gdata.time = Date.now();
-	//console.log(JSON.stringify(rayFromPos(0,90)))
 	var camRays = getCameraRays();
 	context.fillStyle = "black";
 	context.fillRect(0, 0, canvas.width, canvas.height);
-	context.fillStyle = 'white';
+	context.fillStyle = global_style.star;
 
-	//console.log('Sirius ' + allstars[0].AM + ' ' + JSON.stringify(rayFromPos(allstars[0].RA,allstars[0].DE)))
 
 	for(var i=0;i<allstars.length;i++) {
 		if(allstars[i].AM > global_mag)
 			break;
 		var highlight = null;
 		if(i == global_target_index)
-			highlight = 'yellow';
+			highlight = global_style.target;
 		else if(i == global_align_index)
-			highlight = 'magenta';
+			highlight = global_style.align;
 		var  pos = plotStar(allstars[i],camRays,highlight);
-		if(pos && allstars[i].t!='Ca') {
+		// select only stars if not aligned
+		// if aligned select all but constellations
+		if(pos && allstars[i].t!='Ca' && (allstars[i].t == 'S' || global_use_gyro)) {
 			pos.index = i;
 			global_targets_list.push(pos);
 		}
@@ -411,14 +573,41 @@ function plotStars()
 		plotBearing(xyz);
 
 	}
+	else if(global_use_gyro) {
+		plotCross();
+	}
 	plotLines(camRays);
-	setTimeout(plotStars,200)
+	plotAltAz(camRays[2]);
+	var passed = Date.now() - start;
+	if(passed > global_expected_frame_rate_ms / 2) {
+		setTimeout(plotStars,global_expected_frame_rate_ms);
+	}
+	else {
+		setTimeout(plotStars,global_expected_frame_rate_ms-passed);
+	}
+}
+
+function plotAltAz(fwd)
+{
+	var alt = Math.asin(fwd[2]) / Math.PI * 180;
+	var az  = Math.atan2(fwd[0],fwd[1]) / Math.PI * 180;
+	alt = 'Alt:' + alt.toFixed(1);
+	if(az < 0)
+		az = 360 + az;
+	az  = 'Az:' + az.toFixed(1);
+	context.font = "5mm Sans"
+	context.textBaseline = 'bottom';
+	context.textAlign = 'end';
+	context.fillStyle = global_style.altaz;
+	context.fillText(alt,canvas.width - 5,canvas.height - 5)
+	context.textAlign = 'start';
+	context.fillText(az,5,canvas.height - 5)
 }
 
 function selectTaret(index)
 {
 	global_target_index = index;
-	global_expecting_select = null;
+	//global_expecting_select = null;
 }
 
 function selectionEvent(e)
@@ -446,8 +635,6 @@ function showpos(position)
 	var latlon = position.coords.latitude + "," + position.coords.longitude;
 	gdata.lat = position.coords.latitude;
 	gdata.lon = position.coords.longitude;
-
-	//console.log(latlon)
 }
 
 function getLocation() {
@@ -461,41 +648,125 @@ function gyroListener(event)
 	gdata.alpha_gyro = event.alpha;
 }
 
+
 function deviceOrientationListener(event) {
 	if(!(event.alpha === null)) {
-		gdata.alpha = event.alpha;
+		if(global_use_compass)
+			gdata.alpha = event.alpha;
+		gdata.compass_alpha = event.alpha;
 		gdata.beta = event.beta;
 		gdata.gamma = event.gamma;
 	}
-	var status=use_gyro ? "Aligned" : "Not Aligned";
-	document.getElementById("alignment").innerHTML = status
+}
 
-	var M = getRotationMatrix(gdata.alpha,gdata.beta,gdata.gamma);
 
-	return;
+function noCompass()
+{
+	document.getElementById("nocompass_button").style.display="inline";
+	document.getElementById("compass_button").style.display="none";
+	document.getElementById("hand_button").style.display="none";
+}
 
-	var rz = getCameraRays();
-	var extra = "Aligned=" + use_gyro + "</br><table>"
-	for(var i=0;i<3;i++) {
-		extra += "<tr>"
-		for (var j=0;j<3;j++) {
-			extra+= "<td>" + Math.round(rz[i][j]*100) + "</td>";
+function manualMode()
+{
+	global_use_compass = false;
+	gdata.alpha_user_offset = gdata.alpha;
+	gdata.alpha = 0;
+	document.getElementById("compass_button").style.display="inline";
+	document.getElementById("hand_button").style.display="none";
+}
+
+function compassMode()
+{
+	global_use_compass = true;
+	gdata.alpha_user_offset = 0;
+	gdata.alpha = gdata.compass_alpha;
+	document.getElementById("compass_button").style.display="none";
+	document.getElementById("hand_button").style.display="inline";
+}
+
+function manualDown(e)
+{
+	global_prev_xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
+}
+
+function manualMove(e)
+{
+	if(!global_prev_xy)
+		return;
+	
+	var xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
+	moveSky(global_prev_xy,xy);
+	global_prev_xy = xy;
+}
+function manualUp(e)
+{
+	if(!global_prev_xy)
+		return;
+	var xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
+	moveSky(global_prev_xy,xy);
+	global_prev_xy = null;
+}
+function moveSky(prev,cur)
+{
+	if(global_use_compass)
+		return;
+	if(!prev || !cur)
+		return;
+	var fov =  getFOV().lr;
+	var da = (cur.x - prev.x) / canvas.width * fov;;
+	gdata.alpha_user_offset += da;
+}
+
+function dontPropMouseDown(lst)
+{
+	for(var i=0;i<lst.length;i++) {
+		var elements = document.getElementsByClassName(lst[i]);
+		for(var j=0;j<elements.length;j++) {
+			elements[j].addEventListener('mousedown',function(e) {
+				e.stopPropagation();
+			});
 		}
-		extra += "</tr>";
 	}
-
-	document.getElementById("orient").innerHTML = "a=" + Math.round(gdata.alpha*10)/10 + " b=" + Math.round(gdata.beta*10)/10 + " g=" + Math.round(gdata.gamma*10)/10 + " <br>" + extra;
 }
 
-
-if (window.DeviceOrientationEvent) {
-	window.addEventListener("deviceorientationabsolute", deviceOrientationListener);
-	window.addEventListener("deviceorientation",gyroListener);
-} else {
-	alert("Sorry, your browser doesn't support Device Orientation");
+function setupOrientationEvents()
+{
+	if (window.DeviceOrientationEvent) {
+		if(('ondeviceorientationabsolute' in window)) {
+			window.addEventListener("deviceorientationabsolute", deviceOrientationListener);
+			window.addEventListener("deviceorientation",gyroListener);
+			compassMode();
+		}
+		else if(('ondeviceorientation' in window)) {
+			global_use_compass = false;
+			window.addEventListener("deviceorientation", deviceOrientationListener);
+			window.addEventListener("deviceorientation",gyroListener);
+			noCompass();
+		}
+		else {
+			unsupported();
+		}
+	} else {
+		unsupported();
+	}
+	setUseGyro(false);
+}
+function switchMode()
+{
+	var el = document.getElementById('night_mode');
+	if(global_style == global_day_style) {
+		global_style = global_night_style;
+		el.innerHTML = 'D';
+	}
+	else {
+		global_style = global_day_style;
+		el.innerHTML = 'N';
+	}
 }
 
-// Elements for taking the snapshot
+setupOrientationEvents();
+// global drawing stuff
 var canvas = document.getElementById('myCanvas');
 canvas.width = document.body.clientWidth;
 canvas.height = document.body.clientHeight;
@@ -503,9 +774,11 @@ var context = canvas.getContext('2d');
 setTimeout(getLocation,500)
 setTimeout(plotStars,1000)
 document.body.addEventListener('mousedown',selectionEvent);
-
-});
-
+document.body.addEventListener('touchstart',manualDown);
+document.body.addEventListener('touchend',manualUp);
+document.body.addEventListener('touchcancel',manualUp);
+document.body.addEventListener('touchmove',manualMove);
+dontPropMouseDown(["ui_but","incdec_but"]);
 </script>
 
 

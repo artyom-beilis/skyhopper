@@ -1,11 +1,13 @@
 import os
 import csv
+import sys
 import json
 allstars = []
 
 starpos = dict()
+base=sys.argv[1]
 
-with open('data/hygdata_v3/hygdata_v3.csv','r') as f:
+with open(base + '/data/hygdata_v3/hygdata_v3.csv','r') as f:
     for i,row in enumerate(csv.reader(f)):
         if i <= 1:
             continue
@@ -29,7 +31,7 @@ for i in range(len(allstars)):
 allstars = allstars[:end]
 
 messier = []
-with open('data/processed/messier_ngc_processed.csv','r') as f:
+with open(base + '/data/processed/messier_ngc_processed.csv','r') as f:
     for i,row in enumerate(csv.reader(f)):
         if i <= 0:
             continue
@@ -42,17 +44,18 @@ with open('data/processed/messier_ngc_processed.csv','r') as f:
             t='Ne'
         elif t.find('open clu')!=-1:
             t='Oc'
-        elif t.find('gallaxy')!=-1:
+        elif t.find('galaxy')!=-1:
             t='Ga'
         elif t.find('globular')!=-1:
             t='Gc'
         elif t.find('clou')!=-1:
             t='Cl'
         else:
+            print("Skipping",t,name);
             continue
         messier.append(dict(DE=de,RA=ra,AM=-1,name=name,t=t))
-os.system('iconv -f latin1 -t utf-8 data/processed/centered_constellations.csv -o ct_utf8.csv')
-with open('ct_utf8.csv','r') as f:
+os.system('iconv -f latin1 -t utf-8 ' + base + '/data/processed/centered_constellations.csv -o /tmp/ct_utf8.csv')
+with open('/tmp/ct_utf8.csv','r') as f:
     for i,row in enumerate(csv.reader(f)):
         if i <= 0:
             continue
@@ -64,7 +67,7 @@ with open('ct_utf8.csv','r') as f:
 
 lines=[]
 
-with open('data/stellarium_western_asterisms/constellationship.fab','r') as f:
+with open(base + '/data/stellarium_western_asterisms/constellationship.fab','r') as f:
     for line in f.readlines():
         row=line.split(' ')
         row=filter(lambda v:v!='',row)
