@@ -77,12 +77,9 @@ viewing direction.
 
 ## TODO
 
-0. Validate the program on multiple devices
-1. Improve DSO database: many messier objects are missing
-2. Add user's object list: so user can add any object by RA, DE
-3. Use different icons for different DSO: galaxy, open cluster, globular cluster, nebula etc.
-4. Add DSO filter by types and by magnitude
-5. Implement planets and moon 
+1. Validate the program on multiple devices
+2. Implement planets and moon 
+3. Add user's object list: so user can add any object by RA, DE
 
 ## Notes
 
