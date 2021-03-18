@@ -46,14 +46,14 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <input style="width:100%" type="range" id="dso_level" name="dso_level" min="3" max="20" value="5" step="1" onchange="setDSOMag(this.value)" />
 </p>
-<p><input class="dso_selector" id="P_checked" type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked">Planets and Moon</label></p>
+<p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
 <p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
 <p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
 <p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
 <p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
 <p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
 </div>
-<script src='jsdb.js' ></script>
+<script src="jsdb.js"></script>
 <script src="planet.js"></script>
 <script>
 

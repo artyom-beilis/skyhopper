@@ -18,6 +18,8 @@ points towards viewing direction. Note it is different from typical sky observin
 that simulate camera view of the sky. For this application the screen is parallel to the
 viewing direction.
 
+Before you attach the smartphone, open the application and calibrate the compass using "8" like movements. The calibration will significantly improve compass direction accuracy.
+
 1. Align your telescope with an easily identifiable star near the object you want to observe
 2. Click `Align` button on
 3. Click the star you selected - now the application is aligned. "Aligned" message is shown and a cross that represents the direction your telescope is looking to is shown in the center of the screen.
@@ -73,13 +75,12 @@ viewing direction.
 - Settings Menu:
 
     - Maximal apparent magnitude of DSO objects to be displayed
-    - Selection of the objects by type 
+    - Filtering of the Astronomical objects by type 
 
 ## TODO
 
 1. Validate the program on multiple devices
-2. Implement planets and moon 
-3. Add user's object list: so user can add any object by RA, DE
+2. Add user's object list: so user can add any object by RA, DE
 
 ## Notes
 

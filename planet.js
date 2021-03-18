@@ -1,7 +1,7 @@
 ///
 /// Adapted from https://github.com/TheSiebi/SpacePointer/blob/master/RPi_Calculations%2BInterface.py
 //
-// Copyright © Michael Siebenmann, Artyom Beilis,  License GPL
+// Copyright (c) Michael Siebenmann, Artyom Beilis,  License GPL
 //
 // 
 
