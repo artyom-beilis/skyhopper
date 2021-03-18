@@ -167,12 +167,16 @@ def get_constellation_lines(starpos):
                 lines.append(line)
     return lines
 
+def get_planets(dso):
+    for name in ['Moon','Mercury','Venus','Mars','Jupiter','Saturn','Neptune','Uranus']:
+        dso.append(dict(DE=-1,RA=-1,AM=-1,name=name,t='P'))
+
 def make_jsbd(dso,lines):
     with open('jsdb.js','w') as f:
         f.write("//Generated from https://github.com/eleanorlutz/western_constellations_atlas_of_space\n")
         f.write("// Lincense: https://github.com/eleanorlutz/western_constellations_atlas_of_space/blob/main/LICENSE (GPL)\n")
         f.write("// DSO data from https://github.com/mattiaverga/OpenNGC by CC-BY-SA-v4.0\n")
-        f.write("// types: 'S' - star,'Ca' - canstelation,  'Oc' - open cluster, 'Gc' = globular cluster, 'Ga' - gallaxy, 'Ne' - nebula\n")
+        f.write("// types: 'S' - star,'Ca' - canstelation,  'Oc' - open cluster, 'Gc' = globular cluster, 'Ga' - gallaxy, 'Ne' - nebula, 'P' - Planet\n")
         db,index=dso.json
         f.write('var allstars_index = ' + json.dumps(index) +';\n');
         f.write('var allstars = ')
@@ -186,6 +190,7 @@ if __name__ == "__main__":
     objects = DSODB()
     #get_atlas_DSO(objects)
     get_OpenNGC_DSO(objects)
+    get_planets(objects)
     mapping = get_stars(objects);
     get_constellations(objects);
     lines = get_constellation_lines(mapping)
