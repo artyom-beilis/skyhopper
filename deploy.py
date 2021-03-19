@@ -1,6 +1,12 @@
 import re
+import os
+import sys
+
+from create_data import create_db
 
 script=re.compile(r'^<script src="(.*)"></script>')
+
+create_db()
 
 with open("skyhopper.html","r") as f, open("skyhopper_deploy.html","w") as out:
     for line in f.readlines():
@@ -14,4 +20,7 @@ with open("skyhopper.html","r") as f, open("skyhopper_deploy.html","w") as out:
         else:
             out.write(line)
 
-
+if len(sys.argv) == 2:
+    target = sys.argv[1]
+    os.system("cp -v skyhopper_deploy.html " + target + "/skyhopper.html")
+    os.system("cp -v README.md LICENSE COPYING.md " + target + "/") 
