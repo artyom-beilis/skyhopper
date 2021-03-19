@@ -4,6 +4,9 @@ import sys
 import json
 
 
+global_dso_mag_limit = 16
+global_mag_limit = 6
+
 class DSODB(object):
     def __init__(self):
         self._db = dict()
@@ -80,6 +83,8 @@ def get_OpenNGC_DSO(result):
             if row[9] == '':
                 continue
             mag = float(row[9])
+            if mag > global_dso_mag_limit:
+                continue
             messier = int(row[18]) if row[18]!='' else 0
             #hack data
             if object_id == 'NGC5866':
@@ -105,8 +110,11 @@ def get_stars(allstars):
             if sid!='':
                 starpos[int(sid)] = (ra,de,name)
             mag=float(row[13])
-            if mag <= 6.5:
-               objects.append(dict(DE=de,RA=ra,AM=mag,name=name,t='S'))
+            if mag <= global_mag_limit:
+                star = dict(DE=de,RA=ra,AM=mag,t='S')
+                if name:
+                    star['name']=name
+                allstars.append(star)
 
     return starpos
 
@@ -171,6 +179,29 @@ def get_planets(dso):
     for name in ['Mercury','Venus','Mars','Jupiter','Saturn','Neptune','Uranus']:
         dso.append(dict(DE=-1,RA=-1,AM=-1,name=name,t='P'))
 
+
+def dumpjs(j,f):
+    if isinstance(j,list):
+        f.write('[');
+        for i,v in enumerate(j):
+            if i>0:
+                f.write(',')
+            dumpjs(v,f)
+        f.write(']')
+    elif isinstance(j,dict):
+        f.write('{');
+        for i,n in enumerate(j):
+            if i>0:
+                f.write(',')
+            json.dump(n,f)
+            f.write(':')
+            dumpjs(j[n],f)
+        f.write('}')
+    elif isinstance(j,float):
+        f.write('%.4f' % j)
+    else:
+        json.dump(j,f)
+
 def make_jsbd(dso,lines):
     with open('jsdb.js','w') as f:
         f.write("//Generated from https://github.com/eleanorlutz/western_constellations_atlas_of_space\n")
@@ -180,13 +211,13 @@ def make_jsbd(dso,lines):
         db,index=dso.json
         f.write('var allstars_index = ' + json.dumps(index) +';\n');
         f.write('var allstars = ')
-        json.dump(db,f,indent=2)
+        dumpjs(db,f)
         f.write(';\n')
         f.write('var constellation_lines = ')
-        json.dump(lines,f,indent=2)
+        dumpjs(lines,f)
         f.write(';\n')
 
-if __name__ == "__main__":
+def create_db():
     objects = DSODB()
     #get_atlas_DSO(objects)
     get_OpenNGC_DSO(objects)
@@ -196,4 +227,7 @@ if __name__ == "__main__":
     lines = get_constellation_lines(mapping)
     make_jsbd(objects,lines)
 
+
+if __name__ == "__main__":
+    create_db();
 
