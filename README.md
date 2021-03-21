@@ -73,13 +73,14 @@ Before you attach the smartphone, open the application and calibrate the compass
 
 - Right side, from top to bottom
 
-    - `N` or `D` button switch to night/day mode. `↻` button - reset alignment
-    - `✥` - switch to full screen mode and `↓` to switch back 
-    - `✋` - switch to manual mode,  `⎋` switch to compass mode, ~~`⎋`~~ - no compass available use manual mode only
     - `⚙` - settings button
+    - `↻` button - reset alignment
+    - `✋` - switch to manual mode,  `⎋` switch to compass mode, ~~`⎋`~~ - no compass available use manual mode only
 
 - Settings Menu:
 
+    - Night Mode - enable or disable red-night mode screen
+    - Full Screen - switch application to full screen
     - Maximal apparent magnitude of DSO objects to be displayed
     - Filtering of the Astronomical objects by type 
 

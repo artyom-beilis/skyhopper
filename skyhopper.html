@@ -908,18 +908,6 @@ function switchNightMode(is_night)
 	global_style = is_night ? global_night_style : global_day_style;
 }
 
-function switchMode()
-{
-	var el = document.getElementById('night_mode');
-	if(global_style == global_day_style) {
-		global_style = global_night_style;
-		el.innerHTML = 'D';
-	}
-	else {
-		global_style = global_day_style;
-		el.innerHTML = 'N';
-	}
-}
 
 function setDSOMag(val)
 {
