@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <style>
-body { font-size: 5mm ; color:red ; font-family: sans }
+body { font-size: 5mm ; color:red ; font-family: sans; background-color:black }
 button { height:10mm; font-size:5mm ; text-align:center; background-color:black; color:red; border: 2px solid red }
 .comp_but, .incdec_but { width: 10mm ; height:10mm; font-size:5mm }
 .comp_but { float:right }
@@ -17,15 +17,16 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 		<button class="incdec_but" onclick="decFOV();">+</button>
 		&angle;<span id="fov_val">60&deg;</span><span style="font-size:16px" id="rtime"></span>
 		<span style="float:right">
-			<button class="incdec_but" id="night_mode" onclick="switchMode();">N</button>
-			<button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
+			<button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
 		</span>
 </p>
 <p>
 		<button class="incdec_but" onclick="decMAG();">-</button>
 		<button class="incdec_but" onclick="incMAG();">+</button>
 		<i>m&leq;</i><span id="mag_val">4</span>
-		<button id="req_fs" class="incdec_but" style="float:right" onclick="toggleFS();">&#x2725;</button>
+		<span style="float:right">
+			<button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
+		</span>
 </p>
 <p>
 	<button class="ui_but" onclick="align();">Align</button>
@@ -33,9 +34,6 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 	<button class="comp_but" id="nocompass_button" style="display:none"><strike>&#x238b;</strike></button>
 	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
-</p>
-<p>
-	<button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
 </p>
 <p id="orient"></p>
 <p id="status"></p>
@@ -45,6 +43,8 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 <div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
 <button class="incdec_but" style="position:absolute; right:1mm; top:1mm" onclick="showConfig('none');">X</button>
 <p><b>Settings</b></p>
+<p><input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night Mode</label></p>
+<p><input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full Screen</label></p>
 <p>
 DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <input style="width:100%" type="range" id="dso_level" name="dso_level" min="3" max="16" value="5" step="1" onchange="setDSOMag(this.value)" />
@@ -135,18 +135,13 @@ function showConfig(v)
 {
 	document.getElementById('config').style.display = v;
 }
-function toggleFS()
+function toggleFS(fs)
 {
-	var fs = document.getElementById('req_fs');
-	if(!global_full_screen) {
+	if(fs) {
 		document.documentElement.requestFullscreen({navigationUI:'hide'});
-		fs.innerHTML = '&#x2193';
-		global_full_screen = true;
 	}
 	else {
 		document.exitFullscreen();
-		fs.innerHTML = '&#x2725;'
-		global_full_screen = false;
 	}
 }
 
@@ -906,6 +901,11 @@ function setupGyros()
 	else {
 		setupOrientationEvents();
 	}
+}
+
+function switchNightMode(is_night)
+{
+	global_style = is_night ? global_night_style : global_day_style;
 }
 
 function switchMode()
