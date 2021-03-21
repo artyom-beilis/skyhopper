@@ -20,12 +20,18 @@ viewing direction.
 
 Before you attach the smartphone, open the application and calibrate the compass using "8" like movements. The calibration will significantly improve compass direction accuracy.
 
+
 1. Align your telescope with an easily identifiable star near the object you want to observe
 2. Click `Align` button on
 3. Click the star you selected - now the application is aligned. "Aligned" message is shown and a cross that represents the direction your telescope is looking to is shown in the center of the screen.
 4. Click on an object you want to observe and you get a line showing a direction you need to move the telescope to and the changes in altitude and azimuth are shown at the right and bottom part of the screen
 5. Move the telescope till these numbers are close to zero - at this point your telescope should point to the requested object
 6. In order to move to next object - repeat the alignment process from the step 1 since the builtin cellphone gyros don't keep the accuracy for a long time/multiple movements
+
+## Notes for iOS Users
+
+- For iOS 13.0 and above you need to allow access to device orientation information by pressing `Enable Device Orientation` button once application loads
+- For iOS 12.2 and before 13 you need to allow access via: _Settings > Safari > Motion and Orientation access_
 
 ## Troubleshooting 
 
