@@ -38,7 +38,10 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 	<button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
 </p>
 <p id="orient"></p>
-<p id="orientN"></p>
+<p id="status"></p>
+<div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ">
+<button class="ui_but" onclick="iOSOrientation();">Enable Device Orientation</button>
+</div>
 <div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
 <button class="incdec_but" style="position:absolute; right:1mm; top:1mm" onclick="showConfig('none');">X</button>
 <p><b>Settings</b></p>
@@ -119,6 +122,14 @@ var gdata = {
 var global_align_matrix = [1,0,0,0,1,0,0,0,1];
 var global_use_gyro = false;
 var global_full_screen = false;
+
+var global_status = "";
+
+function showStatus(v)
+{
+	global_status += v+"<br/>"
+	document.getElementById('status').innerHTML = global_status;
+}
 
 function showConfig(v)
 {
@@ -739,6 +750,16 @@ function gyroListener(event)
 	gdata.alpha_gyro = event.alpha;
 }
 
+function deviceOrientationListenerIOS(event) {
+	document.getElementById('orient').innerHTML = msg;
+	if(!(event.alpha === null)) {
+		if(global_use_compass)
+			gdata.alpha = event.webkitCompassHeading;
+		gdata.compass_alpha = event.webkitCompassHeading;
+		gdata.beta = event.beta;
+		gdata.gamma = event.gamma;
+	}
+}
 
 function deviceOrientationListener(event) {
 	if(!(event.alpha === null)) {
@@ -821,6 +842,26 @@ function dontPropMouseDown(lst)
 	}
 }
 
+
+
+function setupiOSOrientationEvents()
+{
+	if (window.DeviceOrientationEvent) {
+		if(('ondeviceorientation' in window)) {
+			window.addEventListener("deviceorientation", deviceOrientationListenerIOS);
+			window.addEventListener("deviceorientation",gyroListener);
+			compassMode();
+		}
+		else {
+			unsupported();
+		}
+	} else {
+		unsupported();
+	}
+	setUseGyro(false);
+}
+
+
 function setupOrientationEvents()
 {
 	if (window.DeviceOrientationEvent) {
@@ -843,6 +884,30 @@ function setupOrientationEvents()
 	}
 	setUseGyro(false);
 }
+
+function iOSOrientation()
+{
+	//Notification.requestPermission().then(response => {
+	DeviceOrientationEvent.requestPermission().then(response => {
+		if (response == 'granted') {
+			document.getElementById("allow_orientation").style.display='none';
+			setupiOSOrientationEvents();
+		}
+	})
+	.catch(console.error)
+}
+
+function setupGyros()
+{
+	//if (typeof window.Notification.requestPermission === 'function') {
+	if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+		document.getElementById("allow_orientation").style.display='inline';
+	}
+	else {
+		setupOrientationEvents();
+	}
+}
+
 function switchMode()
 {
 	var el = document.getElementById('night_mode');
@@ -862,7 +927,7 @@ function setDSOMag(val)
 	document.getElementById('dso_level_val').innerHTML = '' + global_dso_mag;
 }
 
-setupOrientationEvents();
+setupGyros();
 // global drawing stuff
 var canvas = document.getElementById('myCanvas');
 canvas.width = document.body.clientWidth;
