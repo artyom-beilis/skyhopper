@@ -55,6 +55,8 @@ DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
 <p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
 <p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
+<hr>
+<p><span id="lat"></span>, <span id="lon"></span></p>
 </div>
 <script src="jsdb.js"></script>
 <script src="planet.js"></script>
@@ -727,17 +729,32 @@ function selectionEvent(e)
 	}
 }
 
+function formatLatLon(id,deg,pos,neg)
+{
+	var direction = deg >= 0 ? pos : neg;
+	deg = Math.abs(deg);
+	var ideg = Math.floor(deg);
+	var min = 60*(deg - ideg);
+	var imin = Math.floor(min);
+	var sec = 60*(min - imin);
+	var msg = direction + ideg + "\u00b0" + imin + "'" + sec.toFixed(1) + "''";
+	document.getElementById(id).innerHTML = msg;
+}
+
 function showpos(position)
 {
 	var latlon = position.coords.latitude + "," + position.coords.longitude;
 	gdata.lat = position.coords.latitude;
 	gdata.lon = position.coords.longitude;
+	formatLatLon("lat",gdata.lat,'N','S');
+	formatLatLon("lon",gdata.lon,'E','W');
 }
 
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showpos);
   }
+  setTimeout(getLocation,600*1000)
 }
 
 function gyroListener(event)
