@@ -28,6 +28,8 @@ Before you attach the smartphone, open the application and calibrate the compass
 5. Move the telescope till these numbers are close to zero - at this point your telescope should point to the requested object
 6. In order to move to next object - repeat the alignment process from the step 1 since the builtin cellphone gyros don't keep the accuracy for a long time/multiple movements
 
+Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
+
 ## Notes for iOS Users
 
 - For iOS 13.0 and above you need to allow access to device orientation information by pressing `Enable Device Orientation` button once application loads
