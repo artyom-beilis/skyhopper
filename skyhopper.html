@@ -6,8 +6,8 @@
 </head>
 <style>
 body { font-size: 5mm ; color:red ; font-family: sans; background-color:black }
-button { height:10mm; font-size:5mm ; text-align:center; background-color:black; color:red; border: 2px solid red }
-.comp_but, .incdec_but { width: 10mm ; height:10mm; font-size:5mm }
+button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle; background-color:black; color:red; border: 2px solid red }
+.comp_but, .incdec_but { width: 10mm ; height:10mm; font-size:5mm ; padding: 0 }
 .comp_but { float:right }
 </style>
 <body>
@@ -37,8 +37,8 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 </p>
 <p id="orient"></p>
 <p id="status"></p>
-<div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ">
-<button class="ui_but" onclick="iOSOrientation();">Enable Device Orientation</button>
+<div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
+<button class="ui_but" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
 </div>
 <div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
 <button class="incdec_but" style="position:absolute; right:1mm; top:1mm" onclick="showConfig('none');">X</button>
