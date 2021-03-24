@@ -30,7 +30,7 @@ button { height:10mm; font-size:5mm ; text-align:center; background-color:black;
 </p>
 <p>
 	<button class="ui_but" onclick="align();">Align</button>
-	<span id="alignment"></span>
+	<span id="alignment"></span> <span id="countdown"></span>
 	<button class="comp_but" id="nocompass_button" style="display:none"><strike>&#x238b;</strike></button>
 	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
@@ -201,9 +201,11 @@ function resetAll()
 
 function align()
 {
+	if(global_expecting_select == doNothing)
+		return;
 	setUseGyro(false,"Select Star");
 	global_align_index = -1;
-	global_expecting_select = selectAlign;
+	global_expecting_select = selectAlignWithTimer;
 }
 
 function normV(v)
@@ -234,6 +236,27 @@ function matAdd(A,alpha,B,beta)
 function matEye()
 {
 	return [1,0,0, 0,1,0, 0,0,1];
+}
+
+function doNothing(index)
+{
+}
+
+function selectAlignWithTimer(index,start_val=3)
+{
+	var cd = document.getElementById("countdown");
+	global_align_index = index;
+	global_expecting_select = doNothing;
+	if(start_val <= 0) {
+		cd.innerHTML="";
+		selectAlign(index);
+	}
+	else {
+		cd.innerHTML = start_val.toFixed(1) + "s";
+		setTimeout(function() {
+			selectAlignWithTimer(index,start_val - 0.1);
+		},100);
+	}
 }
 
 function selectAlign(index)
@@ -763,7 +786,6 @@ function gyroListener(event)
 }
 
 function deviceOrientationListenerIOS(event) {
-	document.getElementById('orient').innerHTML = msg;
 	if(!(event.alpha === null)) {
 		if(global_use_compass)
 			gdata.alpha = event.webkitCompassHeading;
