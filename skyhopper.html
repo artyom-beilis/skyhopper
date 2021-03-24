@@ -35,6 +35,7 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
 </p>
+<p id="gps">No Geolocation</p>
 <p id="orient"></p>
 <p id="status"></p>
 <div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
@@ -771,6 +772,7 @@ function showpos(position)
 	gdata.lon = position.coords.longitude;
 	formatLatLon("lat",gdata.lat,'N','S');
 	formatLatLon("lon",gdata.lon,'E','W');
+	document.getElementById("gps").style.display='none';
 }
 
 function getLocation() {
