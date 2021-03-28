@@ -18,6 +18,7 @@ points towards viewing direction. Note it is different from typical sky observin
 that simulate camera view of the sky. For this application the screen is parallel to the
 viewing direction.
 
+
 Before you attach the smartphone, open the application and calibrate the compass using "8" like movements. The calibration will significantly improve compass direction accuracy.
 
 
@@ -37,6 +38,10 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
 ## Troubleshooting 
 
+-   _The sky in application look different from what I expect?_
+
+    Make sure your browser provided location information. If it is not "No Geolocation" message will be shown. Check the geographica coordinates in settings menu to make sure they match your location
+
 -   _I move the phone but nothing moves?_
 
     Make sure your cellphone has working sensors. Does SkyMap like applications work for you?
@@ -52,7 +57,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
     1. Move your cell phone in compass calibration/waving pattern to increase compass accuracy
     2. Increase application's field of view by pressing `+` at the top left corner near value `∠60°` - default FOV.
-    3. You may switch to manual azimuth mode by pressing "hand" icon at the right side and adjust the azimuth manually
+    3. You may switch to manual azimuth mode by pressing `✋` icon at the right side and adjust the azimuth manually
 
 -   _The screen becomes dim very fast and I don't have time to align/point the telescope?_
 
@@ -86,10 +91,19 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
     - Maximal apparent magnitude of DSO objects to be displayed
     - Filtering of the Astronomical objects by type 
 
+## Equatorial Mount Users
+
+The application assumes you work with alt-azimuth mount. If you are using equatorial mount an additional error may be introduced due to misalignment between the cell phone major axis and the telescope axis.
+
+If the targets are close to poles and significant changes in right ascension are required for the hop any misalignment error between cell phone axis and telescope axis will affect the accuracy. Final error can be calculated as 2e⋅sin(Δα/2)⋅sin(δ), where e - misalignment error between cell phone and telescope, Δα - change in right ascension required for the hop and δ - declination of the target.
+
+So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended.
+
 ## TODO
 
 1. Validate the program on multiple devices
 2. Add user's object list: so user can add any object by RA, DE
+3. Develop procedure for phone alignment for equatorial mounts.
 
 ## Notes
 
