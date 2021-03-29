@@ -101,9 +101,10 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 ## TODO
 
-1. Validate the program on multiple devices
-2. Add user's object list: so user can add any object by RA, DE
-3. Develop procedure for phone alignment for equatorial mounts.
+1. Fix planets movement calculations
+2. Validate the program on multiple devices
+3. Add user's object list: so user can add any object by RA, DE
+4. Develop procedure for phone alignment for equatorial mounts.
 
 ## Notes
 

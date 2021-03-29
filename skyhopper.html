@@ -50,7 +50,7 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <input style="width:100%" type="range" id="dso_level" name="dso_level" min="3" max="16" value="5" step="1" onchange="setDSOMag(this.value)" />
 </p>
-<p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
+<!-- <p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p> -->
 <p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
 <p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
 <p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
@@ -81,7 +81,7 @@ var global_show_obj = {
 	'Ca': true,
 	'Ga':true,
 	'Ne':true,
-    'P': true
+    	'P': false
 };
 
 var global_night_style = {
