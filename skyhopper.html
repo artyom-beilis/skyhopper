@@ -36,6 +36,12 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
 </p>
 <p id="gps">No Geolocation</p>
+<div id="object_log" style="display:none">
+<p>Sirius:<span id="Sirius_alt"></span>, <span id="Sirius_az"></span></p>
+<p>Mars:<span id="Mars_alt"></span>, <span id="Mars_az"></span></p>
+<p>Rigel:<span id="Rigel_alt"></span>, <span id="Rigel_az"></span></p>
+<p>Jupiter:<span id="Jupiter_alt"></span>, <span id="Jupiter_az"></span></p>
+</div>
 <p id="orient"></p>
 <p id="status"></p>
 <div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
@@ -43,14 +49,14 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 </div>
 <div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
 <button class="incdec_but" style="position:absolute; right:1mm; top:1mm" onclick="showConfig('none');">X</button>
-<p><b>Settings</b></p>
+<p><b>Settings (version)</b></p>
 <p><input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night Mode</label></p>
 <p><input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full Screen</label></p>
 <p>
 DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <input style="width:100%" type="range" id="dso_level" name="dso_level" min="3" max="16" value="5" step="1" onchange="setDSOMag(this.value)" />
 </p>
-<!-- <p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p> -->
+<p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
 <p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
 <p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
 <p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
@@ -60,8 +66,12 @@ DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <p><span id="lat"></span>, <span id="lon"></span></p>
 <p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span></p>
 </div>
+<script src="vsop87-multilang/Languages/JavaScript/vsop87a_xsmall.js"></script>
+<script>
+vsop87a_full = vsop87a_xsmall;
+</script>
+<script src="vsop87-multilang/Languages/JavaScript/astrolib.js"></script>
 <script src="jsdb.js"></script>
-<script src="planet.js"></script>
 <script>
 
 var global_day_style = {
@@ -81,7 +91,7 @@ var global_show_obj = {
 	'Ca': true,
 	'Ga':true,
 	'Ne':true,
-    	'P': false
+    	'P': true,
 };
 
 var global_night_style = {
@@ -392,6 +402,7 @@ function rayFromPos(RAd,DEd)
 	var angle = Math.PI * 2 * (0.7790572732640+1.00273781191135448 * tu);
 	var q = angle + gdata.lon*deg2rad;
 	var H = q - RA;
+	
 	var f = deg2rad * gdata.lat;
 
 	var az_y = Math.sin(H);
@@ -652,6 +663,42 @@ function plotBearing(xyz)
 }			
 
 
+function logObject(thestar)
+{
+	if(thestar.name == 'Sirius' || thestar.name == 'Mars' || thestar.name == 'Jupiter' || thestar.name == 'Rigel') {
+		document.getElementById('object_log').style.display='inline';
+		if(1) {
+			let ray = rayFromPos(thestar.RA,thestar.DE);
+			let alt = Math.asin(ray[2]) / Math.PI * 180
+				let az  = Math.atan2(ray[0],ray[1]) / Math.PI * 180;
+			if(az < 0)
+				az += 360;
+			formatLatLon(thestar.name+"_alt",alt,'+','-');
+			formatLatLon(thestar.name+"_az",az,'+','-');
+		}
+		else{
+			let alt = thestar.RA / 15;
+			let az  = thestar.DE;
+			formatLatLon(thestar.name+"_alt",alt,'','-');
+			formatLatLon(thestar.name+"_az",az,'+','-');
+		}
+	}
+}
+
+function getSolarSystemObject(p)
+{
+	var body = astrolib.bodies.indexOf(p);
+	var r2d = 180 / Math.PI;
+	var d2r = Math.PI / 180;
+	var rLat = gdata.lat * d2r;
+	var rLon = gdata.lon * d2r;
+	var jd = astrolib.convertDateToJulianDate(new Date());
+	var RaDec = astrolib.getBodyRaDec(jd,body,rLat,rLon,false);
+	var RA = RaDec[2];
+	var DEC = RaDec[1];
+	return { "RA" : RA * r2d, "DE": DEC *r2d, "name": p, "AM" : -1 };
+}
+
 
 
 function plotStars()
@@ -666,11 +713,15 @@ function plotStars()
 
 	for(var i=0;i<allstars.length;i++) {
 		var st = allstars[i].t;
-        if(st == 'P') {
-            let pos = getSolarSystemObject(allstars[i].name);
-            allstars[i].RA = pos.RA;
-            allstars[i].DE = pos.DE;
-        }
+		
+		if(st == 'P') {
+		    let pos = getSolarSystemObject(allstars[i].name);
+		    allstars[i].RA = pos.RA;
+		    allstars[i].DE = pos.DE;
+		}
+		
+		//logObject(allstars[i]);
+		
 		var mag = allstars[i].AM;
 		if((st == 'S' && mag > global_mag) || (st != 'S' && mag > global_dso_mag) || !global_show_obj[st])
 		{

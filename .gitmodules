@@ -4,3 +4,6 @@
 [submodule "western_constellations_atlas_of_space"]
 	path = western_constellations_atlas_of_space
 	url = https://github.com/eleanorlutz/western_constellations_atlas_of_space.git
+[submodule "vsop87-multilang"]
+	path = vsop87-multilang
+	url = https://github.com/gmiller123456/vsop87-multilang.git
