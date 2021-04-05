@@ -1,5 +1,7 @@
 # SkyHopper
 
+[TOC]
+
 [SkyHopper](https://artyom-beilis.github.io/skyhopper.html) is a web application that helps
 to find objects across the night sky by hopping from a well know and easily identifiable 
 star to other fainter stars or DSO by measuring changes in angles of the cell phone
@@ -82,14 +84,32 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
     - `⚙` - settings button
     - `↻` button - reset alignment
-    - `✋` - switch to manual mode,  `⎋` switch to compass mode, ~~`⎋`~~ - no compass available use manual mode only
+    - `✋` - switch to manual mode,  `⎋` switch to compass mode, <del>`⎋`</del> - no compass available use manual mode only
 
 - Settings Menu:
 
+    - Small Screen Mode - optimize for small screen, move some controls to settings menu
     - Night Mode - enable or disable red-night mode screen
     - Full Screen - switch application to full screen
     - Maximal apparent magnitude of DSO objects to be displayed
     - Filtering of the Astronomical objects by type 
+
+## Constrols in Small Screen Mode
+
+On screen controls:
+
+- Left Top: `◎` - Align button
+- Right:
+
+    - Manual `✋` or Compass `⎋` mode
+    - Settings Menu: `⚙`
+
+Extra controls in settings menu:
+
+- `↻` button - reset alignment
+- `∠` with `-`/`+` buttons - change FOV
+- `★` with `-`/`+` - modify stars magnitude
+
 
 ## Equatorial Mount Users
 
@@ -101,10 +121,9 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 ## TODO
 
-1. Fix planets movement calculations
-2. Validate the program on multiple devices
-3. Add user's object list: so user can add any object by RA, DE
-4. Develop procedure for phone alignment for equatorial mounts.
+1. Add user's object list: so user can add any object by RA, DE
+2. Develop procedure for phone alignment for equatorial mounts.
+3. Improve multiple-hops prodecures in manual compass mode
 
 ## Notes
 

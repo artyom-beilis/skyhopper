@@ -162,7 +162,7 @@ def get_constellation_lines(starpos):
     with open('western_constellations_atlas_of_space' + '/data/stellarium_western_asterisms/constellationship.fab','r') as f:
         for line in f.readlines():
             row=line.split(' ')
-            row=filter(lambda v:v!='',row)
+            row=list(filter(lambda v:v!='',row))
             N=int(row[1])
             pairs = [int(v) for v in row[2:]]
             for k in range(N):

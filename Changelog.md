@@ -1,3 +1,8 @@
+2021-04-05: v0.0.26
+
+- Added small screen optimized mode
+- Added in-app manual
+
 2021-04-04: v0.0.25
 
   - Fixed Planets Calculations

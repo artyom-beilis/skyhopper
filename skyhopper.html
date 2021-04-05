@@ -2,16 +2,24 @@
 <html>
 <head>
 <title>Sky Hopper - Web Application for Sky Navigation</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <style>
 body { font-size: 5mm ; color:red ; font-family: sans; background-color:black }
+a:link {color: red;}
+a:visited { color: red; }
+a:active { color:red; }
+a:hover { color:red; }
 button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle; background-color:black; color:red; border: 2px solid red }
 .comp_but, .incdec_but { width: 10mm ; height:10mm; font-size:5mm ; padding: 0 }
 .comp_but { float:right }
+.only_tiny { display : none }
+.only_full { display : inline }
 </style>
 <body>
 <canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
+<div class="only_full">
 <p>
 		<button class="incdec_but" onclick="incFOV();">-</button>
 		<button class="incdec_but" onclick="decFOV();">+</button>
@@ -28,13 +36,18 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 			<button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
 		</span>
 </p>
+</div>
 <p>
-	<button class="ui_but" onclick="align();">Align</button>
-	<span id="alignment"></span> <span id="countdown"></span>
+	<span class="only_full"><button class="ui_but" onclick="align();">Align</button></span>
+	<span class="only_tiny"><button class="incdec_but" onclick="align();">&#x25ce;</button></span>
+	<span class="only_full" id="alignment"></span> <span id="countdown"></span>
 	<button class="comp_but" id="nocompass_button" style="display:none"><strike>&#x238b;</strike></button>
 	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
 </p>
+<p class="only_tiny"><button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
+</p>
+
 <p id="gps">No Geolocation</p>
 <div id="object_log" style="display:none">
 <p>Sirius:<span id="Sirius_alt"></span>, <span id="Sirius_az"></span></p>
@@ -48,8 +61,17 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 <button class="ui_but" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
 </div>
 <div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
-<button class="incdec_but" style="position:absolute; right:1mm; top:1mm" onclick="showConfig('none');">X</button>
+<span style="position:absolute; right:1mm; top:1mm">
+<button class="incdec_but" onclick="showManual(true)">?</button>
+<button class="incdec_but" onclick="showConfig('none');">X</button>
+</span>
 <p><b>Settings (version)</b></p>
+<p><input class="dso_selector" id="small_screen" type="checkbox" onchange="smallScreen(this.checked)" /><label for="small_screen" >Small Screen Mode</label></p>
+<p class="only_tiny">
+<button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
+ &angle;<button class="incdec_but" onclick="incFOV();">-</button><button class="incdec_but" onclick="decFOV();">+</button>
+ &#x2605;<button class="incdec_but" onclick="decMAG();">-</button><button class="incdec_but" onclick="incMAG();">+</button>
+</p>
 <p><input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night Mode</label></p>
 <p><input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full Screen</label></p>
 <p>
@@ -66,6 +88,14 @@ DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <p><span id="lat"></span>, <span id="lon"></span></p>
 <p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span></p>
 </div>
+
+<div style="position:absolute; left:0; top:0; z-index:5; width:100%; background:black; display:none;" id="manual">
+<span style="float:right; margin-right: 2mm; margin-top:2mm">
+<button class="incdec_but" onclick="showManual(false);">X</button>
+</span>
+MANUAL
+</div>
+
 <script src="vsop87-multilang/Languages/JavaScript/vsop87a_xsmall.js"></script>
 <script>
 vsop87a_full = vsop87a_xsmall;
@@ -138,6 +168,28 @@ var global_use_gyro = false;
 var global_full_screen = false;
 
 var global_status = "";
+
+
+function showManual(v)
+{
+	document.getElementById('manual').style.display = v ? 'inline' : 'none';
+}
+function setDisplayByClass(cls,value)
+{
+	var el = document.getElementsByClassName(cls);
+	for(var i=0;i<el.length;i++) {
+		el[i].style.display = value;
+	}
+}
+
+function smallScreen(v)
+{
+	var tiny = v ? 'inline' : 'none';
+	var full = v ? 'none' : 'inline';
+	setDisplayByClass('only_tiny',tiny);
+	setDisplayByClass('only_full',full);
+}
+
 
 function showStatus(v)
 {
