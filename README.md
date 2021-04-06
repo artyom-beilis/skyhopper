@@ -122,6 +122,7 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 ## TODO
 
 1. Add user's object list: so user can add any object by RA, DE
+2. Add higher zoom level
 2. Develop procedure for phone alignment for equatorial mounts.
 3. Improve multiple-hops prodecures in manual compass mode
 

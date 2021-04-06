@@ -97,7 +97,7 @@ def get_OpenNGC_DSO(result):
 
 def get_stars(allstars):
     starpos = dict()
-    with open('western_constellations_atlas_of_space' + '/data/hygdata_v3/hygdata_v3.csv','r') as f:
+    with open('western_constellations_atlas_of_space/data/hygdata_v3/hygdata_v3.csv','r') as f:
         for i,row in enumerate(csv.reader(f)):
             if i <= 1:
                 continue
@@ -119,7 +119,7 @@ def get_stars(allstars):
     return starpos
 
 def get_atlas_DSO(messier):
-    with open('western_constellations_atlas_of_space' + '/data/processed/messier_ngc_processed.csv','r') as f:
+    with open('western_constellations_atlas_of_space/data/processed/messier_ngc_processed.csv','r') as f:
         for i,row in enumerate(csv.reader(f)):
             if i <= 0:
                 continue
@@ -145,8 +145,8 @@ def get_atlas_DSO(messier):
     return messier
 
 def get_constellations(cons):
-    os.system('iconv -f latin1 -t utf-8 ' + 'western_constellations_atlas_of_space' + '/data/processed/centered_constellations.csv -o /tmp/ct_utf8.csv')
-    with open('/tmp/ct_utf8.csv','r') as f:
+    src_path = 'western_constellations_atlas_of_space/data/processed/centered_constellations.csv'
+    with open(src_path,'r',encoding='latin1') as f:
         for i,row in enumerate(csv.reader(f)):
             if i <= 0:
                 continue
@@ -159,7 +159,7 @@ def get_constellations(cons):
 
 def get_constellation_lines(starpos):
     lines=[]
-    with open('western_constellations_atlas_of_space' + '/data/stellarium_western_asterisms/constellationship.fab','r') as f:
+    with open('western_constellations_atlas_of_space/data/stellarium_western_asterisms/constellationship.fab','r') as f:
         for line in f.readlines():
             row=line.split(' ')
             row=list(filter(lambda v:v!='',row))

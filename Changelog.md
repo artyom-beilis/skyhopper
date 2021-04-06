@@ -1,3 +1,8 @@
+2021-04-06: v0.0.27
+
+- Removed some Linux-isms from the python code
+- Added readme for developers
+
 2021-04-05: v0.0.26
 
 - Added small screen optimized mode
