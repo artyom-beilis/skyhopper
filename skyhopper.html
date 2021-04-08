@@ -270,6 +270,7 @@ function align()
 {
 	if(global_expecting_select == doNothing)
 		return;
+	/// realign in manual mode
 	if(global_use_gyro && !global_use_compass) {
 		// keep bearing
 		gdata.alpha_user_offset = gdata.alpha_gyro + gdata.alpha_diff - gdata.alpha;
