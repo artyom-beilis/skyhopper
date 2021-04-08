@@ -148,7 +148,9 @@ var global_expected_frame_rate_ms = 66;
 var global_use_compass = false;
 var global_dso_mag = parseInt(document.getElementById('dso_level_val').innerHTML);
 
-var global_fov = 60;
+var global_fov_index = 3;
+var global_fov_values = [7,15,30,60,90,120,150]
+var global_fov = global_fov_values[global_fov_index];
 var global_mag = 4;
 var gdata = {
 	"lat" : 31.9,
@@ -230,18 +232,19 @@ function updateMAG()
 
 function incFOV()
 {
-	if(global_fov < 150)
-		global_fov += 30;
+	if(global_fov_index + 1 < global_fov_values.length)
+		global_fov_index++;
 	updateFOV()
 }
 function decFOV()
 {
-	if(global_fov > 30)
-		global_fov -=30;
+	if(global_fov_index > 0)
+		global_fov_index--;
 	updateFOV();
 }
 function updateFOV()
 {
+	global_fov = global_fov_values[global_fov_index];
 	document.getElementById("fov_val").innerHTML = global_fov + "&deg;";
 }
 
@@ -267,11 +270,11 @@ function align()
 {
 	if(global_expecting_select == doNothing)
 		return;
-	setUseGyro(false,"Select Star");
-	if(!global_use_compass) {
+	if(global_use_gyro && !global_use_compass) {
 		// keep bearing
 		gdata.alpha_user_offset = gdata.alpha_gyro + gdata.alpha_diff - gdata.alpha;
 	}
+	setUseGyro(false,"Select Star");
 	global_align_index = -1;
 	global_expecting_select = selectAlignWithTimer;
 }

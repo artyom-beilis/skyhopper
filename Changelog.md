@@ -1,5 +1,7 @@
-2021-04-06: v0.0.27
+2021-04-08: v0.0.27
 
+- Improved multi-star hopping without compass - adjust AZ offset to new position
+- Added support of higher zoom levels
 - Improved highlighting target/source
 - Removed some Linux-isms from the python code
 - Added readme for developers
