@@ -1,5 +1,6 @@
 2021-04-06: v0.0.27
 
+- Improved highlighting target/source
 - Removed some Linux-isms from the python code
 - Added readme for developers
 

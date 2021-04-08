@@ -538,11 +538,6 @@ function projectToCamera(RAd,DEd,cameraRays,in_fov=true)
 
 function plotStar(star,camRays,highlight)
 {
-	if(canvas.width != document.body.clientWidth || canvas.height != document.body.clientHeight) {
-		canvas.width = document.body.clientWidth;
-		canvas.height = document.body.clientHeight;
-	}
-	
 	var pos = projectToCamera(star.RA,star.DE,camRays);
 	if(!pos)
 		return null;
@@ -551,8 +546,8 @@ function plotStar(star,camRays,highlight)
 	if(size < 1)
 		size = 1;
 	var color;
-	if(highlight) {
-		color = highlight;
+	if(highlight >= 2) {
+		color = highlight == 3 ? global_style.target : global_style.align;
 		size = 10;
 	}
 	else {
@@ -564,6 +559,9 @@ function plotStar(star,camRays,highlight)
 		context.fillStyle = 'black';
 	var pix_x = pos.x * canvas.width;
 	var pix_y = pos.y * canvas.height;
+	result = { x: pix_x, y:pix_y , index:-1};
+	if(highlight == 0)
+		return result;
 	if(star.t != 'Ca') {
 		context.strokeStyle = color;
 		context.lineWidth = 1;
@@ -632,13 +630,21 @@ function plotStar(star,camRays,highlight)
 			context.fillText(star.name,pix_x,pix_y)
 		}
 		else {
-			context.font = "3mm Sans";
+			let text = star.name;
+			if(highlight > 1) {
+				context.font = "6mm Sans";
+				if(star.AM != -1 && highlight == 3)
+					text+=", m=" + star.AM.toFixed(1);
+			}
+			else {
+				context.font = "3mm Sans";
+			}
 			context.textBaseline = 'bottom';
 			context.textAlign = 'start';
-			context.fillText(star.name,pix_x + size + 1,pix_y - size - 1)
+			context.fillText(text,pix_x + size + 1,pix_y - size - 1)
 		}
 	}
-	return { x: pix_x, y:pix_y , index:-1};
+	return result;
 }
 
 function plotLines(camRays)
@@ -756,6 +762,12 @@ function getSolarSystemObject(p)
 function plotStars()
 {
 	var start=Date.now();
+	
+	if(canvas.width != document.body.clientWidth || canvas.height != document.body.clientHeight) {
+		canvas.width = document.body.clientWidth;
+		canvas.height = document.body.clientHeight;
+	}
+	
 	global_targets_list=[];
 	gdata.time = Date.now();
 	var camRays = getCameraRays();
@@ -780,11 +792,9 @@ function plotStars()
 			i=allstars_index[st] - 1;
 			continue
 		}
-		var highlight = null;
-		if(i == global_target_index)
-			highlight = global_style.target;
-		else if(i == global_align_index)
-			highlight = global_style.align;
+		var highlight = 1;
+		if(i == global_target_index || i == global_align_index)
+			highlight = 0;
 		var  pos = plotStar(allstars[i],camRays,highlight);
 		// select only stars if not aligned
 		// if aligned select all but constellations
@@ -793,11 +803,14 @@ function plotStars()
 			global_targets_list.push(pos);
 		}
 	}
+	if(global_align_index >= 0 && global_align_index != global_target_index) {
+		plotStar(allstars[global_align_index],camRays,2);
+	}
 	if(global_target_index >= 0) {
 		var star = allstars[global_target_index];
 		var xyz = cameraBearing(star.RA,star.DE,camRays);
 		plotBearing(xyz);
-
+		plotStar(star,camRays,3);
 	}
 	else if(global_use_gyro) {
 		plotCross();
