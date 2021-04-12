@@ -33,6 +33,20 @@ def make_manual():
     return html
 
 
+def embed_server():
+    file_read=re.compile(r"(.*)=open\('(.*)','r'.*\).read\(\)")
+    with open("pyserver.py","r") as f, open("skyhopper.py","w") as out:
+        for line in f.readlines():
+            m = file_read.match(line)
+            if m:
+                with open(m.group(2),"r") as inline:
+                    line = inline.read()
+                    out.write('%s=r"""' % m.group(1))
+                    out.write(line)
+                    out.write('"""\n')
+            else:
+                out.write(line)
+
 def embed(manual):
     script=re.compile(r'^<script src="(.*)"></script>')
     ver=re.compile(r'.*Settings \((version)\).*')
@@ -64,6 +78,7 @@ def main():
     create_db()
     man = make_manual()
     embed(man)
+    embed_server()
     if len(sys.argv) == 2:
         deploy_files(sys.argv[1])
 
