@@ -3,15 +3,13 @@ import ssl, socket
 import signal
 import sys
 import traceback
+import tempfile
 import os
 
 pem=open('cert.pem','r',encoding='utf-8').read()
 hopper=open('skyhopper_deploy.html','r',encoding='utf-8').read()
 
-if 'TMPDIR' in os.environ:
-    cert_path = os.environ['TMPDIR'] + '/cert.pem'
-else:
-    cert_path = '/tmp/cert.pem'
+cert_path = tempfile.gettempdir()+ '/cert.pem'
 
 print("Saving sertificate to temporary ",cert_path)
 
