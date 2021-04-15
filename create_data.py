@@ -15,9 +15,12 @@ class DSODB(object):
         if t not in self._db:
             self._db[t] = []
         self._db[t].append(v)
+
     @property
     def json(self):
         index=dict()
+        names=[]
+        poss=[]
         result = []
         for n in self._db:
             self._db[n].sort(key=lambda v:v['AM'])
@@ -28,7 +31,12 @@ class DSODB(object):
         index['Ca']=len(result)
         result += self._db['S']
         index['S']=len(result)
-        return result,index
+        for i,v in enumerate(result):
+            if 'name' in v and v['t'] != 'Ca':
+                names.append(v['name'].upper())
+                poss.append(i)
+        nindex = {"names":names,"index":poss}
+        return result,index,nindex
 
 
 
@@ -208,7 +216,7 @@ def make_jsbd(dso,lines):
         f.write("// Lincense: https://github.com/eleanorlutz/western_constellations_atlas_of_space/blob/main/LICENSE (GPL)\n")
         f.write("// DSO data from https://github.com/mattiaverga/OpenNGC by CC-BY-SA-v4.0\n")
         f.write("// types: 'S' - star,'Ca' - canstelation,  'Oc' - open cluster, 'Gc' = globular cluster, 'Ga' - gallaxy, 'Ne' - nebula, 'P' - Planet\n")
-        db,index=dso.json
+        db,index,nindex=dso.json
         f.write('var allstars_index = ' + json.dumps(index) +';\n');
         f.write('var allstars = ')
         dumpjs(db,f)
@@ -216,6 +224,7 @@ def make_jsbd(dso,lines):
         f.write('var constellation_lines = ')
         dumpjs(lines,f)
         f.write(';\n')
+        f.write('var allstars_index_name = ' + json.dumps(nindex) + ';\n')
 
 def create_db():
     objects = DSODB()

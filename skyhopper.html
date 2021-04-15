@@ -16,6 +16,12 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 .comp_but { float:right }
 .only_tiny { display : none }
 .only_full { display : inline }
+input[type=text], input[type=text]:focus {
+	border: 1px solid red;
+	color:red;
+	background:black;
+
+}
 </style>
 <body>
 <canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
@@ -72,6 +78,7 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
  &angle;<button class="incdec_but" onclick="incFOV();">-</button><button class="incdec_but" onclick="decFOV();">+</button>
  &#x2605;<button class="incdec_but" onclick="decMAG();">-</button><button class="incdec_but" onclick="incMAG();">+</button>
 </p>
+<p>&#x2315; <input type="text" oninput="findTargetByName(this.value)" onfocus="findTargetByName(this.value)" style="width:30%" /> <b><span style="float:right" id="find_status"><span></b></p>
 <p><input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night Mode</label></p>
 <p><input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full Screen</label></p>
 <p>
@@ -213,6 +220,39 @@ function toggleFS(fs)
 	}
 }
 
+
+function findTargetByName(name ='')
+{
+	var found = document.getElementById('find_status')
+	var name = name.toUpperCase();
+	var N=allstars_index_name.names.length;
+	var found_index = -1;
+	if(name != '') {
+		for(var i=0;i<N;i++) {
+			let candidate = allstars_index_name.names[i];
+			if(candidate == name) {
+				found_index = i;
+				break;
+			}
+			else if(found_index != -2 && candidate.startsWith(name)) {
+				if(found_index == -1) {
+					found_index = i;
+				}
+				else {
+					found_index = -2;
+				}
+			}
+		}
+	}
+	if(found_index >= 0) {
+		global_target_index = allstars_index_name.index[found_index];
+		found.innerHTML = allstars[global_target_index].name;
+	}
+	else {
+		global_target_index = -1;
+		found.innerHTML = '';
+	}
+}
 function incMAG()
 {
 	if(global_mag < 6)
@@ -261,7 +301,9 @@ function setUseGyro(val,message=null)
 function resetAll()
 {
 	global_expecting_select = null;
+	findTargetByName();
 	global_target_index = -1;
+	document.getElementById('find_status').innerHTML = '';
 	global_align_index = -1;
 	setUseGyro(false);
 }
@@ -854,6 +896,7 @@ function plotAltAz(fwd)
 
 function selectTaret(index)
 {
+	findTargetByName();
 	global_target_index = index;
 	//global_expecting_select = null;
 }

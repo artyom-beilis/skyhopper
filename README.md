@@ -123,8 +123,11 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 1. Add user's object list: so user can add any object by RA, DE
 2. Develop procedure for phone alignment for equatorial mounts.
-3. Add search of objects by names
-4. Implement zoom-via-pinch.
+3. Implement zoom-via-pinch.
+
+## Known Issues
+
+- On some iPad versions (iOS 12.5) the star/target selection does not work
 
 ## Notes
 

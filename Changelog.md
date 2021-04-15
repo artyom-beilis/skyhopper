@@ -1,3 +1,9 @@
+2021-04-12: v0.0.28
+
+- Added search target by name functionality
+- Added python server for serving the app via termux python
+- Switched to use click instead of mousedown event for alignment/search
+
 2021-04-08: v0.0.27
 
 - Improved multi-star hopping without compass - adjust AZ offset to new position
