@@ -71,7 +71,7 @@ def embed(manual):
 
 def deploy_files(target):
     copyf('skyhopper_deploy.html',target + "/skyhopper.html");
-    for f in ['README.md','LICENSE','COPYING.md','manual.html']:
+    for f in ['README.md','LICENSE','COPYING.md','manual.html','skyhopper.py']:
         copyf(f,target+ "/" + f)
 
 def main():

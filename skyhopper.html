@@ -92,7 +92,7 @@ DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
 <p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
 <hr>
-<p><span id="lat"></span>, <span id="lon"></span></p>
+<p><button class="incdec_but" onclick="requestGeolocation();">&#x21bb;</button> GPS: <span id="lat">Unknown</span>, <span id="lon">Unknown</span></p>
 <p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span></p>
 </div>
 
@@ -943,10 +943,15 @@ function showpos(position)
 	document.getElementById("gps").style.display='none';
 }
 
-function getLocation() {
+function requestGeolocation()
+{
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showpos);
   }
+}
+
+function getLocation() {
+  requestGeolocation();
   setTimeout(getLocation,600*1000)
 }
 

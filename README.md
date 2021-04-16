@@ -89,10 +89,13 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 - Settings Menu:
 
     - Small Screen Mode - optimize for small screen, move some controls to settings menu
+    - Search target by name field
     - Night Mode - enable or disable red-night mode screen
     - Full Screen - switch application to full screen
     - Maximal apparent magnitude of DSO objects to be displayed
     - Filtering of the Astronomical objects by type 
+    - Status of geolocation and reload geolocation buttom
+    - Sensors information
 
 ## Constrols in Small Screen Mode
 
@@ -128,6 +131,23 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 ## Known Issues
 
 - On some iPad versions (iOS 12.5) the star/target selection does not work
+
+## Serving SkyHopper of remote location
+
+In remote locations internet isn't always present. SkyHopper provides simple web server written in python3 to serve the SkyHopper over LAN. You can setup it on any device that can run python 3.
+
+This is how you can serve it from an Android phone:
+
+
+- Install termux
+- Install python withing termux `pkg install python`
+- Download a copy of [skyhopper.py](https://raw.githubusercontent.com/artyom-beilis/artyom-beilis.github.io/master/skyhopper.py) to a location accessible by termux
+- Create "hotspot", the typical gateway of android hotspot is `192.168.43.1`
+- Open termux and `cd` to the directory you downloaded`skyhopper.py` to.
+- Run `python skyhopper.py`
+- Now you can go to <https://192.168.43.1:8443/> from any device connected to the hotspot and open skyhopper there. Please note `https` protocol and `8443` port
+- Note since it uses self-signed SSL sertificate you will have to give a security exception when accessing this site
+- You can close the server by simply pressing `Ctrl+C`
 
 ## Notes
 
