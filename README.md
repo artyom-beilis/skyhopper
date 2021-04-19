@@ -94,7 +94,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
     - Full Screen - switch application to full screen
     - Maximal apparent magnitude of DSO objects to be displayed
     - Filtering of the Astronomical objects by type 
-    - Status of geolocation and reload geolocation buttom
+    - Status of geolocation and reload geolocation button
     - Sensors information
 
 ## Constrols in Small Screen Mode
@@ -146,8 +146,10 @@ This is how you can serve it from an Android phone:
 - Open termux and `cd` to the directory you downloaded`skyhopper.py` to.
 - Run `python skyhopper.py`
 - Now you can go to <https://192.168.43.1:8443/> from any device connected to the hotspot and open skyhopper there. Please note `https` protocol and `8443` port
-- Note since it uses self-signed SSL sertificate you will have to give a security exception when accessing this site
+- Note since it uses self-signed SSL certificate you will have to give a security exception when accessing this site
 - You can close the server by simply pressing `Ctrl+C`
+
+If you want to use the server only locally for your own phone, no need to create hotspot and you can access the web application via <https://127.0.0.1:8443/> address. 
 
 ## Notes
 
