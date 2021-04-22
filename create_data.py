@@ -31,6 +31,7 @@ class DSODB(object):
         index['Ca']=len(result)
         result += self._db['S']
         index['S']=len(result)
+        index['U']=len(result) # user points
         for i,v in enumerate(result):
             if 'name' in v and v['t'] != 'Ca':
                 names.append(v['name'].upper())
@@ -225,6 +226,7 @@ def make_jsbd(dso,lines):
         dumpjs(lines,f)
         f.write(';\n')
         f.write('var allstars_index_name = ' + json.dumps(nindex) + ';\n')
+        f.write('var allstars_db_specs={"items":%d,"index_size":%d,"index_name_size":%d};\n' % (len(db),len(index),len(nindex["names"])))
 
 def create_db():
     objects = DSODB()

@@ -16,7 +16,7 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 .comp_but { float:right }
 .only_tiny { display : none }
 .only_full { display : inline }
-input[type=text], input[type=text]:focus {
+input[type=text], input[type=text]:focus, textarea{
 	border: 1px solid red;
 	color:red;
 	background:black;
@@ -91,6 +91,15 @@ DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
 <p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
 <p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
+<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" onchange="global_show_obj.U = this.checked;" /><label for="U_checked">User Objects</label> <a href="javascript:editUserDSO();">(edit&#x2026;)</a></p>
+<div id="dso_edit" style="display:none;">
+<p>Name,RA(hh:mm:ss),DE(±dd:mm:ss)</p>
+<p>
+    <textarea id="user_dso" style="width:80%" rows="5"></textarea>
+</p>
+<p><button class="ui_but" onclick="saveUserDSO();" >Save</button> <button class="ui_but" onclick="discardUserDSO();" >Discard</button></p>
+<p id="dso_errors"></p>
+</div>
 <hr>
 <p><button class="incdec_but" onclick="requestGeolocation();">&#x21bb;</button> GPS: <span id="lat">Unknown</span>, <span id="lon">Unknown</span></p>
 <p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span></p>
@@ -128,7 +137,8 @@ var global_show_obj = {
 	'Ca': true,
 	'Ga':true,
 	'Ne':true,
-    	'P': true,
+   	'P': true,
+    'U': true
 };
 
 var global_night_style = {
@@ -178,6 +188,8 @@ var global_full_screen = false;
 
 var global_status = "";
 
+var global_watchlists = [];
+var global_watchlist_index = { "list" : -1, "item" : -1 };
 
 function showManual(v)
 {
@@ -661,6 +673,18 @@ function plotStar(star,camRays,highlight)
 			context.fill();
 			context.stroke();
 		}
+		else if(star.t == 'U') {
+			context.lineWidth = 2;
+			context.beginPath();	
+            context.moveTo(pix_x-size,pix_y);
+            context.lineTo(pix_x,pix_y+size);
+            context.lineTo(pix_x+size,pix_y);
+            context.lineTo(pix_x,pix_y-size);
+            context.lineTo(pix_x-size,pix_y);
+			context.fillStyle = 'black';
+			context.fill();
+			context.stroke();
+		}
 		else {
 			context.arc(pix_x,pix_y,size,0,2*Math.PI,false);
 			context.fill();
@@ -1120,6 +1144,185 @@ function formatValue(uid,v)
 	document.getElementById(uid).innerHTML=msg;
 }
 
+function parseCSV(v)
+{
+    var res = new Array();
+    var rows = v.split('\n');
+    for(var r=0;r<rows.length;r++) {
+        var parsed_row=new Array();
+        if(rows[r].trim() == '')
+            continue;
+        var cols = rows[r].split(',');
+        for(var c=0;c<cols.length;c++) {
+            parsed_row.push(cols[c].trim())
+        }
+        res.push(parsed_row)
+    }
+    return res;
+}
+
+function parseRA(svalue)
+{
+    const re_float = /^(\d+\.\d+)$/;
+    const re_colon = /^(\d+):(\d+)(?::(\d+(.\d+)?))?$/;
+    const re_hms = /^(\d+)[hH \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|′′|″|''))?$/;
+    const re_space = /^(\d+)\s+(\d+)(?:\s+(\d+(.\d+)?))?$/;
+    var res = svalue.match(re_float);
+    var deg = null;
+    if(res) {
+        deg = parseFloat(res[1]);
+        if(deg < 0 || deg > 360)
+            return null;
+        return deg;
+    }
+    res = svalue.match(re_colon) || svalue.match(re_hms) || svalue.match(re_space);
+    if(!res)
+        return null;
+    var h = parseInt(res[1]);
+    var m = parseInt(res[2]);
+    var s = 0;
+    if(res[3]) {
+        s = parseFloat(res[3]);
+    }
+    if(h  >= 24 || m >= 60 || s >= 60) {
+        return null
+    }
+    deg = 15 * (h + (60 * m + s) / 3600.0 );
+    return deg;
+}
+
+function parseDEC(svalue)
+{
+    const re_float = /^([+-−]?\d+.\d+?)$/;
+    const re_colon = /^([-+−]?)(\d+):(\d+)(?::(\d+(.\d+)?))?$/;
+    const re_dms = /^([-+−]?)(\d+)[dD° \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|″|′′|''))?$/;
+    const re_space = /^([-+−]?)(\d+)\s+(\d+)(?:\s+(\d+(.\d+)?))?$/;
+    var res = svalue.match(re_float)
+    if(res) {
+        var deg = parseFloat(res[1])
+        if(deg < -90 || deg > 90)
+            return null;
+        return deg;
+    }
+    res = svalue.match(re_colon) || svalue.match(re_dms) || svalue.match(re_space);
+    if(!res)
+        return null;
+    var sig = (res[1] == '-' || res[1] == '−')? -1.0 : 1.0;
+    var d = parseInt(res[2]);
+    var m = parseInt(res[3]);
+    var s = 0;
+    if(res[4]) {
+        s = parseFloat(res[3]);
+    }
+    if(d  > 90 || m >= 60 || s >= 60)
+        return null;
+    return sig*(d + (60 * m + s) / 3600.0);
+}
+
+
+function editUserDSO()
+{
+    document.getElementById('dso_edit').style.display='inline';
+}
+
+function htmlEscape(v)
+{
+    return v.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/&/g,'&amp;').replace(/"/g,"&quot;").replace(/'/g,'&#x39;')
+}
+
+function discardUserDSO()
+{
+    loadUserDSO();
+    document.getElementById('dso_edit').style.display = 'none';
+}
+
+function saveUserDSO()
+{
+    resetUserDSOsAndMergeNewToAllStars();
+    var text = document.getElementById('user_dso').value;
+    var res = parseUserDSO(text);
+    var dso_errors = document.getElementById('dso_errors');
+    if(res[1].length > 0) {
+        var msg = '<b>Errors:</b><ol>';
+        for(var i=0;i<res[1].length;i++) {
+            msg = msg + '<li>' + htmlEscape(res[1][i]) + '</li>';
+        }
+        msg = msg + '</ol>';
+        dso_errors.innerHTML = msg;
+    }
+    else {
+        dso_errors.innerHTML = '';
+        window.localStorage.setItem('user_dso',text)
+        resetUserDSOsAndMergeNewToAllStars(res[0]);
+        document.getElementById('dso_edit').style.display='none';
+    }
+}
+
+function parseUserDSO(value)
+{
+    var errors = []
+    var dsos = new Array();
+    var names = new Set(allstars_index_name.names);
+    var new_names = new Set();
+    var csv = parseCSV(value)
+    for(var i=0;i<csv.length;i++) {
+        if(csv[i].length<3) {
+            errors.push('Too few colums in line ' + (i+1));
+            continue;
+        }
+        var name = csv[i][0];
+        if(name == "") {
+            errors.push('Empty object name in line ' + (i+1));
+            continue;
+        }
+        var sname = name.toUpperCase();
+        if(names.has(sname)) {
+            errors.push('Object ' + name + ' exists in data base')
+            continue;
+        }
+        if(new_names.has(sname)) {
+            errors.push('Duplicate object ' + name);
+            continue;
+        }
+        var ra = parseRA(csv[i][1]);
+        if(ra === null) {
+            errors.push('Invalid RA value ' + csv[i][1])
+            continue;
+        }
+        var de = parseDEC(csv[i][2]);
+        if(de === null) {
+            errors.push('Invalid DEC value ' + csv[i][2])
+            continue;
+        }
+        new_names.add(sname)
+        dsos.push({"name":name,"RA":ra,"DE":de,"AM":-1,"t":"U"});
+    }
+    return [dsos,errors]
+}
+function shortenArray(a,l)
+{
+    while(a.length > l) {
+        a.pop();
+    }
+}
+
+function resetUserDSOsAndMergeNewToAllStars(dsos = [])
+{
+    shortenArray(allstars,allstars_db_specs.items)
+    shortenArray(allstars_index_name.names,allstars_db_specs.index_name_size)
+    shortenArray(allstars_index_name.index,allstars_db_specs.index_name_size)
+    for(var i=0;i<dsos.length;i++) {
+        var pos = allstars.length;
+        allstars.push(dsos[i])
+        allstars_index_name.names.push(dsos[i].name.toUpperCase());
+        allstars_index_name.index.push(pos);
+    }
+    allstars_index["U"] = allstars.length;
+    if(global_target_index >= allstars.length) {
+        selectTaret(-1);
+    }
+}
+
 
 function iOSOrientation()
 {
@@ -1156,6 +1359,17 @@ function setDSOMag(val)
 	document.getElementById('dso_level_val').innerHTML = '' + global_dso_mag;
 }
 
+function loadUserDSO()
+{
+    var storage = window.localStorage;
+    var user_dso = storage.getItem('user_dso');
+    document.getElementById("user_dso").value = user_dso;
+    var dso = user_dso ? parseUserDSO(user_dso)[0] : [];
+    resetUserDSOsAndMergeNewToAllStars(dso);
+}
+
+
+
 setupGyros();
 // global drawing stuff
 var canvas = document.getElementById('myCanvas');
@@ -1164,6 +1378,7 @@ canvas.height = document.body.clientHeight;
 var context = canvas.getContext('2d');
 setTimeout(getLocation,500)
 setTimeout(plotStars,1000)
+loadUserDSO();
 document.body.addEventListener('mousedown',selectionEvent);
 document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);
