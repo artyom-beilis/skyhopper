@@ -53,6 +53,7 @@ input[type=text], input[type=text]:focus, textarea{
 </p>
 <p class="only_tiny"><button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
 </p>
+<p style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(-1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
 
 <p id="gps">No Geolocation</p>
 <div id="object_log" style="display:none">
@@ -85,6 +86,15 @@ input[type=text], input[type=text]:focus, textarea{
 DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 <input style="width:100%" type="range" id="dso_level" name="dso_level" min="3" max="16" value="5" step="1" onchange="setDSOMag(this.value)" />
 </p>
+<p>List: <button  class="incdec_but" onclick="prevWatchList();">&lt;</button> <button class="incdec_but" onclick="nextWatchList()">&gt;</button> <span id="wl_sel">None</span> <a href="javascript:editWatchList();">(edit&#x2026;)</a></p>
+<div id="wl_edit" style="display:none;">
+	<p>name: dso1, dso2, dso3, &#x2026;</p>
+	<p>
+	    <textarea id="user_wl" style="width:80%" rows="5"></textarea>
+	</p>
+	<p><button class="ui_but" onclick="saveWL();" >Save</button> <button class="ui_but" onclick="discardWL();" >Discard</button></p>
+	<p id="wl_errors"></p>
+</div>
 <p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
 <p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
 <p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
@@ -188,8 +198,7 @@ var global_full_screen = false;
 
 var global_status = "";
 
-var global_watchlists = [];
-var global_watchlist_index = { "list" : -1, "item" : -1 };
+var global_watchlist = null;
 
 function showManual(v)
 {
@@ -259,10 +268,12 @@ function findTargetByName(name ='')
 	if(found_index >= 0) {
 		global_target_index = allstars_index_name.index[found_index];
 		found.innerHTML = allstars[global_target_index].name;
+		return true;
 	}
 	else {
 		global_target_index = -1;
 		found.innerHTML = '';
+		return false;
 	}
 }
 function incMAG()
@@ -1323,6 +1334,171 @@ function resetUserDSOsAndMergeNewToAllStars(dsos = [])
     }
 }
 
+function setWatchList(wl)
+{
+	selectWatchList(-1);
+	global_watchlist = wl;
+}
+
+function nextWatchList()
+{
+	if(global_watchlist.current_list + 1 >= global_watchlist.lists.length) {
+		selectWatchList(-1);
+	}
+	else {
+		selectWatchList(global_watchlist.current_list + 1);
+	}
+
+}
+
+function prevWatchList()
+{
+	if(global_watchlist.current_list <= -1) {
+		selectWatchList(global_watchlist.lists.length - 1);
+	}
+	else {
+		selectWatchList(global_watchlist.current_list - 1);
+	}
+
+}
+
+function watchListItemUpdate(offset)
+{
+	if(global_watchlist.current_list < 0 || global_watchlist.current_list >= global_watchlist.lists.length)
+		return;
+	var list = global_watchlist.lists[global_watchlist.current_list];
+	if(global_target_index != -1) {
+		var target = allstars[global_target_index];
+		if(!target.name || target.name.toUpperCase() != list[global_watchlist.current_item].toUpperCase()) {
+			offset = 0;
+		}
+	}
+	global_watchlist.current_item = (global_watchlist.current_item + offset + list.length) % list.length;
+	findTargetByName(list[global_watchlist.current_item]);
+	markTarget();
+}
+
+function markTarget()
+{
+	var msgEl = document.getElementById("wl_target_name");
+	if(global_watchlist.current_list == -1) {
+		msgEl.innerHTML = "";
+	}
+	else {
+		var name = global_watchlist.lists[global_watchlist.current_list][global_watchlist.current_item];
+		msgEl.innerHTML = global_target_index == -1 ? ("?" + name + "?") : name;
+	}
+}	
+
+
+function watchListNext()
+{
+	if(global_watchlist.current_list < 0 || global_watchlist.current_list >= global_watchlist.lists.length)
+		return;
+	global_watchlist.current_item = (global_watchlist.current_item + 1) % global_watchlist.lists[global_watchlist.current_list].length;
+}
+
+function selectWatchList(index)
+{
+	if(index < 0 || index >= global_watchlist.lists.length) {
+		findTargetByName();
+		document.getElementById("wl_ctl").style.display = 'none';
+		document.getElementById("wl_sel").innerHTML = "None";
+		global_watchlist.current_list = -1;
+		global_watchlist.current_item = -1;
+	}
+	else {
+		document.getElementById("wl_ctl").style.display = "inline";
+		document.getElementById("wl_sel").innerHTML = global_watchlist.names[index];
+		global_watchlist.current_list = index;
+		global_watchlist.current_item = 0;
+		findTargetByName(global_watchlist.lists[index][0]);
+	}
+	markTarget();
+}
+
+function editWatchList()
+{
+	document.getElementById("wl_edit").style.display="inline";
+}
+
+function parseWatchList(text)
+{
+	var wl = {
+		lists: [],
+		names: [],
+		current_list: -1,
+		current_item: -1
+	};
+	var not_found = [];
+	var index={};
+	var items = text.split(/\s+|\s*,\s*/);
+	var list_name = "default";
+	for(var i=0;i<items.length;i++) {
+		var item = items[i];
+		if(item == "") {
+			continue;
+		}
+		if(item.slice(-1) == ":") {
+			list_name = item.slice(0,-1);
+			continue;
+		}
+		var nitem = item.toUpperCase();
+		if(allstars_index_name.names.findIndex(x=>x==nitem) == -1) {
+			not_found.push(item)
+		}
+		if(!(list_name in index)) {
+			index[list_name] = wl.names.length;
+			wl.names.push(list_name);
+			wl.lists.push(new Array());
+		}
+		wl.lists[index[list_name]].push(item);
+	}
+	return [wl,not_found]
+}
+
+function loadWL()
+{
+	var wl_text = window.localStorage.getItem("watch_list");
+	if(!wl_text)
+		wl_text = "";
+	var wl = parseWatchList(wl_text);
+	global_watchlist = wl[0];
+	document.getElementById("user_wl").value = wl_text;
+}
+
+function saveWL()
+{
+	var text = document.getElementById("user_wl").value;
+	var wl_all = parseWatchList(text);
+	var wl = wl_all[0];
+	var errors = wl_all[1];
+	var emsg = document.getElementById("wl_errors");
+	if(errors.length > 0) {
+		var msg="Not Found:";
+		for(var i=0;i<errors.length;i++) {
+			if(i > 0)
+				msg = msg + ", " + errors[i];
+			else
+				msg = msg + errors[i];
+		}
+		emsg.innerHTML = msg;
+		return;
+	}
+	emsg.innerHTML = "";
+	setWatchList(wl);
+	window.localStorage.setItem("watch_list",text);
+	document.getElementById("wl_edit").style.display = 'none';
+}
+
+function discardWL()
+{
+	var wl_text = window.localStorage.getItem("watch_list");
+	if(!wl_text)
+		wl_text = "";
+	document.getElementById("user_wl").value = wl_text;
+	document.getElementById("wl_edit").style.display = 'none';
+}
 
 function iOSOrientation()
 {
@@ -1370,6 +1546,7 @@ function loadUserDSO()
 
 
 
+
 setupGyros();
 // global drawing stuff
 var canvas = document.getElementById('myCanvas');
@@ -1379,6 +1556,7 @@ var context = canvas.getContext('2d');
 setTimeout(getLocation,500)
 setTimeout(plotStars,1000)
 loadUserDSO();
+loadWL();
 document.body.addEventListener('mousedown',selectionEvent);
 document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);

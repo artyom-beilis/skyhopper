@@ -3,7 +3,6 @@
 - Added search target by name functionality
 - Added python server for serving the app via termux python
 - Added manual geolocation reload control
-- Switched to use click instead of mousedown event for alignment/search
 
 2021-04-08: v0.0.27
 
