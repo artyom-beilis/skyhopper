@@ -1440,6 +1440,15 @@ function selectWatchList(index)
 }
 
 
+function tokenizeWL(text)
+{
+	const re=/(,|:|"[^"]*"|\s|[^ :,"]*)/;
+	const ws=/^\s+$/;
+	var items=text.split(re);
+	return items.filter(x=>x.trim() != "" && x!=",");
+}
+
+
 function parseWatchList(text)
 {
 	var wl = {
@@ -1450,15 +1459,14 @@ function parseWatchList(text)
 	};
 	var not_found = [];
 	var index={};
-	var items = text.split(/\s+|\s*,\s*/);
+	var items = tokenizeWL(text);
 	var list_name = "default";
 	for(var i=0;i<items.length;i++) {
 		var item = items[i];
-		if(item == "") {
-			continue;
-		}
-		if(item.slice(-1) == ":") {
-			list_name = item.slice(0,-1);
+		item = item.replace(/"/g,'')
+		if(i+1 < items.length && items[i+1] == ":") {
+			list_name = item;
+			i+=1;
 			continue;
 		}
 		var nitem = item.toUpperCase();
