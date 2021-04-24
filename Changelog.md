@@ -2,7 +2,8 @@
 
 - Added support of adding user's object to the map
 - Added support of watch list
-- Various modifications in UI
+- Various modifications in UI 
+- Target can now be selected even without alignment
 
 2021-04-16: v0.0.28
 

@@ -33,6 +33,7 @@ Before you attach the smartphone, open the application and calibrate the compass
 
 Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
+
 ## Notes for iOS Users
 
 - For iOS 13.0 and above you need to allow access to device orientation information by pressing `Enable Device Orientation` button once application loads
@@ -79,6 +80,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
     - Field of view - modify with `+`, `-` to adjust 
     - Maximal star magnitude to display/align on - adjust with `+`, `-` controls
     - Align button and status - pressing on it starts alignment process - you need to select a star you aligning on to.
+    - If watch list is selected `<`,`>` controls for browsing watch list object. Selected object name is shown below
 
 - Right side, from top to bottom
 
@@ -89,19 +91,22 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 - Settings Menu:
 
     - Small Screen Mode - optimize for small screen, move some controls to settings menu
-    - Search target by name field
-    - Night Mode - enable or disable red-night mode screen
     - Full Screen - switch application to full screen
+    - Night Mode - enable or disable red-night mode screen
     - Maximal apparent magnitude of DSO objects to be displayed
+    - Watch List selection and editing 
+    - Search target by name field
     - Filtering of the Astronomical objects by type 
+    - User Added Objects List
     - Status of geolocation and reload geolocation button
     - Sensors information
 
-## Constrols in Small Screen Mode
+## Controls in Small Screen Mode
 
 On screen controls:
 
-- Left Top: `◎` - Align button
+- Left Top: `◎` - Align button with status: `✓` - aligned, `✗` - not aligned, `?` - select alignment star
+- If watch list is selected, on the left `<`,`>` controls for browsing watch list object. Selected object name is shown below
 - Right:
 
     - Manual `✋` or Compass `⎋` mode
@@ -112,6 +117,47 @@ Extra controls in settings menu:
 - `↻` button - reset alignment
 - `∠` with `-`/`+` buttons - change FOV
 - `★` with `-`/`+` - modify stars magnitude
+
+## Watch List
+
+A user can create custom watch list in advance to browse them easily during the night.
+There is `List` option in "Settings" menu.  It has  `[edit]` control to open watch list editing tool/
+
+A watch list is defined by a simple list of object names separated by space, new lines or commas. 
+For example below the "default" list:
+
+    M411, M47, M49, M50, M44, M45
+
+Several named lists can be defined by giving watch list a name followed by `:`:
+
+    clusters: M41 M47 M49
+     M50 M44 M45
+    dbstars: Polaris, "Cor Caroli"
+
+Lists can be selected by pressing `<` and `>' buttons in "Lists" control. When the list is selected two buttons `<` and `>` are shown in main screen under "Align" button. They allow browsing the objects forward and backward. The current selected object's name is shown under the conrols.
+
+The watch lists are stored at your phone on per domain basis. They are kept even when you reopen the app. 
+
+_Note:_ if you accessing the app from different location (for example from local server) than it is stored saparetly, so prepare the list in advance.
+
+## User Objects
+
+This application does not contain every possible star or DSO. If you want to access objects that are not listed in the database you can add them via "User Objects" in settings menu.
+
+User object are defined in CSV format when first column contains object name, second right ascension (RA) and the third the declination (DEC).
+Both RA and DEC can be given as decimal degrees (0-360 for RA and -90 +90 for DEC) or in hour/degree with minutes and seconds. Seconds may be omitted. Fields can be separated by spaces, by ":" or by apropriate symbols like "h", "m", "s", "d". For example 
+
+- RA: `170.6358`, `11:22:32.6`, `11h 22m 32.6s`, `11h 22' 32.6''`, `11 22′ 32.6″`, `11 22 32.6`, `11:32`
+- DEC: `-87.3757`, `-87:22:32.6`, `-87d 22m 32.6s`, `-87d 22' 32.6''`, `-87° 22′ 32.6″`, `-87 22 32.6`, `-87:22`
+
+This is an example of such a list:
+
+    V1405,23h 24m 48s, +61° 11′ 15″
+    Pluto,19:55:16,-22:13:42
+
+The user objects are stored at your phone on per domain basis. They are kept even when you reopen the app. 
+
+_Note:_ if you accessing the app from different location (for example from local server) than it is stored separetly, so prepare the list in advance.
 
 
 ## Equatorial Mount Users
