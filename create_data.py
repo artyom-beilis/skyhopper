@@ -89,6 +89,7 @@ def get_OpenNGC_DSO(result):
                 continue
             ra = parse_ra(row[2])
             de = parse_de(row[3])
+            size = 0 if row[5]=='' else float(row[5])
             if row[9] == '':
                 continue
             mag = float(row[9])
@@ -101,7 +102,7 @@ def get_OpenNGC_DSO(result):
             if messier:
                 mapped.remove(messier)
                 object_id = 'M%d' % messier
-            result.append(dict(RA=ra,DE=de,AM=mag,name=object_id,t=object_type))
+            result.append(dict(RA=ra,DE=de,AM=mag,name=object_id,t=object_type,s=size))
     return result
 
 def get_stars(allstars):
@@ -207,7 +208,9 @@ def dumpjs(j,f):
             dumpjs(j[n],f)
         f.write('}')
     elif isinstance(j,float):
-        f.write('%.4f' % j)
+        fv='%.4f' % j
+        stripped = fv.rstrip('0').rstrip('.')
+        f.write(stripped)
     else:
         json.dump(j,f)
 
@@ -221,6 +224,7 @@ def make_jsbd(dso,lines):
         f.write('var allstars_index = ' + json.dumps(index) +';\n');
         f.write('var allstars = ')
         dumpjs(db,f)
+        #json.dump(db,f,indent=2)
         f.write(';\n')
         f.write('var constellation_lines = ')
         dumpjs(lines,f)

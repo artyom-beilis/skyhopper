@@ -617,6 +617,32 @@ function projectToCamera(RAd,DEd,cameraRays,in_fov=true)
 	return xyzTo2d(xyz,in_fov);
 }
 
+function formatSize(arcmin)
+{
+	var res = '';
+	const lim_factor = 3;
+	if(arcmin >= 60) {
+		var deg = Math.floor(arcmin / 60);
+		res += deg + "°";
+		var m = Math.floor(arcmin - deg * 60);
+		if(arcmin < 60 * lim_factor && m != 0) {
+			res += m + "′";
+		}
+	}
+	else if(arcmin >= 1) {
+		var m = Math.floor(arcmin);
+		res += m + "′";
+		var s = Math.floor((arcmin - m)*60)
+		if(arcmin < 1 * lim_factor && s != 0) {
+			res += s + "″";
+		}
+	}
+	else {
+		res = Math.floor(arcmin * 60) + "″";
+	}
+	return res;
+}
+
 function plotStar(star,camRays,highlight)
 {
 	var pos = projectToCamera(star.RA,star.DE,camRays);
@@ -724,10 +750,16 @@ function plotStar(star,camRays,highlight)
 		}
 		else {
 			let text = star.name;
+			let text_extra = []
 			if(highlight > 1) {
 				context.font = "6mm Sans";
-				if(star.AM != -1 && highlight == 3)
-					text+=", m=" + star.AM.toFixed(1);
+				if(highlight == 3) {
+					if(star.AM != -1)
+						text_extra.push("m=" + star.AM.toFixed(1));
+					if(star.s) {
+						text_extra.push(formatSize(star.s));
+					}
+				}
 			}
 			else {
 				context.font = "3mm Sans";
@@ -735,6 +767,11 @@ function plotStar(star,camRays,highlight)
 			context.textBaseline = 'bottom';
 			context.textAlign = 'start';
 			context.fillText(text,pix_x + size + 1,pix_y - size - 1)
+			if(text_extra) {
+				context.textBaseline = 'top';
+				context.fillText(text_extra.join(', '),pix_x + size + 1,pix_y - size/2 - 1)
+				context.textBaseline = 'bottom';
+			}
 		}
 	}
 	return result;
@@ -891,7 +928,8 @@ function plotStars()
 		var  pos = plotStar(allstars[i],camRays,highlight);
 		// select only stars if not aligned
 		// if aligned select all but constellations
-		if(pos && st!='Ca' && (st == 'S' || global_use_gyro)) {
+		var waiting_for_align = global_expecting_select == selectAlignWithTimer;
+		if(pos && st!='Ca' && (st == 'S' || !waiting_for_align)) {
 			pos.index = i;
 			global_targets_list.push(pos);
 		}
