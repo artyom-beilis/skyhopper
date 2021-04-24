@@ -1,3 +1,9 @@
+2021-04-24: v0.0.29
+
+- Added support of adding user's object to the map
+- Added support of watch list
+- Various modifications in UI
+
 2021-04-16: v0.0.28
 
 - Added search target by name functionality

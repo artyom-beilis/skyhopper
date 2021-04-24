@@ -53,7 +53,7 @@ input[type=text], input[type=text]:focus, textarea{
 </p>
 <p class="only_tiny"><button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
 </p>
-<p style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(-1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
+<p style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
 
 <p id="gps">No Geolocation</p>
 <div id="object_log" style="display:none">
@@ -331,7 +331,7 @@ function setUseGyro(val,message=null,message_tiny=null)
 
 function resetAll()
 {
-	global_expecting_select = null;
+	global_expecting_select = selectTaret;
 	findTargetByName();
 	global_target_index = -1;
 	document.getElementById('find_status').innerHTML = '';
@@ -1442,7 +1442,7 @@ function selectWatchList(index)
 
 function tokenizeWL(text)
 {
-	const re=/(,|:|"[^"]*"|\s|[^ :,"]*)/;
+	const re=/(,|:|"[^"]*"|\s+|[^\s:,"]*)/;
 	const ws=/^\s+$/;
 	var items=text.split(re);
 	return items.filter(x=>x.trim() != "" && x!=",");
@@ -1598,6 +1598,8 @@ document.body.addEventListener('touchend',manualUp);
 document.body.addEventListener('touchcancel',manualUp);
 document.body.addEventListener('touchmove',manualMove);
 dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but"]);
+global_expecting_select = selectTaret;
+
 </script>
 
 
