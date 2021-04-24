@@ -46,7 +46,7 @@ input[type=text], input[type=text]:focus, textarea{
 <p>
 	<span class="only_full"><button class="ui_but" onclick="align();">Align</button></span>
 	<span class="only_tiny"><button class="incdec_but" onclick="align();">&#x25ce;</button></span>
-	<span class="only_full" id="alignment"></span> <span id="countdown"></span>
+	<span class="only_tiny" id="alignment_tiny"></span><span class="only_full" id="alignment"></span> <span id="countdown"></span>
 	<button class="comp_but" id="nocompass_button" style="display:none"><strike>&#x238b;</strike></button>
 	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
@@ -310,14 +310,23 @@ function updateFOV()
 	document.getElementById("fov_val").innerHTML = global_fov + "&deg;";
 }
 
-function setUseGyro(val,message=null)
+function setUseGyro(val,message=null,message_tiny=null)
 {
 	global_use_gyro = val;
-	if(message)
+	if(message) {
 		var status = message;
-	else
+	}
+	else {
 		var status= global_use_gyro ? "Aligned" : "Not Aligned";
-	document.getElementById("alignment").innerHTML = status
+	}
+	if(message_tiny) {
+		var status_t = message_tiny;
+	}
+	else {
+		var status_t = global_use_gyro ? "✓" : "✗";
+	}
+	document.getElementById("alignment").innerHTML = status;
+	document.getElementById("alignment_tiny").innerHTML = status_t;
 }
 
 function resetAll()
@@ -339,7 +348,7 @@ function align()
 		// keep bearing
 		gdata.alpha_user_offset = gdata.alpha_gyro + gdata.alpha_diff - gdata.alpha;
 	}
-	setUseGyro(false,"Select Star");
+	setUseGyro(false,"Select Star","?");
 	global_align_index = -1;
 	global_expecting_select = selectAlignWithTimer;
 }
