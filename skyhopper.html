@@ -73,20 +73,18 @@ input[type=text], input[type=text]:focus, textarea{
 <button class="incdec_but" onclick="showConfig('none');">X</button>
 </span>
 <p><b>Settings (version)</b></p>
-<p><input class="dso_selector" id="small_screen" type="checkbox" onchange="smallScreen(this.checked)" /><label for="small_screen" >Small Screen Mode</label></p>
+<p>
+<input class="dso_selector" id="small_screen" type="checkbox" onchange="smallScreen(this.checked)"   /><label for="small_screen" >Small UI</label> 
+<input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night</label>
+<input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full S.</label>
+</p>
 <p class="only_tiny">
 <button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
  &angle;<button class="incdec_but" onclick="incFOV();">-</button><button class="incdec_but" onclick="decFOV();">+</button>
  &#x2605;<button class="incdec_but" onclick="decMAG();">-</button><button class="incdec_but" onclick="incMAG();">+</button>
 </p>
-<p>&#x2315; <input type="text" oninput="findTargetByName(this.value)" onfocus="findTargetByName(this.value)" style="width:30%" /> <b><span style="float:right" id="find_status"><span></b></p>
-<p><input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night Mode</label></p>
-<p><input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full Screen</label></p>
-<p>
-DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
-<input style="width:100%" type="range" id="dso_level" name="dso_level" min="3" max="16" value="5" step="1" onchange="setDSOMag(this.value)" />
-</p>
-<p>List: <button  class="incdec_but" onclick="prevWatchList();">&lt;</button> <button class="incdec_but" onclick="nextWatchList()">&gt;</button> <span id="wl_sel">None</span> <a href="javascript:editWatchList();">(edit&#x2026;)</a></p>
+<p>DSO <button class="incdec_but" onclick="dsoMagUpdate(-1);">-</button><button class="incdec_but" onclick="dsoMagUpdate(1)">+</button> <i>m&leq;</i><span id="dso_level_val">5</span></p>
+<p>List: <button  class="incdec_but" onclick="prevWatchList();">&lt;</button> <button class="incdec_but" onclick="nextWatchList()">&gt;</button> <span id="wl_sel">None</span> <a id="list_edit_toggle" href="javascript:toggleEditWL()">[edit]</a></p>
 <div id="wl_edit" style="display:none;">
 	<p>name: dso1, dso2, dso3, &#x2026;</p>
 	<p>
@@ -95,13 +93,14 @@ DSO Magnitude &leq;<span id="dso_level_val">5</span><br/>
 	<p><button class="ui_but" onclick="saveWL();" >Save</button> <button class="ui_but" onclick="discardWL();" >Discard</button></p>
 	<p id="wl_errors"></p>
 </div>
+<p>&#x2315; <input type="text" oninput="findTargetByName(this.value)" onfocus="findTargetByName(this.value)" style="width:30%" /> <b><span style="float:right" id="find_status"><span></b></p>
 <p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
 <p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
 <p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
 <p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
 <p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
 <p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
-<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" onchange="global_show_obj.U = this.checked;" /><label for="U_checked">User Objects</label> <a href="javascript:editUserDSO();">(edit&#x2026;)</a></p>
+<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" onchange="global_show_obj.U = this.checked;" /><label for="U_checked">User Objects</label> <a id="edit_user_dso" href="javascript:toggleEditDSO();">[edit]</a></p>
 <div id="dso_edit" style="display:none;">
 <p>Name,RA(hh:mm:ss),DE(±dd:mm:ss)</p>
 <p>
@@ -1231,10 +1230,19 @@ function parseDEC(svalue)
 }
 
 
-function editUserDSO()
+function toggleUI(link_id,ui_id)
 {
-    document.getElementById('dso_edit').style.display='inline';
+	var ui = document.getElementById(ui_id);
+	if(ui.style.display == "none") {
+		ui.style.display="inline";
+		document.getElementById(link_id).innerHTML = "[hide]";
+	}
+	else {
+		ui.style.display="none";
+		document.getElementById(link_id).innerHTML = "[edit]";
+	}
 }
+
 
 function htmlEscape(v)
 {
@@ -1244,7 +1252,12 @@ function htmlEscape(v)
 function discardUserDSO()
 {
     loadUserDSO();
-    document.getElementById('dso_edit').style.display = 'none';
+    toggleEditDSO();
+}
+
+function toggleEditDSO()
+{
+	toggleUI('edit_user_dso','dso_edit');
 }
 
 function saveUserDSO()
@@ -1265,7 +1278,7 @@ function saveUserDSO()
         dso_errors.innerHTML = '';
         window.localStorage.setItem('user_dso',text)
         resetUserDSOsAndMergeNewToAllStars(res[0]);
-        document.getElementById('dso_edit').style.display='none';
+	toggleEditDSO();
     }
 }
 
@@ -1417,10 +1430,6 @@ function selectWatchList(index)
 	markTarget();
 }
 
-function editWatchList()
-{
-	document.getElementById("wl_edit").style.display="inline";
-}
 
 function parseWatchList(text)
 {
@@ -1467,6 +1476,11 @@ function loadWL()
 	document.getElementById("user_wl").value = wl_text;
 }
 
+function toggleEditWL()
+{
+	toggleUI('list_edit_toggle','wl_edit');
+}
+
 function saveWL()
 {
 	var text = document.getElementById("user_wl").value;
@@ -1488,7 +1502,7 @@ function saveWL()
 	emsg.innerHTML = "";
 	setWatchList(wl);
 	window.localStorage.setItem("watch_list",text);
-	document.getElementById("wl_edit").style.display = 'none';
+	toggleEditWL();
 }
 
 function discardWL()
@@ -1497,7 +1511,7 @@ function discardWL()
 	if(!wl_text)
 		wl_text = "";
 	document.getElementById("user_wl").value = wl_text;
-	document.getElementById("wl_edit").style.display = 'none';
+	toggleEditWL();
 }
 
 function iOSOrientation()
@@ -1529,9 +1543,13 @@ function switchNightMode(is_night)
 }
 
 
-function setDSOMag(val)
+function dsoMagUpdate(offset)
 {
-	global_dso_mag = parseInt(val);
+	global_dso_mag = global_dso_mag + offset;
+	if(global_dso_mag < 3)
+		global_dso_mag = 3;
+	else if(global_dso_mag > 16)
+		global_dso_mag = 16;
 	document.getElementById('dso_level_val').innerHTML = '' + global_dso_mag;
 }
 
