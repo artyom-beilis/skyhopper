@@ -15,6 +15,7 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 .comp_but, .incdec_but { width: 10mm ; height:10mm; font-size:5mm ; padding: 0 }
 .comp_but { float:right }
 .only_tiny { display : none }
+.only_tiny_tr { display : none }
 .only_full { display : inline }
 input[type=text], input[type=text]:focus, textarea{
 	border: 1px solid red;
@@ -25,24 +26,6 @@ input[type=text], input[type=text]:focus, textarea{
 </style>
 <body>
 <canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
-<div class="only_full">
-<p>
-		<button class="incdec_but" onclick="incFOV();">-</button>
-		<button class="incdec_but" onclick="decFOV();">+</button>
-		&angle;<span id="fov_val">60&deg;</span><span style="font-size:16px" id="rtime"></span>
-		<span style="float:right">
-			<button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
-		</span>
-</p>
-<p>
-		<button class="incdec_but" onclick="decMAG();">-</button>
-		<button class="incdec_but" onclick="incMAG();">+</button>
-		<i>m&leq;</i><span id="mag_val">4</span>
-		<span style="float:right">
-			<button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
-		</span>
-</p>
-</div>
 <p>
 	<span class="only_full"><button class="ui_but" onclick="align();">Align</button></span>
 	<span class="only_tiny"><button class="incdec_but" onclick="align();">&#x25ce;</button></span>
@@ -51,6 +34,16 @@ input[type=text], input[type=text]:focus, textarea{
 	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
 	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
 </p>
+<div class="only_full">
+<p>
+		<button class="incdec_but" onclick="incFOV();">-</button>
+		<button class="incdec_but" onclick="decFOV();">+</button>
+		&angle;<span class="fov_val">60&deg;</span>
+		<span style="float:right">
+			<button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
+		</span>
+</p>
+</div>
 <p class="only_tiny"><button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
 </p>
 <p style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
@@ -74,17 +67,54 @@ input[type=text], input[type=text]:focus, textarea{
 </span>
 <p><b>Settings (version)</b></p>
 <p>
+<button class="ui_but" onclick="resetAll();">&#x21bb;</button>
 <input class="dso_selector" id="small_screen" type="checkbox" onchange="smallScreen(this.checked)"   /><label for="small_screen" >Small UI</label> 
 <input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night</label>
 <input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full S.</label>
 </p>
-<p class="only_tiny">
-<button class="incdec_but" onclick="resetAll();">&#x21bb;</button>
- &angle;<button class="incdec_but" onclick="incFOV();">-</button><button class="incdec_but" onclick="decFOV();">+</button>
- &#x2605;<button class="incdec_but" onclick="decMAG();">-</button><button class="incdec_but" onclick="incMAG();">+</button>
-</p>
-<p>DSO <button class="incdec_but" onclick="dsoMagUpdate(-1);">-</button><button class="incdec_but" onclick="dsoMagUpdate(1)">+</button> <i>m&leq;</i><span id="dso_level_val">5</span></p>
-<p>List: <button  class="incdec_but" onclick="prevWatchList();">&lt;</button><button class="incdec_but" onclick="nextWatchList()">&gt;</button> <span id="wl_sel">None</span> <a id="list_edit_toggle" href="javascript:toggleEditWL()">[edit]</a></p>
+<table>
+<tr class="only_tiny_tr">
+	<td>FOV</td>
+	<td>
+		<button class="incdec_but" onclick="incFOV();">-</button> <button class="incdec_but" onclick="decFOV();">+</button>
+	</td>
+	<td>
+		&angle;<span class="fov_val">60&deg;</span>
+	</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>Stars</td>
+	<td>
+		<button class="incdec_but" onclick="decMAG();">-</button> <button class="incdec_but" onclick="incMAG();">+</button>
+	</td>
+	<td>
+		<i>m&leq;</i><span id="mag_val">4</span>
+	</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>DSO</td>
+	<td>
+		<button class="incdec_but" onclick="dsoMagUpdate(-1);">-</button> <button class="incdec_but" onclick="dsoMagUpdate(1)">+</button>
+	</td>
+	<td>
+		<i>m&leq;</i><span id="dso_level_val">5</span>
+	</td>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>List</td>
+	<td>
+		<button  class="incdec_but" onclick="prevWatchList();">&lt;</button> <button class="incdec_but" onclick="nextWatchList()">&gt;</button>
+	</td>
+	<td id="wl_sel">None</td>
+	<td>
+		<a id="list_edit_toggle" href="javascript:toggleEditWL()">[edit]</a>
+	</td>
+</tr>
+</table>
+
 <div id="wl_edit" style="display:none;">
 	<p>name: dso1, dso2, dso3, &#x2026;</p>
 	<p>
@@ -214,7 +244,9 @@ function setDisplayByClass(cls,value)
 function smallScreen(v)
 {
 	var tiny = v ? 'inline' : 'none';
+	var tiny_tr = v ? 'table-row' : 'none';
 	var full = v ? 'none' : 'inline';
+	setDisplayByClass('only_tiny_tr',tiny_tr);
 	setDisplayByClass('only_tiny',tiny);
 	setDisplayByClass('only_full',full);
 }
@@ -307,7 +339,10 @@ function decFOV()
 function updateFOV()
 {
 	global_fov = global_fov_values[global_fov_index];
-	document.getElementById("fov_val").innerHTML = global_fov + "&deg;";
+	var vals = document.getElementsByClassName("fov_val");
+	for(var i=0;i<vals.length;i++) {
+		vals[i].innerHTML = global_fov + "&deg;";
+	}
 }
 
 function setUseGyro(val,message=null,message_tiny=null)
