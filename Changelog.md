@@ -1,5 +1,6 @@
 2021-04-25: v0.0.30
 
+- Improved contrast of selected target in night mode
 - Moved star magnitude control to settings to cleanup UI
 - Cleanup of settings user interfaces
 - Added informaton on object sizes in addition to magnitude

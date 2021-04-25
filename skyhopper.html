@@ -186,7 +186,7 @@ var global_night_style = {
 	bearing 	: 'red',
 	star		: 'red',
 	altaz		: 'red',
-	target		: '#AA0000',
+	target		: 'red',
 	align		: '#AA0000'
 };
 
@@ -756,11 +756,11 @@ function plotStar(star,camRays,highlight)
 		else if(star.t == 'U') {
 			context.lineWidth = 2;
 			context.beginPath();	
-            context.moveTo(pix_x-size,pix_y);
-            context.lineTo(pix_x,pix_y+size);
-            context.lineTo(pix_x+size,pix_y);
-            context.lineTo(pix_x,pix_y-size);
-            context.lineTo(pix_x-size,pix_y);
+			context.moveTo(pix_x-size,pix_y);
+			context.lineTo(pix_x,pix_y+size);
+			context.lineTo(pix_x+size,pix_y);
+			context.lineTo(pix_x,pix_y-size);
+			context.lineTo(pix_x-size,pix_y);
 			context.fillStyle = 'black';
 			context.fill();
 			context.stroke();
