@@ -77,23 +77,24 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
 - Left side, from top to bottom:
 
-    - Field of view - modify with `+`, `-` to adjust 
-    - Maximal star magnitude to display/align on - adjust with `+`, `-` controls
     - Align button and status - pressing on it starts alignment process - you need to select a star you aligning on to.
+    - Field of view - modify with `+`, `-` to adjust 
     - If watch list is selected `<`,`>` controls for browsing watch list object. Selected object name is shown below
 
 - Right side, from top to bottom
 
     - `⚙` - settings button
-    - `↻` button - reset alignment
     - `✋` - switch to manual mode,  `⎋` switch to compass mode, <del>`⎋`</del> - no compass available use manual mode only
 
 - Settings Menu:
 
+    - `↻` button - reset alignment and target
     - Small Screen Mode - optimize for small screen, move some controls to settings menu
     - Full Screen - switch application to full screen
     - Night Mode - enable or disable red-night mode screen
-    - Maximal apparent magnitude of DSO objects to be displayed
+    - In "Small Screen Mode" only: Field of view - modify with `+`, `-` to adjust 
+    - Maximal star magnitude to display/align on - adjust with `+`, `-` controls
+    - Maximal apparent magnitude of DSO objects to be displayed - modify with `+`, `-` controls
     - Watch List selection and editing 
     - Search target by name field
     - Filtering of the Astronomical objects by type 
@@ -112,11 +113,6 @@ On screen controls:
     - Manual `✋` or Compass `⎋` mode
     - Settings Menu: `⚙`
 
-Extra controls in settings menu:
-
-- `↻` button - reset alignment
-- `∠` with `-`/`+` buttons - change FOV
-- `★` with `-`/`+` - modify stars magnitude
 
 ## Watch List
 
@@ -134,7 +130,7 @@ Several named lists can be defined by giving watch list a name followed by `:`:
      M50 M44 M45
     dbstars: Polaris, "Cor Caroli"
 
-Lists can be selected by pressing `<` and `>' buttons in "Lists" control. When the list is selected two buttons `<` and `>` are shown in main screen under "Align" button. They allow browsing the objects forward and backward. The current selected object's name is shown under the conrols.
+Lists can be selected by pressing `<` and `>` buttons in "Lists" control. When the list is selected two buttons `<` and `>` are shown in main screen under "Align" button. They allow browsing the objects forward and backward. The current selected object's name is shown under the conrols.
 
 The watch lists are stored at your phone on per domain basis. They are kept even when you reopen the app. 
 
@@ -198,5 +194,5 @@ If you want to use the server only locally for your own phone, no need to create
 
 ## Notes
 
-It is experimental open source web application that would work only with well working sensors. No guarantee so. It is released under GPL license.
+It is an open source web application licensed under GPL license. It may work only with well working sensors. No warranty of any kind is given.
 
