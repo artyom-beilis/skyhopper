@@ -1,3 +1,11 @@
+2021-04-30: v0.0.31
+
+- Manual content improvement thanks to David Gudewicz.
+- Search box improvement:
+    - Completing search in the search box (submit/enter) closes settings menu if the object was found
+    - Search box in cleaned on input start.
+    - If you want to research same object press on search:`⌕` button
+
 2021-04-25: v0.0.30
 
 - Improved contrast of selected target in night mode
