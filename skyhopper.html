@@ -141,7 +141,7 @@ input[type=text], input[type=text]:focus, textarea{
 </div>
 <hr>
 <p><button class="incdec_but" onclick="requestGeolocation();">&#x21bb;</button> GPS: <span id="lat">Unknown</span>, <span id="lon">Unknown</span></p>
-<p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span></p>
+<p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span> UTC=<span id="utc_time"></span></p>
 </div>
 
 <div style="position:absolute; left:0; top:0; z-index:5; width:100%; background:black; display:none;" id="manual">
@@ -771,7 +771,7 @@ function plotStar(star,camRays,highlight)
 			context.stroke();
 		}
 	}
-	if(star.name) {
+	if(star.name || highlight >= 2) {
 		if(star.t == 'Ca') {
 			color = global_style.constelations;
 		}
@@ -784,7 +784,7 @@ function plotStar(star,camRays,highlight)
 			context.fillText(star.name,pix_x,pix_y)
 		}
 		else {
-			let text = star.name;
+			let text = star.name ? star.name : '';
 			let text_extra = []
 			if(highlight > 1) {
 				context.font = "6mm Sans";
@@ -923,6 +923,14 @@ function getSolarSystemObject(p)
 }
 
 
+function updateDebugTime(v)
+{
+    var mins=Math.floor(v / 60000);
+    var h = Math.floor(mins / 60) % 24
+    var m = mins % 60;
+    document.getElementById('utc_time').innerHTML = ('' + h).padStart(2,'0') + ':' + (m+'').padStart(2,'0')
+
+}
 
 function plotStars()
 {
@@ -935,6 +943,7 @@ function plotStars()
 	
 	global_targets_list=[];
 	gdata.time = Date.now();
+    updateDebugTime(gdata.time);
 	var camRays = getCameraRays();
 	context.fillStyle = "black";
 	context.fillRect(0, 0, canvas.width, canvas.height);
