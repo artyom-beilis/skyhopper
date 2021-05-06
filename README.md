@@ -25,9 +25,9 @@ Before you attach the smartphone, open the application and calibrate the compass
 
 
 1. Align your telescope with an easily identifiable star near the object you want to observe
-2. Click `Align` button on
-3. Click the star you selected. 3s timer is started to make sure there is no shaking. After 3 seconds the application is aligned on the selected star. "Aligned" message is shown and a cross that represents the direction your telescope is looking to is shown in the center of the screen.
-4. Click on an object you want to observe and you get a line showing a direction you need to move the telescope to and the changes in altitude and azimuth are shown at the right and bottom part of the screen
+2. Tap on `Align` button 
+3. Tap on the star you selected. 3s timer is started to make sure there is no shaking. After 3 seconds the application is aligned on the selected star. "Aligned" message is shown and a cross that represents the direction your telescope is looking to is shown in the center of the screen.
+4. Tap on an object you want to observe and you get a line showing a direction you need to move the telescope to and the changes in altitude and azimuth are shown at the right and bottom part of the screen
 5. Move the telescope till these numbers are close to zero - at this point your telescope should point to the requested object
 6. In order to move to next object - repeat the alignment process from the step 1 since the builtin cellphone gyros don't keep the accuracy for a long time/multiple movements
 
