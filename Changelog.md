@@ -1,10 +1,12 @@
-2021-04-30: v0.0.31
+2021-05-07: v0.99.1
 
 - Manual content improvement thanks to David Gudewicz.
 - Search box improvement:
     - Completing search in the search box (submit/enter) closes settings menu if the object was found
     - Search box in cleaned on input start.
     - If you want to research same object press on search:`⌕` button
+- Added mangitude information for stars without names
+- Added UTC time to debug information
 
 2021-04-25: v0.0.30
 
