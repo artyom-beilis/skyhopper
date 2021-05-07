@@ -17,12 +17,19 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 .only_tiny { display : none }
 .only_tiny_tr { display : none }
 .only_full { display : inline }
-input[type=text], input[type=text]:focus, textarea{
-	border: 1px solid red;
+input[type=text], input[type=text]:focus, textarea, input[type=submit]{
+	border: 2px solid red;
 	color:red;
 	background:black;
-
 }
+
+input[type=text], input[type=text]:focus, input[type=submit] {
+	height:10mm;
+	font-size:5mm;
+        padding: 0;
+	vertical-align: middle; background-color:black; 
+}
+input[type=submit] { width:10mm;}
 </style>
 <body>
 <canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
@@ -123,7 +130,9 @@ input[type=text], input[type=text]:focus, textarea{
 	<p><button class="ui_but" onclick="saveWL();" >Save</button> <button class="ui_but" onclick="discardWL();" >Discard</button></p>
 	<p id="wl_errors"></p>
 </div>
-<p>&#x2315; <input type="text" oninput="findTargetByName(this.value)" onfocus="findTargetByName(this.value)" style="width:30%" /> <b><span style="float:right" id="find_status"><span></b></p>
+<form onsubmit="return hideSettingIfSelectionOk()" >
+<p> <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
+</form>
 <p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
 <p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
 <p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
@@ -272,6 +281,15 @@ function toggleFS(fs)
 	}
 }
 
+
+function hideSettingIfSelectionOk()
+{
+	var value = document.getElementById("search_field").value;
+	if(findTargetByName(value)) {
+		showConfig('none')
+	}
+	return false;
+}
 
 function findTargetByName(name ='')
 {
