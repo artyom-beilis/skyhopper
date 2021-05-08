@@ -180,17 +180,31 @@ At remote locations internet isn't always present. SkyHopper provides simple web
 This is how you can serve it from an Android phone:
 
 
-- Install termux
-- Install python withing termux `pkg install python`
-- Download a copy of [skyhopper.py](https://raw.githubusercontent.com/artyom-beilis/artyom-beilis.github.io/master/skyhopper.py) to a location accessible by termux
-- Create "hotspot", the typical gateway of android hotspot is `192.168.43.1`
-- Open termux and `cd` to the directory you downloaded`skyhopper.py` to.
-- Run `python skyhopper.py`
-- Now you can go to <https://192.168.43.1:8443/> from any device connected to the hotspot and open skyhopper there. Please note `https` protocol and `8443` port
-- Note since it uses self-signed SSL certificate you will have to give a security exception when accessing this site
-- You can close the server by simply pressing `Ctrl+C`
+- Install termux, you need to use F-Droid package manager: <https://www.f-droid.org/>, the version avalible from Google Store is not getting updates and at this point it is impossible to install python there:
+- Install python withing termux:
 
-If you want to use the server only locally for your own phone, no need to create hotspot and you can access the web application via <https://127.0.0.1:8443/> address. 
+        apt update
+        pkg install python
+
+- Provide termux access to storage by running:
+
+        termux-setup-storage
+
+- Download a copy of [skyhopper.py](https://raw.githubusercontent.com/artyom-beilis/artyom-beilis.github.io/master/skyhopper.py) to a location accessible by termux, for this manual it will be `Downloads`
+- Run python script from there:
+
+        cd /storage/emulated/0/Downloads
+        python skyhopper.py
+  
+  You can close the server by simply pressing `Ctrl+C`
+
+- Now you can go to <https://127.0.0.1:8443/> address in the browser and use it.  Please note `https` protocol and `8443` port
+- Note since it uses self-signed SSL certificate you will have to give a security exception when accessing this site
+- If you want to serve the skyhopper to other users at your pysical location:
+    - Create "hotspot", the typical gateway of android hotspot is `192.168.43.1`
+    - Run skyhopper as described before _after_ you created hotspot
+    - Now you can go to <https://192.168.43.1:8443/> from any device connected to the hotspot and open skyhopper there.
+
 
 ## Notes
 
