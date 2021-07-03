@@ -24,9 +24,9 @@ viewing direction.
 Before you attach the smartphone, open the application and calibrate the compass using "8" like movements. The calibration will significantly improve compass direction accuracy.
 
 
-1. Align your telescope with an easily identifiable star near the object you want to observe
+1. Align your telescope with an easily identifiable star or a planet near the object you want to observe
 2. Tap on `Align` button 
-3. Tap on the star you selected. 3s timer is started to make sure there is no shaking. After 3 seconds the application is aligned on the selected star. "Aligned" message is shown and a cross that represents the direction your telescope is looking to is shown in the center of the screen.
+3. Tap on the star or the planet you selected. 3s timer is started to make sure there is no shaking. After 3 seconds the application is aligned on the selected object. "Aligned" message is shown and a cross that represents the direction your telescope is looking to is shown in the center of the screen.
 4. Tap on an object you want to observe and you get a line showing a direction you need to move the telescope to and the changes in altitude and azimuth are shown at the right and bottom part of the screen
 5. Move the telescope till these numbers are close to zero - at this point your telescope should point to the requested object
 6. In order to move to next object - repeat the alignment process from the step 1 since the builtin cellphone gyros don't keep the accuracy for a long time/multiple movements
@@ -77,7 +77,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
 - Left side, from top to bottom:
 
-    - Align button and status - pressing on it starts alignment process - you need to select a star you aligning on to.
+    - Align button and status - pressing on it starts alignment process - you need to select a star or planet you aligning on to.
     - Field of view - modify with `+`, `-` to adjust 
     - If watch list is selected `<`,`>` controls for browsing watch list object. Selected object name is shown below
 
@@ -97,6 +97,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
     - Maximal apparent magnitude of DSO objects to be displayed - modify with `+`, `-` controls
     - Watch List selection and editing 
     - Search target by name field
+    - Allow alignment using any DSO object. Use with care since it is hard to define a center of big DSO object like open cluster.
     - Filtering of the Astronomical objects by type 
     - User Added Objects List
     - Status of geolocation and reload geolocation button
