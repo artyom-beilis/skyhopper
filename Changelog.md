@@ -1,3 +1,9 @@
+2021-07-03: v0.99.2
+
+- Fixed a bug of compass, hand and settings icons now showing in Samsung browser
+- Allow alignment on planets by default
+- Allow alignment on DSO objects by user request
+
 2021-05-07: v0.99.1
 
 - Manual content improvement thanks to David Gudewicz.
