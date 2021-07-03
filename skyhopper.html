@@ -155,6 +155,7 @@ input[type=submit] { width:10mm;}
 <form onsubmit="return hideSettingIfSelectionOk()" >
 <p> <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
 </form>
+<p><input class="dso_selector" id="align_dso_checked"  type="checkbox" onchange="global_align_on_dso  = this.checked;" /><label for="align_dso_checked" >Allow align on DSO</label></p>
 <p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
 <p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
 <p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
@@ -225,6 +226,7 @@ var global_night_style = {
 
 var global_style = global_day_style;
 
+var global_align_on_dso=false;
 var global_targets_list = [];
 var global_prev_xy=null;
 var global_target_index = -1;
@@ -972,6 +974,13 @@ function updateDebugTime(v)
 
 }
 
+function validAlignType(t)
+{
+    if(!global_align_on_dso)
+        return t=='S' || t=='P';
+    return t!='Ca';
+}
+
 function plotStars()
 {
 	var start=Date.now();
@@ -1013,7 +1022,7 @@ function plotStars()
 		// select only stars if not aligned
 		// if aligned select all but constellations
 		var waiting_for_align = global_expecting_select == selectAlignWithTimer;
-		if(pos && st!='Ca' && (st == 'S' || !waiting_for_align)) {
+		if(pos && st!='Ca' && (validAlignType(st) || !waiting_for_align)) {
 			pos.index = i;
 			global_targets_list.push(pos);
 		}
