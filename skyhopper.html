@@ -17,6 +17,28 @@ button { height:10mm; font-size:5mm ; text-align:center; vertical-align: middle;
 .only_tiny { display : none }
 .only_tiny_tr { display : none }
 .only_full { display : inline }
+
+.manual_background {
+    background: url(manual-blk.png) no-repeat center center;
+    background-size: 10mm 10mm;
+}
+
+.compass_background {
+    background: url(compass-blk.png) no-repeat center center;
+    background-size: 10mm 10mm;
+}
+
+.nocompass_background {
+    background: url(nocompass-blk.png) no-repeat center center;
+    background-size: 10mm 10mm;
+}
+
+.settings_background {
+    background: url(settings-blk.png) no-repeat center center;
+    background-size: 10mm 10mm;
+}
+
+
 input[type=text], input[type=text]:focus, textarea, input[type=submit]{
 	border: 2px solid red;
 	color:red;
@@ -37,9 +59,9 @@ input[type=submit] { width:10mm;}
 	<span class="only_full"><button class="ui_but" onclick="align();">Align</button></span>
 	<span class="only_tiny"><button class="incdec_but" onclick="align();">&#x25ce;</button></span>
 	<span class="only_tiny" id="alignment_tiny"></span><span class="only_full" id="alignment"></span> <span id="countdown"></span>
-	<button class="comp_but" id="nocompass_button" style="display:none"><strike>&#x238b;</strike></button>
-	<button class="comp_but" id="hand_button" style="display:none; color: transparent; text-shadow: 0 0 0 red;" onclick="manualMode();">&#x270B;</button>
-	<button class="comp_but" id="compass_button" style="display:none" onclick="compassMode();">&#x238b;</button>
+	<button class="comp_but nocompass_background" id="nocompass_button" style="display:none">&nbsp;</button>
+	<button class="comp_but manual_background" id="hand_button" style="display:none;" onclick="manualMode();">&nbsp;</button>
+	<button class="comp_but compass_background" id="compass_button" style="display:none" onclick="compassMode();">&nbsp;</button>
 </p>
 <div class="only_full">
 <p>
@@ -47,11 +69,11 @@ input[type=submit] { width:10mm;}
 		<button class="incdec_but" onclick="decFOV();">+</button>
 		&angle;<span class="fov_val">60&deg;</span>
 		<span style="float:right">
-			<button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
+			<button class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
 		</span>
 </p>
 </div>
-<p class="only_tiny"><button class="comp_but" style="color: transparent; text-shadow: 0 0 0 red;" onclick="showConfig('inline');">&#x2699;</button>
+<p class="only_tiny"><button class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
 </p>
 <p style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
 

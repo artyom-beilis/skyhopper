@@ -60,7 +60,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
     1. Move your cell phone in compass calibration/waving pattern to increase compass accuracy
     2. Increase application's field of view by pressing `+` at the top left corner near value `∠60°` - default FOV.
-    3. You may switch to manual azimuth mode by pressing `✋` icon at the right side and adjust the azimuth manually
+    3. You may switch to manual azimuth mode by pressing "hand" `✋` icon at the right side and adjust the azimuth manually
 
 -   _The screen becomes dim very fast and I don't have time to align/point the telescope?_
 
@@ -84,7 +84,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 - Right side, from top to bottom
 
     - `⚙` - settings button
-    - `✋` - switch to manual mode,  `⎋` switch to compass mode, <del>`⎋`</del> - no compass available use manual mode only
+    - `✋` - switch to manual mode, "_compass_" switch to compass mode, "_compass crossed_" - no compass available use manual mode only
 
 - Settings Menu:
 
@@ -110,7 +110,7 @@ On screen controls:
 - If watch list is selected, on the left `<`,`>` controls for browsing watch list object. Selected object name is shown below
 - Right:
 
-    - Manual `✋` or Compass `⎋` mode
+    - Manual `✋` or "_compass_" mode
     - Settings Menu: `⚙`
 
 

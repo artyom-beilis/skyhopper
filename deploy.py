@@ -3,6 +3,7 @@ import os
 import sys
 import markdown
 import shutil
+import base64
 
 from create_data import create_db
 
@@ -50,12 +51,14 @@ def embed_server():
 def embed(manual):
     script=re.compile(r'^<script src="(.*)"></script>')
     ver=re.compile(r'.*Settings \((version)\).*')
+    urlpng=re.compile(r'^(.*)url\(([a-z0-9_\-]*\.png)\)(.*)$')
     
     version = get_ver()
     with open("skyhopper.html","r") as f, open("skyhopper_deploy.html","w") as out:
         for line in f.readlines():
             m = script.match(line)
             v = ver.match(line)
+            u = urlpng.match(line)
             if m:
                 with open(m.group(1),"r") as inline:
                     line = inline.read()
@@ -64,6 +67,12 @@ def embed(manual):
                     out.write('</script>\n')
             elif v:
                 out.write(line.replace('version',version))
+            elif u:
+                with open(u.group(2),'rb') as f:
+                    png = f.read()
+                    b64png = base64.b64encode(png).decode()
+                new_line = '%surl(data:image/png;base64,%s)%s\n' % (u.group(1),b64png,u.group(3))
+                out.write(new_line )
             elif line.find('MANUAL') == 0:
                 out.write(manual)
             else:
