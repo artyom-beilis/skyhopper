@@ -1,3 +1,9 @@
+2021-11-25: v0.99.3
+
+-   Added names normalization such that NGC0171, NGC 171 and NGC171 will refer to same object
+-   Added using of B-Mag when V-Mag does not provides, reduced maximal DSO magnitude to 14 instead of 16
+    to make sure the size remains small
+
 2021-07-03: v0.99.2
 
 - Fixed a bug of compass, hand and settings icons now showing in Samsung browser

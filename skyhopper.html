@@ -315,10 +315,21 @@ function hideSettingIfSelectionOk()
 	return false;
 }
 
+function normalizeName(name)
+{
+    name = name.toUpperCase()
+    const re=/^(.*)(([A-Z]+)[ 0]+)([^0].*)$/;
+    var match = name.match(re);
+    if(match) {
+        return normalizeName(match[1]+match[3]+match[4]);
+    }
+    return name;
+}
+
 function findTargetByName(name ='')
 {
 	var found = document.getElementById('find_status')
-	var name = name.toUpperCase();
+	var name = normalizeName(name);
 	var N=allstars_index_name.names.length;
 	var found_index = -1;
 	if(name != '') {
@@ -1439,7 +1450,7 @@ function parseUserDSO(value)
             errors.push('Empty object name in line ' + (i+1));
             continue;
         }
-        var sname = name.toUpperCase();
+        var sname = normalizeName(name);
         if(names.has(sname)) {
             errors.push('Object ' + name + ' exists in data base')
             continue;
@@ -1478,7 +1489,7 @@ function resetUserDSOsAndMergeNewToAllStars(dsos = [])
     for(var i=0;i<dsos.length;i++) {
         var pos = allstars.length;
         allstars.push(dsos[i])
-        allstars_index_name.names.push(dsos[i].name.toUpperCase());
+        allstars_index_name.names.push(normalizeName(dsos[i].name));
         allstars_index_name.index.push(pos);
     }
     allstars_index["U"] = allstars.length;
@@ -1522,7 +1533,7 @@ function watchListItemUpdate(offset)
 	var list = global_watchlist.lists[global_watchlist.current_list];
 	if(global_target_index != -1) {
 		var target = allstars[global_target_index];
-		if(!target.name || target.name.toUpperCase() != list[global_watchlist.current_item].toUpperCase()) {
+		if(!target.name || normalizeName(target.name) != normalizeName(list[global_watchlist.current_item])) {
 			offset = 0;
 		}
 	}
@@ -1600,7 +1611,7 @@ function parseWatchList(text)
 			i+=1;
 			continue;
 		}
-		var nitem = item.toUpperCase();
+		var nitem = normalizeName(item);
 		if(allstars_index_name.names.findIndex(x=>x==nitem) == -1) {
 			not_found.push(item)
 		}
@@ -1696,8 +1707,8 @@ function dsoMagUpdate(offset)
 	global_dso_mag = global_dso_mag + offset;
 	if(global_dso_mag < 3)
 		global_dso_mag = 3;
-	else if(global_dso_mag > 16)
-		global_dso_mag = 16;
+	else if(global_dso_mag > 14)
+		global_dso_mag = 14;
 	document.getElementById('dso_level_val').innerHTML = '' + global_dso_mag;
 }
 

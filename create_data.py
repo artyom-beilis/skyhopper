@@ -2,10 +2,19 @@ import os
 import csv
 import sys
 import json
+import re
 
 
-global_dso_mag_limit = 16
+global_dso_mag_limit = 14
 global_mag_limit = 6
+zeros=re.compile('^(.*)(([A-Z]+)[ 0]+)([^0].*)$')
+
+def normalize_name(name):
+    m=zeros.match(name)
+    if m:
+       new_name = m.group(1) + m.group(3) + m.group(4)
+       return normalize_name(new_name)
+    return name
 
 class DSODB(object):
     def __init__(self):
@@ -90,9 +99,12 @@ def get_OpenNGC_DSO(result):
             ra = parse_ra(row[2])
             de = parse_de(row[3])
             size = 0 if row[5]=='' else float(row[5])
-            if row[9] == '':
-                continue
-            mag = float(row[9])
+            mag_str = row[9]
+            if mag_str == '': # try V-Mag First than B-Mag
+                mag_str = row[8] 
+                if mag_str == '': 
+                    continue
+            mag = float(mag_str)
             if mag > global_dso_mag_limit:
                 continue
             messier = int(row[18]) if row[18]!='' else 0
@@ -102,6 +114,7 @@ def get_OpenNGC_DSO(result):
             if messier:
                 mapped.remove(messier)
                 object_id = 'M%d' % messier
+            object_id = normalize_name(object_id)
             result.append(dict(RA=ra,DE=de,AM=mag,name=object_id,t=object_type,s=size))
     return result
 
@@ -115,6 +128,8 @@ def get_stars(allstars):
             name=row[6]
             if name == '':
                 name = None
+            else:
+                name = normalize_name(name)
             ra=float(row[7])*15.0
             de=float(row[8])
             if sid!='':
@@ -128,31 +143,6 @@ def get_stars(allstars):
 
     return starpos
 
-def get_atlas_DSO(messier):
-    with open('western_constellations_atlas_of_space/data/processed/messier_ngc_processed.csv','r') as f:
-        for i,row in enumerate(csv.reader(f)):
-            if i <= 0:
-                continue
-            name=row[0]
-            t=row[1]
-            ra=float(row[2])*15.0
-            de=float(row[3])
-            mag=float(row[4])
-            if t.find('nebula')!=-1:
-                t='Ne'
-            elif t.find('open clu')!=-1:
-                t='Oc'
-            elif t.find('galaxy')!=-1:
-                t='Ga'
-            elif t.find('globular')!=-1:
-                t='Gc'
-            elif t.find('clou')!=-1:
-                t='Oc'
-            else:
-                print("Skipping",t,name);
-                continue
-            messier.append(dict(DE=de,RA=ra,AM=mag,name=name,t=t))
-    return messier
 
 def get_constellations(cons):
     src_path = 'western_constellations_atlas_of_space/data/processed/centered_constellations.csv'
@@ -234,7 +224,6 @@ def make_jsbd(dso,lines):
 
 def create_db():
     objects = DSODB()
-    #get_atlas_DSO(objects)
     get_OpenNGC_DSO(objects)
     get_planets(objects)
     mapping = get_stars(objects);
