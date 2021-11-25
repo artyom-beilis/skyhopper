@@ -3,6 +3,7 @@
 -   Added names normalization such that NGC0171, NGC 171 and NGC171 will refer to same object
 -   Added using of B-Mag when V-Mag does not provides, reduced maximal DSO magnitude to 14 instead of 16
     to make sure the size remains small
+-   Added support of display font size modifcation
 
 2021-07-03: v0.99.2
 

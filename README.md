@@ -95,6 +95,7 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
     - In "Small Screen Mode" only: Field of view - modify with `+`, `-` to adjust 
     - Maximal star magnitude to display/align on - adjust with `+`, `-` controls
     - Maximal apparent magnitude of DSO objects to be displayed - modify with `+`, `-` controls
+    - Font size increase option to allow bigger fonts if needed
     - Watch List selection and editing 
     - Search target by name field
     - Allow alignment using any DSO object. Use with care since it is hard to define a center of big DSO object like open cluster.

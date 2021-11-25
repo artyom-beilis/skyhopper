@@ -142,6 +142,16 @@ input[type=submit] { width:10mm;}
 		<a id="list_edit_toggle" href="javascript:toggleEditWL()">[edit]</a>
 	</td>
 </tr>
+<tr>
+	<td>Font</td>
+	<td>
+		<button class="incdec_but" onclick="incDecLF(-1);">-</button> <button class="incdec_but" onclick="incDecLF(1)">+</button>
+	</td>
+	<td>
+		<i>+</i><span id="lf_val">0</span><i>mm</i>
+	</td>
+	<td>&nbsp;</td>
+</tr>
 </table>
 
 <div id="wl_edit" style="display:none;">
@@ -236,6 +246,7 @@ var global_camera_projection = true;
 var global_expected_frame_rate_ms = 66;
 var global_use_compass = false;
 var global_dso_mag = parseInt(document.getElementById('dso_level_val').innerHTML);
+var global_large_font = 0;
 
 var global_fov_index = 3;
 var global_fov_values = [7,15,30,60,90,120,150]
@@ -295,6 +306,13 @@ function showConfig(v)
 {
 	document.getElementById('config').style.display = v;
 }
+
+
+function largeF(n,s)
+{
+    return (s+global_large_font) + "mm " +n;
+}
+
 function toggleFS(fs)
 {
 	if(fs) {
@@ -831,7 +849,7 @@ function plotStar(star,camRays,highlight)
 		context.strokeStyle = color;
 		context.fillStyle = color;
 		if(star.t == 'Ca') {
-			context.font = "4mm Sans"
+			context.font = largeF('Sans',4);
 			context.textBaseline = 'middle';
 			context.textAlign = 'center';
 			context.fillText(star.name,pix_x,pix_y)
@@ -840,7 +858,7 @@ function plotStar(star,camRays,highlight)
 			let text = star.name ? star.name : '';
 			let text_extra = []
 			if(highlight > 1) {
-				context.font = "6mm Sans";
+				context.font = largeF("Sans",6);
 				if(highlight == 3) {
 					if(star.AM != -1)
 						text_extra.push("m=" + star.AM.toFixed(1));
@@ -850,7 +868,7 @@ function plotStar(star,camRays,highlight)
 				}
 			}
 			else {
-				context.font = "3mm Sans";
+				context.font = largeF("Sans",3);
 			}
 			context.textBaseline = 'bottom';
 			context.textAlign = 'start';
@@ -927,7 +945,7 @@ function plotBearing(xyz)
 	var left = (dx > 0 ? 'Right' : 'Left' ) + ' ' + Math.abs(Math.atan2(xyz.x,xyz.z) / Math.PI * 180).toFixed(1) + '\u00b0';
 	context.stroke();
 	context.lineWidth = 0;
-	context.font = "6mm Serif";
+	context.font = largeF('Serif',6);
 	context.strokeStyle = global_style.bearing;
 	context.fillStyle = global_style.bearing;
 	context.textBaseline = 'middle';
@@ -1070,7 +1088,7 @@ function plotAltAz(fwd)
 	if(az < 0)
 		az = 360 + az;
 	az  = 'Az:' + az.toFixed(1);
-	context.font = "5mm Sans"
+	context.font = largeF('Sans',5);
 	context.textBaseline = 'bottom';
 	context.textAlign = 'end';
 	context.fillStyle = global_style.altaz;
@@ -1702,6 +1720,21 @@ function switchNightMode(is_night)
 }
 
 
+function incDecLF(dsize)
+{
+    var storage = window.localStorage;
+    var fs = storage.getItem('user_fs');
+    var fs = fs ? parseInt(fs) : 0;
+    fs += dsize;
+    if(fs < 0)
+        fs = 0;
+    if(fs > 10)
+        fs = 10;
+    global_large_font  = fs;
+    storage.setItem('user_fs',global_large_font);
+    document.getElementById('lf_val').innerHTML = '' + global_large_font;
+}
+
 function dsoMagUpdate(offset)
 {
 	global_dso_mag = global_dso_mag + offset;
@@ -1734,6 +1767,7 @@ setTimeout(getLocation,500)
 setTimeout(plotStars,1000)
 loadUserDSO();
 loadWL();
+incDecLF(0);
 document.body.addEventListener('mousedown',selectionEvent);
 document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);
