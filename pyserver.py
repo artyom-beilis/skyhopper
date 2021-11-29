@@ -7,7 +7,7 @@ import tempfile
 import os
 
 pem=open('cert.pem','r',encoding='utf-8').read()
-hopper=open('skyhopper_deploy.html','r',encoding='utf-8').read()
+hopper=open('astrohopper_deploy.html','r',encoding='utf-8').read()
 
 cert_path = tempfile.gettempdir()+ '/cert.pem'
 
@@ -37,7 +37,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0) as sock:
                                b'Content-Type: text/html\r\n'
                                b'Content-Length: %d\r\n'
                                b'\r\n%s' % (len(hopper),hopper))
-                    print("Served one SkyHopper page")
+                    print("Served one AtroHopper page")
                 else:
                     conn.write(b'HTTP/1.0 404 Not Found\r\n'
                                b'Connection: close\r\n'

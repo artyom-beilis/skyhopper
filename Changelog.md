@@ -1,3 +1,7 @@
+2021-11-29: v0.99.4
+
+- SkyHopper renamed to AstroHopper
+
 2021-11-25: v0.99.3
 
 -   Added names normalization such that NGC0171, NGC 171 and NGC171 will refer to same object

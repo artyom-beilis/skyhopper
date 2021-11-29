@@ -1,8 +1,8 @@
-# SkyHopper
+# AstroHopper - (f.k.a. SkyHopper)
 
 [TOC]
 
-[SkyHopper](https://artyom-beilis.github.io/skyhopper.html) is a web application that helps
+[AstroHopper](https://artyom-beilis.github.io/astrohopper.html) (formely known as skyhopper) is a web application that helps
 to find objects across the night sky by hopping from a well know and easily identifiable 
 star to other fainter stars or DSO by measuring changes in angles of the cell phone
 using built in gyroscope and gravity sensors. It is similar to Digital Setting Circles 
@@ -170,14 +170,15 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 1. Develop procedure for phone alignment for equatorial mounts.
 2. Implement zoom-via-pinch.
+3. Implement installable web application
 
 ## Known Issues
 
 - On some iPad versions (iOS 12.5) the star/target selection does not work
 
-## Serving SkyHopper of remote location
+## Serving AstroHopper of remote location
 
-At remote locations internet isn't always present. SkyHopper provides simple web server written in python3 to serve the SkyHopper over LAN. You can setup it on any device that can run python 3.
+At remote locations internet isn't always present. AstroHopper provides simple web server written in python3 to serve the AstroHopper over LAN. You can setup it on any device that can run python 3.
 
 This is how you can serve it from an Android phone:
 
@@ -192,20 +193,20 @@ This is how you can serve it from an Android phone:
 
         termux-setup-storage
 
-- Download a copy of [skyhopper.py](https://raw.githubusercontent.com/artyom-beilis/artyom-beilis.github.io/master/skyhopper.py) to a location accessible by termux, for this manual it will be `Downloads`
+- Download a copy of [astrohopper.py](https://raw.githubusercontent.com/artyom-beilis/artyom-beilis.github.io/master/astrohopper.py) to a location accessible by termux, for this manual it will be `Downloads`
 - Run python script from there:
 
         cd /storage/emulated/0/Downloads
-        python skyhopper.py
+        python astrohopper.py
   
   You can close the server by simply pressing `Ctrl+C`
 
 - Now you can go to <https://127.0.0.1:8443/> address in the browser and use it.  Please note `https` protocol and `8443` port
 - Note since it uses self-signed SSL certificate you will have to give a security exception when accessing this site
-- If you want to serve the skyhopper to other users at your pysical location:
+- If you want to serve the astrohopper to other users at your pysical location:
     - Create "hotspot", the typical gateway of android hotspot is `192.168.43.1`
-    - Run skyhopper as described before _after_ you created hotspot
-    - Now you can go to <https://192.168.43.1:8443/> from any device connected to the hotspot and open skyhopper there.
+    - Run astrohopper as described before _after_ you created hotspot
+    - Now you can go to <https://192.168.43.1:8443/> from any device connected to the hotspot and open astrohopper there.
 
 
 ## Notes

@@ -36,7 +36,7 @@ def make_manual():
 
 def embed_server():
     file_read=re.compile(r"(.*)=open\('(.*)','r'.*\).read\(\)")
-    with open("pyserver.py","r") as f, open("skyhopper.py","w") as out:
+    with open("pyserver.py","r") as f, open("astrohopper.py","w") as out:
         for line in f.readlines():
             m = file_read.match(line)
             if m:
@@ -54,7 +54,7 @@ def embed(manual):
     urlpng=re.compile(r'^(.*)url\(([a-z0-9_\-]*\.png)\)(.*)$')
     
     version = get_ver()
-    with open("skyhopper.html","r") as f, open("skyhopper_deploy.html","w") as out:
+    with open("astrohopper.html","r") as f, open("astrohopper_deploy.html","w") as out:
         for line in f.readlines():
             m = script.match(line)
             v = ver.match(line)
@@ -79,8 +79,8 @@ def embed(manual):
                 out.write(line)
 
 def deploy_files(target):
-    copyf('skyhopper_deploy.html',target + "/skyhopper.html");
-    for f in ['README.md','LICENSE','COPYING.md','manual.html','skyhopper.py']:
+    copyf('astrohopper_deploy.html',target + "/astrohopper.html");
+    for f in ['README.md','LICENSE','COPYING.md','manual.html','astrohopper.py']:
         copyf(f,target+ "/" + f)
 
 def main():
