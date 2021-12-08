@@ -437,7 +437,7 @@ function setUseGyro(val,message=null,message_tiny=null)
 
 function resetAll()
 {
-	global_expecting_select = selectTaret;
+	global_expecting_select = selectTarget;
 	findTargetByName();
 	global_target_index = -1;
 	document.getElementById('find_status').innerHTML = '';
@@ -537,7 +537,7 @@ function selectAlign(index)
 	setUseGyro(true);
 	gdata.alpha_diff = (gdata.alpha + gdata.alpha_user_offset) - gdata.alpha_gyro;
 	global_align_index = index;
-	global_expecting_select = selectTaret;
+	global_expecting_select = selectTarget;
 }
 
 /// rotation matrix is 
@@ -1097,7 +1097,7 @@ function plotAltAz(fwd)
 	context.fillText(az,5,canvas.height - 5)
 }
 
-function selectTaret(index)
+function selectTarget(index)
 {
 	findTargetByName();
 	global_target_index = index;
@@ -1512,7 +1512,7 @@ function resetUserDSOsAndMergeNewToAllStars(dsos = [])
     }
     allstars_index["U"] = allstars.length;
     if(global_target_index >= allstars.length) {
-        selectTaret(-1);
+        selectTarget(-1);
     }
 }
 
@@ -1774,7 +1774,7 @@ document.body.addEventListener('touchend',manualUp);
 document.body.addEventListener('touchcancel',manualUp);
 document.body.addEventListener('touchmove',manualMove);
 dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but"]);
-global_expecting_select = selectTaret;
+global_expecting_select = selectTarget;
 
 </script>
 
