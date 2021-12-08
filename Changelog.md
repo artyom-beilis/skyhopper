@@ -1,3 +1,8 @@
+2021-12-08: v0.99.5
+
+- Buttons have rounded corners
+
+
 2021-11-29: v0.99.4
 
 - SkyHopper renamed to AstroHopper
