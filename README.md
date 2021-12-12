@@ -2,7 +2,7 @@
 
 [TOC]
 
-[AstroHopper](https://artyom-beilis.github.io/astrohopper.html) (formely known as skyhopper) is a web application that helps
+[AstroHopper](https://artyom-beilis.github.io/astrohopper.html) (formerly known as skyhopper) is a web application that helps
 to find objects across the night sky by hopping from a well know and easily identifiable 
 star to other fainter stars or DSO by measuring changes in angles of the cell phone
 using built in gyroscope and gravity sensors. It is similar to Digital Setting Circles 
@@ -33,11 +33,31 @@ Before you attach the smartphone, open the application and calibrate the compass
 
 Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
-
 ## Notes for iOS Users
 
 - For iOS 13.0 and above you need to allow access to device orientation information by pressing `Enable Device Orientation` button once application loads
 - For iOS 12.2 and before 13 you need to allow access via: _Settings > Safari > Motion and Orientation access_
+
+
+## Installing AstroHopper
+
+AstroHopper is a "Progressive Web Application". It can be installed as regular application on your smart phone. Once it is installed it is fully accessible offline.
+
+In order to install the application, open the URL <https://artyom-beilis.github.io/astrohopper.html> and install it.
+
+- Android/Chrome - tap on "..." near the URL, and select "Install App" or "Add to Home Screen" 
+- Samsung Browser - tap on `↓` symbol near URL
+- Android/Firefox - tap on "..." near the URL, and select "Install"
+- Android/Edge - tap on "..." at the bottom and select "Add to Phone"
+- iPhone/Safari - tap the "Share" button scroll down and select "Add to Home Screen"
+
+The application will be installed on home screen or in applications screen - depending on browser.
+
+Test it works offline:
+
+1. Close all applications/browsers
+2. Put your phone to "Flight/Airplane" mode, make sure WiFi is closed
+3. Tap on application icon and make sure it works as is.
 
 ## Troubleshooting 
 
@@ -175,38 +195,6 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 ## Known Issues
 
 - On some iPad versions (iOS 12.5) the star/target selection does not work
-
-## Serving AstroHopper of remote location
-
-At remote locations internet isn't always present. AstroHopper provides simple web server written in python3 to serve the AstroHopper over LAN. You can setup it on any device that can run python 3.
-
-This is how you can serve it from an Android phone:
-
-
-- Install termux, you need to use F-Droid package manager: <https://www.f-droid.org/>, the version avalible from Google Store is not getting updates and at this point it is impossible to install python there:
-- Install python withing termux:
-
-        apt update
-        pkg install python
-
-- Provide termux access to storage by running:
-
-        termux-setup-storage
-
-- Download a copy of [astrohopper.py](https://raw.githubusercontent.com/artyom-beilis/artyom-beilis.github.io/master/astrohopper.py) to a location accessible by termux, for this manual it will be `Downloads`
-- Run python script from there:
-
-        cd /storage/emulated/0/Downloads
-        python astrohopper.py
-  
-  You can close the server by simply pressing `Ctrl+C`
-
-- Now you can go to <https://127.0.0.1:8443/> address in the browser and use it.  Please note `https` protocol and `8443` port
-- Note since it uses self-signed SSL certificate you will have to give a security exception when accessing this site
-- If you want to serve the astrohopper to other users at your pysical location:
-    - Create "hotspot", the typical gateway of android hotspot is `192.168.43.1`
-    - Run astrohopper as described before _after_ you created hotspot
-    - Now you can go to <https://192.168.43.1:8443/> from any device connected to the hotspot and open astrohopper there.
 
 
 ## Notes

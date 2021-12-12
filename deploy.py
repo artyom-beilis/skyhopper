@@ -34,26 +34,17 @@ def make_manual():
     return html
 
 
-def embed_server():
-    file_read=re.compile(r"(.*)=open\('(.*)','r'.*\).read\(\)")
-    with open("pyserver.py","r") as f, open("astrohopper.py","w") as out:
-        for line in f.readlines():
-            m = file_read.match(line)
-            if m:
-                with open(m.group(2),"r") as inline:
-                    line = inline.read()
-                    out.write('%s=r"""' % m.group(1))
-                    out.write(line)
-                    out.write('"""\n')
-            else:
-                out.write(line)
+def embed_service_worker(version):
+    with open("sw.js","r") as f, open("sw_deploy.js","w") as out:
+        content=f.read()
+        content = content.replace('VERSION',version)
+        out.write(content)
 
-def embed(manual):
+def embed(manual,version):
     script=re.compile(r'^<script src="(.*)"></script>')
     ver=re.compile(r'.*Settings \((version)\).*')
     urlpng=re.compile(r'^(.*)url\(([a-z0-9_\-]*\.png)\)(.*)$')
     
-    version = get_ver()
     with open("astrohopper.html","r") as f, open("astrohopper_deploy.html","w") as out:
         for line in f.readlines():
             m = script.match(line)
@@ -80,14 +71,16 @@ def embed(manual):
 
 def deploy_files(target):
     copyf('astrohopper_deploy.html',target + "/astrohopper.html");
-    for f in ['README.md','LICENSE','COPYING.md','manual.html','astrohopper.py']:
+    copyf('sw_deploy.js',target + "/sw.js");
+    for f in ['README.md','LICENSE','COPYING.md','manual.html','manifest.json']:
         copyf(f,target+ "/" + f)
 
 def main():
     create_db()
+    ver = get_ver()
     man = make_manual()
-    embed(man)
-    embed_server()
+    embed(man,ver)
+    embed_service_worker(ver)
     if len(sys.argv) == 2:
         deploy_files(sys.argv[1])
 

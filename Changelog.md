@@ -1,7 +1,8 @@
-2021-12-08: v0.99.5
+2021-12-12: v0.99.5
 
+- Now AstroHopper is installable as progressive web application
 - Buttons have rounded corners
-
+- Typos in code
 
 2021-11-29: v0.99.4
 

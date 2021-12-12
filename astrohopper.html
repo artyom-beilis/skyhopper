@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>AstroHopper - Web Application for Sky Navigation</title>
+<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
@@ -1775,6 +1776,12 @@ document.body.addEventListener('touchcancel',manualUp);
 document.body.addEventListener('touchmove',manualMove);
 dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but"]);
 global_expecting_select = selectTarget;
+
+window.addEventListener("load", () => {
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js");
+        }
+});
 
 </script>
 
