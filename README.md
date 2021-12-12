@@ -190,7 +190,6 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 1. Develop procedure for phone alignment for equatorial mounts.
 2. Implement zoom-via-pinch.
-3. Implement installable web application
 
 ## Known Issues
 
