@@ -35,8 +35,18 @@ Here you can find a demonstration video: <https://youtu.be/3VXCSMidhe0>
 
 ## Notes for iOS Users
 
+You need to provide some permissions to Safari in order to run AstroHopper Properly
+
+Device Orientation Sensors:
+
 - For iOS 13.0 and above you need to allow access to device orientation information by pressing `Enable Device Orientation` button once application loads
 - For iOS 12.2 and before 13 you need to allow access via: _Settings > Safari > Motion and Orientation access_
+
+Geolocation (watch for No Geolocation message on screen):
+
+- Settings > Privacy > Location Services ON. Then scroll down to "Safari Web..." and check mark "While Using the App". For iOS 14.0 and above both precise and approximate location should work.
+
+
 
 
 ## Installing AstroHopper

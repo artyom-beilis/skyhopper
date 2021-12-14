@@ -15,7 +15,6 @@ Following files are used:
 
 - The main code is located in starhopper.html
 - README.md - manual - it is converted to html and embedded in the app
-- `pyserver.py` simple https server for development and running on termux/android
 - `create_data.py` generates jsdb.js - JSON/JavaScript database of all the objects:
   stars, constellations and constellation lines, deep space objects
 - `deploy.py` calls `create_data.py`, converts `README.md` to manual 
@@ -26,8 +25,7 @@ Following files are used:
 Development cycle:
 
 1. Do any modifications
-2. Run deploy.py
-3. Run astrohopper.py
+2. Run deploy.py /path/to/www-data
 4. Test it over `https://Your-IP-Address:8443/`
 
 # Developers notes:
