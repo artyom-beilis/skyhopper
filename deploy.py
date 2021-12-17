@@ -72,7 +72,7 @@ def embed(manual,version):
 def deploy_files(target):
     copyf('astrohopper_deploy.html',target + "/astrohopper.html");
     copyf('sw_deploy.js',target + "/sw.js");
-    for f in ['README.md','LICENSE','COPYING.md','manual.html','manifest.json']:
+    for f in ['LICENSE','COPYING.md','manual.html','manifest.json']:
         copyf(f,target+ "/" + f)
 
 def main():
