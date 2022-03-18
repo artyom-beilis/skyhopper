@@ -40,16 +40,24 @@ def embed_service_worker(version):
         content = content.replace('VERSION',version)
         out.write(content)
 
+def png_encode(path):
+    with open(path,'rb') as f:
+        png = f.read()
+        b64png = base64.b64encode(png).decode()
+    return 'data:image/png;base64,%s' % b64png
+
 def embed(manual,version):
     script=re.compile(r'^<script src="(.*)"></script>')
     ver=re.compile(r'.*Settings \((version)\).*')
     urlpng=re.compile(r'^(.*)url\(([a-z0-9_\-]*\.png)\)(.*)$')
+    urlpng2=re.compile(r'^(.*<img.*)src="([a-z0-9_\-\/]*\.png)"(.*)$')
     
     with open("astrohopper.html","r") as f, open("astrohopper_deploy.html","w") as out:
         for line in f.readlines():
             m = script.match(line)
             v = ver.match(line)
             u = urlpng.match(line)
+            u2 = urlpng2.match(line)
             if m:
                 with open(m.group(1),"r") as inline:
                     line = inline.read()
@@ -58,12 +66,15 @@ def embed(manual,version):
                     out.write('</script>\n')
             elif v:
                 out.write(line.replace('version',version))
-            elif u:
-                with open(u.group(2),'rb') as f:
-                    png = f.read()
-                    b64png = base64.b64encode(png).decode()
-                new_line = '%surl(data:image/png;base64,%s)%s\n' % (u.group(1),b64png,u.group(3))
-                out.write(new_line )
+            elif u or u2:
+                if u:
+                    pat = '%surl(%s)%s\n'
+                else:
+                    pat = '%ssrc="%s"%s\n'
+                    u=u2
+                b64png = png_encode(u.group(2))
+                new_line = pat % (u.group(1),b64png,u.group(3))
+                out.write(new_line)
             elif line.find('MANUAL') == 0:
                 out.write(manual)
             else:

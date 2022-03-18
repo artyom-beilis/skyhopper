@@ -87,6 +87,43 @@ input[type=submit] { width:10mm;}
 </div>
 <p id="orient"></p>
 <p id="status"></p>
+<div class="config_div" id="quick_start" style="display:none; position:absolute; left:10%; top:10%; z-index:4 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:left ">
+    <span style="position:absolute; right:1mm; top:1mm">
+        <button class="incdec_but" onclick="qsHide()">X</button>
+    </span>
+    <h3>Quick Start Guide</h3>
+    <p><input class="dso_selector" id="qs_hide_1" type="checkbox" onchange="showOnStartup(!this.checked,1)" /><label for="qs_hide_1" >Don't show on startup</label></p>
+    <div id="qs_1">
+        <p>
+            <button class="ui_but" disabled style="color:#800">&lt; Prev</button>
+            <button class="ui_but" onclick="qsShowHide(2,1)">Next &gt;</button>
+        
+        </p>
+        <img style="float:right" width="50%" src="images/qs_1_1.png" alt="Setup" />
+        <p>Connect the smartphone to the optical tube such that its top points to the viewing direction and it lies flat on the tube.</p>
+    </div>
+    <div id="qs_2" style="display:none;">
+        <p>
+            <button class="ui_but" onclick="qsShowHide(1,2)">&lt; Prev</button>
+            <button class="ui_but" onclick="qsShowHide(3,2)">Next &gt;</button>
+        </p>
+        <img style="float:right"  width="50%" src="images/qs_2_1.png" alt="Setup" />
+        <p>Point the telescope to an easily identifiable star or planet nearby an object you want to find. For example in order to find M41, point the telescope to Sirius &mdash; this is going to be an alignment star.</p>
+        <p>Once the telescope is pointing to the alignment star tap [Align] button and tap on the alignment star on the map. Once the application is aligned, it tracks the telescope movement using smartphone's sensors.</p>
+    </div>
+    <div id="qs_3" style="display:none;">
+        <p>
+            <button class="ui_but" onclick="qsShowHide(2,3)">&lt; Prev</button>
+            <button class="ui_but" disabled style="color:#800">Next &gt;</button>
+        </p>
+        <img style="float:right"  width="50%" src="images/qs_3_1.png" alt="Setup" />
+        <p>Tap on the object you want to find (for example M41) and follow the direction line on the map till you reach the target. Now you can observe the object you selected.</p>
+        <p>It is recommended to repeat alignment for each new target you want to find</p>
+        <p>For troubleshooting and further details refer to the full manual via:
+            <button class="incdec_but settings_background">&nbsp;</button>&nbsp;&#8594;&nbsp;<button class="incdec_but">?</button>
+        </p>
+    </div>
+</div>
 <div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
 <button class="ui_but" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
 </div>
@@ -173,6 +210,7 @@ input[type=submit] { width:10mm;}
 <p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
 <p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
 <p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
+<p><input class="dso_selector" id="qs_hide_2" type="checkbox" checked="checked" onchange="showOnStartup(this.checked,2);" /><label for="qs_hide_2">Show Quick Start on Load</label></p>
 <p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" onchange="global_show_obj.U = this.checked;" /><label for="U_checked">User Objects</label> <a id="edit_user_dso" href="javascript:toggleEditDSO();">[edit]</a></p>
 <div id="dso_edit" style="display:none;">
 <p>Name,RA(hh:mm:ss),DE(±dd:mm:ss)</p>
@@ -278,6 +316,19 @@ function showManual(v)
 {
 	document.getElementById('manual').style.display = v ? 'inline' : 'none';
 }
+
+
+function qsHide()
+{
+    document.getElementById('quick_start').style.display = 'none';
+}
+
+function qsShowHide(show_id,hide_id)
+{
+    document.getElementById('qs_' + hide_id).style.display = 'none';
+    document.getElementById('qs_' + show_id).style.display = 'inline';
+}
+
 function setDisplayByClass(cls,value)
 {
 	var el = document.getElementsByClassName(cls);
@@ -1736,6 +1787,23 @@ function incDecLF(dsize)
     document.getElementById('lf_val').innerHTML = '' + global_large_font;
 }
 
+function getShowOnStartup(show)
+{
+    var storage = window.localStorage;
+    var qs_hide = storage.getItem('qs_hide')
+    var qs_hide = qs_hide ? parseInt(qs_hide) : 0;
+    return !qs_hide;
+}
+
+function showOnStartup(show,src)
+{
+    window.localStorage.setItem('qs_hide',(show ? '0' : '1'));
+    if(src != 1)
+        document.getElementById('qs_hide_1').checked = !show;
+    if(src != 2)
+        document.getElementById('qs_hide_2').checked = show;
+}   
+
 function dsoMagUpdate(offset)
 {
 	global_dso_mag = global_dso_mag + offset;
@@ -1769,6 +1837,11 @@ setTimeout(plotStars,1000)
 loadUserDSO();
 loadWL();
 incDecLF(0);
+{
+    let qs = getShowOnStartup();
+    document.getElementById('quick_start').style.display = qs ? 'inline' : 'none';
+    showOnStartup(qs,-1);
+}
 document.body.addEventListener('mousedown',selectionEvent);
 document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);

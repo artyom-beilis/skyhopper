@@ -1,3 +1,8 @@
+2022-03-18: v1.0.0
+
+- Added quick start manual to the app
+- Released version 1.0.0 so it is no longer considered beta
+
 2021-12-12: v0.99.5
 
 - Now AstroHopper is installable as progressive web application
