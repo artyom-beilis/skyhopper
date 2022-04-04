@@ -1116,7 +1116,23 @@ function plotStars()
 		var star = allstars[global_target_index];
 		var xyz = cameraBearing(star.RA,star.DE,camRays);
 		plotBearing(xyz);
-		plotStar(star,camRays,3);
+		var target_pos = plotStar(star,camRays,3);
+        // handle a case were target < mag but it is valid align target
+        // ususally it means it is shown due to search
+        if(target_pos && validAlignType(star.t)) {
+            target_pos.index = global_target_index;
+            var found = false;
+            for(var i=0;i<global_targets_list.length;i++) {
+                if(global_targets_list[i].index == target_pos.index) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) {
+                global_targets_list.push(target_pos);
+            }
+
+        }
 	}
 	else if(global_use_gyro) {
 		plotCross();
