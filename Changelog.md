@@ -1,3 +1,7 @@
+2022-04-04: v1.0.1
+
+- Updated video tutorial, added link to video tutorial to quick start manual
+
 2022-03-18: v1.0.0
 
 - Added quick start manual to the app
