@@ -2,8 +2,9 @@
 
 [TOC]
 
-[AstroHopper](https://artyom-beilis.github.io/astrohopper.html) (formerly known as skyhopper) is a web application that helps
-to find objects across the night sky by hopping from a well know and easily identifiable 
+[AstroHopper](https://artyom-beilis.github.io/astrohopper.html) (formerly known as skyhopper) is a free and open source
+web application developed by Artyom Beilis that helps to find objects across the night sky.
+It does it by allowing an accurate hop from a well know and easily identifiable 
 star to other fainter stars or DSO by measuring changes in angles of the cell phone
 using built in gyroscope and gravity sensors. It is similar to Digital Setting Circles 
 implemented in a smart phone.
@@ -203,10 +204,18 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 ## Known Issues
 
+- Pinch zoom or double tap on iOS devices zooms the screen when not suppose to, pinch zoom is also zooming on Samsung Browser
 - On some iPad versions (iOS 12.5) the star/target selection does not work
 
 
+## Reporting Bug and Getting Support
+
+- Best way to report bugs is on github project: <https://github.com/artyom-beilis/skyhopper>
+- Also the author of the program (Artyom Beilis) is frequent visitor of [Cloudy Nights](https://www.cloudynights.com/index/) forum so you can get help there. Make mention the application name correctly "AstroHopper".
+
 ## Notes
 
-It is an open source web application licensed under GPL license. It may work only with well working sensors. No warranty of any kind is given.
+(C) 2021-2022 Artyom Beilis.
 
+It is an open source web application licensed under GPL license. It may work only with well working sensors. No warranty of any kind is given. For detailed copyrights
+of different parts of the project refer to <https://github.com/artyom-beilis/skyhopper/blob/main/COPYING.md>
