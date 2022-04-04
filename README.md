@@ -215,7 +215,7 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 - Best way to report bugs is on github project: <https://github.com/artyom-beilis/skyhopper>
 - Also the author of the program (Artyom Beilis) is frequent visitor of [Cloudy Nights](https://www.cloudynights.com/index/) forum so you can get help there. Make mention the application name correctly "AstroHopper".
 
-## Notes
+## Copyrights
 
 (C) 2021-2022 Artyom Beilis.
 
