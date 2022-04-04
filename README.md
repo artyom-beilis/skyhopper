@@ -70,6 +70,8 @@ Test it works offline:
 2. Put your phone to "Flight/Airplane" mode, make sure WiFi is closed
 3. Tap on application icon and make sure it works as is.
 
+You can usually update the installed version of AstroHopper by refereshing the page. If this does not work for your browser, uninstall it and install from the scratch.
+
 ## Troubleshooting 
 
 -   _The sky in application look different from what I expect?_
