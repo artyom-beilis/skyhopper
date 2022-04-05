@@ -1,3 +1,7 @@
+2022-04-05: v1.0.3
+
+- Fixed typo in manual
+
 2022-04-05: v1.0.2
 
 - Added manual direction option description to quick start manual
