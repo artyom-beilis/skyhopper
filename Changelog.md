@@ -1,3 +1,7 @@
+2022-04-05: v1.0.2
+
+- Added manual direction option description to quick start manual
+
 2022-04-04: v1.0.1
 
 - Updated video tutorial, added link to video tutorial to quick start manual

@@ -108,16 +108,26 @@ input[type=submit] { width:10mm;}
             <button class="ui_but" onclick="qsShowHide(3,2)">Next &gt;</button>
         </p>
         <img style="float:right"  width="50%" src="images/qs_2_1.png" alt="Setup" />
-        <p>Point the telescope to an easily identifiable star or planet nearby an object you want to find. For example in order to find M41, point the telescope to Sirius &mdash; this is going to be an alignment star.</p>
+        <p>Point the telescope to an easily identifiable star or planet <strong>nearby</strong> an object you want to find. For example in order to find M41 or M47, point the telescope to Sirius &mdash; this is going to be the <em>alignment star</em>.</p>
         <p>Once the telescope is pointing to the alignment star tap <button class="ui_but">Align</button> button and tap on the alignment star on the map. Once the application is aligned, it tracks the telescope movement using smartphone's sensors.</p>
     </div>
     <div id="qs_3" style="display:none;">
         <p>
             <button class="ui_but" onclick="qsShowHide(2,3)">&lt; Prev</button>
+            <button class="ui_but" onclick="qsShowHide(4,3)">Next &gt;</button>
+        </p>
+        <p>If you can't see the alignment star on the map, there may be a common compass accuracy problem.</p>
+        <p>In such a case tap, on <button class="incdec_but manual_background">&nbsp;</button> to switch to manual mode and scroll the map left
+           or right till you see the alignment star.</p>
+        <p>Then tap <button class="ui_but">Align</button> and tap on the alignment star on the map.</p>
+    </div>
+    <div id="qs_4" style="display:none;">
+        <p>
+            <button class="ui_but" onclick="qsShowHide(3,4)">&lt; Prev</button>
             <button class="ui_but" disabled style="color:#800">Next &gt;</button>
         </p>
         <img style="float:right"  width="50%" src="images/qs_3_1.png" alt="Setup" />
-        <p>Tap on the object you want to find (for example M41) and follow the direction line on the map till you reach the target. Now you can observe the object you selected.</p>
+        <p>Once aligned, tap on the object you want to find (for example M41, M47) and follow the direction line on the map till you reach the target. Now you can observe the object you selected.</p>
         <p>It is recommended to repeat alignment for each new target you want to find</p>
         <p>For detailed instruction and troubleshooting please refer to the <a href="https://youtu.be/AtArqBLWWJ8">[Video&nbsp;Tutorial]</a>
           and to the integrated manual via:
