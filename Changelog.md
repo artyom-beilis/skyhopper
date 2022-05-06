@@ -1,3 +1,7 @@
+2022-05-06: v1.0.5
+
+- Fixed bug in parsing object list
+
 2022-05-06: v1.0.4
 
 - Added option to include comments on the objects in watch list by adding them between parentheses after the object id, for example:

@@ -1723,13 +1723,12 @@ function parseWatchList(text)
 			i+=1;
 			continue;
 		}
-		else if(i+1 < items.length && items[i+1] == '(') {
-                    i += 2;
+		if(item == '(') {
+                    i ++;
                     var start = i;
                     while(i < items.length && items[i] != ')')
                         i++;
                     var end = i;
-                    i+=1;
                     if(end > start) {
                         var comment = items[start];
                         start ++;
