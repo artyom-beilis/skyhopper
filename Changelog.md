@@ -8,6 +8,7 @@
 
 - Common object names like Andromeda for M31 are shown on object selection
 - It is possible to search object by their common names - Andromeda - M31
+- Added option to hide star names
 - Fixed search for a star with a space in the name "Cor Carolli"
 
 2022-04-05: v1.0.3
