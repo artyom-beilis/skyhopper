@@ -165,6 +165,10 @@ Several named lists can be defined by giving watch list a name followed by `:`:
      M50 M44 M45
     dbstars: Polaris, "Cor Caroli"
 
+It is possible to add user comment between `(` and `)` to explain the object id. It would be shown in UI upon object selection, for example:
+
+    Galaxies: M31 (Andromeda), M64 (Black Eye)
+
 Lists can be selected by pressing `<` and `>` buttons in "Lists" control. When the list is selected two buttons `<` and `>` are shown in main screen under "Align" button. They allow browsing the objects forward and backward. The current selected object's name is shown under the conrols.
 
 The watch lists are stored at your phone on per domain basis. They are kept even when you reopen the app. 

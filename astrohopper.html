@@ -919,7 +919,8 @@ function plotStar(star,camRays,highlight)
 		}
 		else {
 			let text = star.name ? star.name : '';
-			let text_extra = []
+			let text_extra = [];
+            let name_extra = [];
 			if(highlight > 1) {
 				context.font = largeF("Sans",6);
 				if(highlight == 3) {
@@ -928,6 +929,9 @@ function plotStar(star,camRays,highlight)
 					if(star.s) {
 						text_extra.push(formatSize(star.s));
 					}
+                    if('n2' in star) {
+                        name_extra = star.n2;
+                    }
 				}
 			}
 			else {
@@ -941,6 +945,11 @@ function plotStar(star,camRays,highlight)
 				context.fillText(text_extra.join(', '),pix_x + size + 1,pix_y - size/2 - 1)
 				context.textBaseline = 'bottom';
 			}
+            if(name_extra) {
+				context.textBaseline = 'top';
+				context.fillText(name_extra.join(', '),pix_x + size + 1,pix_y + 2 * size - 1)
+				context.textBaseline = 'bottom';
+            }
 		}
 	}
 	return result;
@@ -1630,12 +1639,12 @@ function watchListItemUpdate(offset)
 	var list = global_watchlist.lists[global_watchlist.current_list];
 	if(global_target_index != -1) {
 		var target = allstars[global_target_index];
-		if(!target.name || normalizeName(target.name) != normalizeName(list[global_watchlist.current_item])) {
+		if(!target.name || normalizeName(target.name) != normalizeName(list[global_watchlist.current_item].name)) {
 			offset = 0;
 		}
 	}
 	global_watchlist.current_item = (global_watchlist.current_item + offset + list.length) % list.length;
-	findTargetByName(list[global_watchlist.current_item]);
+	findTargetByName(list[global_watchlist.current_item].name);
 	markTarget();
 }
 
@@ -1646,8 +1655,10 @@ function markTarget()
 		msgEl.innerHTML = "";
 	}
 	else {
-		var name = global_watchlist.lists[global_watchlist.current_list][global_watchlist.current_item];
-		msgEl.innerHTML = global_target_index == -1 ? ("?" + name + "?") : name;
+        var item = global_watchlist.lists[global_watchlist.current_list][global_watchlist.current_item];
+		var name = item.name;
+        var comment =  item.comment == "" ? "" : " (" + item.comment +")";
+		msgEl.innerHTML = global_target_index == -1 ? ("?" + name + "?") : (name + comment);
 	}
 }	
 
@@ -1673,7 +1684,7 @@ function selectWatchList(index)
 		document.getElementById("wl_sel").innerHTML = global_watchlist.names[index];
 		global_watchlist.current_list = index;
 		global_watchlist.current_item = 0;
-		findTargetByName(global_watchlist.lists[index][0]);
+		findTargetByName(global_watchlist.lists[index][0].name);
 	}
 	markTarget();
 }
@@ -1681,7 +1692,7 @@ function selectWatchList(index)
 
 function tokenizeWL(text)
 {
-	const re=/(,|:|"[^"]*"|\s+|[^\s:,"]*)/;
+	const re=/(,|:|"[^"]*"|\s+|\(|\)|[^\s:,"\(\)]*)/;
 	const ws=/^\s+$/;
 	var items=text.split(re);
 	return items.filter(x=>x.trim() != "" && x!=",");
@@ -1708,6 +1719,29 @@ function parseWatchList(text)
 			i+=1;
 			continue;
 		}
+		else if(i+1 < items.length && items[i+1] == '(') {
+                    i += 2;
+                    var start = i;
+                    while(i < items.length && items[i] != ')')
+                        i++;
+                    var end = i;
+                    i+=1;
+                    if(end > start) {
+                        var comment = items[start];
+                        start ++;
+                        while(start < end) {
+                            comment = comment + " " + items[start];
+                            start ++;
+                        }
+                        if(list_name) {
+                            var arr = wl.lists[index[list_name]];
+                            if(arr.length >= 1) {
+                                arr[arr.length - 1].comment = comment;
+                            }
+                        }
+                    }
+                    continue;
+		}
 		var nitem = normalizeName(item);
 		if(allstars_index_name.names.findIndex(x=>x==nitem) == -1) {
 			not_found.push(item)
@@ -1717,7 +1751,7 @@ function parseWatchList(text)
 			wl.names.push(list_name);
 			wl.lists.push(new Array());
 		}
-		wl.lists[index[list_name]].push(item);
+		wl.lists[index[list_name]].push({"name" : item, "comment": ""});
 	}
 	return [wl,not_found]
 }

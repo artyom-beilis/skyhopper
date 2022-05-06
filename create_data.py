@@ -43,8 +43,13 @@ class DSODB(object):
         index['U']=len(result) # user points
         for i,v in enumerate(result):
             if 'name' in v and v['t'] != 'Ca':
-                names.append(v['name'].upper())
+                obj_id = v['name'].upper()
+                names.append(normalize_name(obj_id.upper()))
                 poss.append(i)
+                if 'n2' in v:
+                    for alt_id in v['n2']:
+                        names.append(normalize_name(alt_id.upper()))
+                        poss.append(i)
         nindex = {"names":names,"index":poss}
         return result,index,nindex
 
@@ -114,8 +119,14 @@ def get_OpenNGC_DSO(result):
             if messier:
                 mapped.remove(messier)
                 object_id = 'M%d' % messier
+            alt_names = None
+            if row[23]!='':
+                alt_names = row[23].split(',')
             object_id = normalize_name(object_id)
-            result.append(dict(RA=ra,DE=de,AM=mag,name=object_id,t=object_type,s=size))
+            entry = dict(RA=ra,DE=de,AM=mag,name=object_id,t=object_type,s=size)
+            if alt_names:
+                entry['n2'] = alt_names
+            result.append(entry)
     return result
 
 def get_stars(allstars):
@@ -128,8 +139,6 @@ def get_stars(allstars):
             name=row[6]
             if name == '':
                 name = None
-            else:
-                name = normalize_name(name)
             ra=float(row[7])*15.0
             de=float(row[8])
             if sid!='':

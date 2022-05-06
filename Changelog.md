@@ -1,3 +1,15 @@
+2022-05-06: v1.0.4
+
+- Added option to include comments on the objects in watch list by adding them between parentheses after the object id, for example:
+
+        list: M31 (Andomeda), M64 (Black Eye)
+
+    And it will be shown upon oject selection
+
+- Common object names like Andromeda for M31 are shown on object selection
+- It is possible to search object by their common names - Andromeda - M31
+- Fixed search for a star with a space in the name "Cor Carolli"
+
 2022-04-05: v1.0.3
 
 - Fixed typo in manual
