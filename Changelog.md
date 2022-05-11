@@ -1,3 +1,7 @@
+2022-05-06: v1.0.6
+
+- Fixed handling of target selection on older iOS 10. Now the application uses touch events for target selection and not click only
+
 2022-05-06: v1.0.5
 
 - Fixed bug in parsing object list

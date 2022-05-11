@@ -291,6 +291,7 @@ var global_align_on_dso=false;
 var global_show_star_names=true;
 var global_targets_list = [];
 var global_prev_xy=null;
+var global_toch_start_time = null;
 var global_target_index = -1;
 var global_align_index = -1;
 var global_expecting_select = null;
@@ -1320,6 +1321,7 @@ function compassMode()
 function manualDown(e)
 {
 	global_prev_xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
+    global_toch_start_time = Date.now(); 
 }
 
 function manualMove(e)
@@ -1330,14 +1332,19 @@ function manualMove(e)
 	var xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
 	moveSky(global_prev_xy,xy);
 	global_prev_xy = xy;
+    global_toch_start_time = null;
 }
 function manualUp(e)
 {
 	if(!global_prev_xy)
 		return;
-	var xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
-	moveSky(global_prev_xy,xy);
+    var touch_end = Date.now();
+    if(global_toch_start_time && touch_end - global_toch_start_time < 500) { 
+        // no move and there is less then 0.5s delay between toch and release
+        selectionEvent({"clientX":global_prev_xy.x,"clientY":global_prev_xy.y})
+    }
 	global_prev_xy = null;
+    global_toch_start_time = null;
 }
 function moveSky(prev,cur)
 {
@@ -1350,14 +1357,16 @@ function moveSky(prev,cur)
 	gdata.alpha_user_offset += da;
 }
 
-function dontPropMouseDown(lst)
+function dontPropMouseDown(lst,events_list)
 {
 	for(var i=0;i<lst.length;i++) {
 		var elements = document.getElementsByClassName(lst[i]);
 		for(var j=0;j<elements.length;j++) {
-			elements[j].addEventListener('mousedown',function(e) {
-				e.stopPropagation();
-			});
+            for(var k=0;k<events_list.length;k++) {
+    			elements[j].addEventListener(events_list[k],function(e) {
+	    			e.stopPropagation();
+		    	});
+            }
 		}
 	}
 }
@@ -1906,12 +1915,12 @@ incDecLF(0);
     document.getElementById('quick_start').style.display = qs ? 'inline' : 'none';
     showOnStartup(qs,-1);
 }
-document.body.addEventListener('mousedown',selectionEvent);
+document.body.addEventListener('click',selectionEvent);
 document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);
 document.body.addEventListener('touchcancel',manualUp);
 document.body.addEventListener('touchmove',manualMove);
-dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but"]);
+dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but"],["click","touchstart","touchend","touchmove","touchcancel"]);
 global_expecting_select = selectTarget;
 
 window.addEventListener("load", () => {
