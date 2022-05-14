@@ -291,6 +291,8 @@ var global_align_on_dso=false;
 var global_show_star_names=true;
 var global_targets_list = [];
 var global_prev_xy=null;
+var global_start_zoom_size = null;
+var global_start_zoom = null;
 var global_toch_start_time = null;
 var global_target_index = -1;
 var global_align_index = -1;
@@ -301,9 +303,8 @@ var global_use_compass = false;
 var global_dso_mag = parseInt(document.getElementById('dso_level_val').innerHTML);
 var global_large_font = 0;
 
-var global_fov_index = 3;
 var global_fov_values = [7,15,30,60,90,120,150]
-var global_fov = global_fov_values[global_fov_index];
+var global_fov = 60;
 var global_mag = 4;
 var gdata = {
 	"lat" : 31.9,
@@ -463,19 +464,32 @@ function updateMAG()
 
 function incFOV()
 {
-	if(global_fov_index + 1 < global_fov_values.length)
-		global_fov_index++;
+    var N = global_fov_values.length;
+    for(var i=0;i<N-1;i++) {
+        if(global_fov == global_fov_values[i]
+           || (global_fov_values[i] < global_fov && global_fov < global_fov_values[i+1]))
+        { 
+            global_fov = global_fov_values[i+1];
+            break;
+        }
+    }
 	updateFOV()
 }
 function decFOV()
 {
-	if(global_fov_index > 0)
-		global_fov_index--;
+    var N = global_fov_values.length;
+    for(var i=N-1;i>0;i--) {
+        if(global_fov == global_fov_values[i]
+           || (global_fov_values[i-1] < global_fov && global_fov < global_fov_values[i]))
+        { 
+            global_fov = global_fov_values[i-1];
+            break;
+        }
+    }
 	updateFOV();
 }
 function updateFOV()
 {
-	global_fov = global_fov_values[global_fov_index];
 	var vals = document.getElementsByClassName("fov_val");
 	for(var i=0;i<vals.length;i++) {
 		vals[i].innerHTML = global_fov + "&deg;";
@@ -1322,6 +1336,12 @@ function manualDown(e)
 {
 	global_prev_xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
     global_toch_start_time = Date.now(); 
+    if(e.touches.length == 2) {
+        let dx = e.touches[0].clientX - e.touches[1].clientX;
+        let dy = e.touches[0].clientY - e.touches[1].clientY;
+        global_start_zoom = global_fov;
+        global_start_zoom_size = Math.sqrt(dx*dx + dy*dy);
+    }
 }
 
 function manualMove(e)
@@ -1330,6 +1350,24 @@ function manualMove(e)
 		return;
 	
 	var xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
+    if(e.touches.length == 2 && global_start_zoom) {
+        let dx = e.touches[0].clientX - e.touches[1].clientX;
+        let dy = e.touches[0].clientY - e.touches[1].clientY;
+        let new_size = Math.sqrt(dx*dx + dy*dy);
+        let scale = new_size / Math.max(global_start_zoom_size,0);
+        let max_fov = global_fov_values[global_fov_values.length-1];
+        let min_fov = global_fov_values[0];
+        let fov = 2 * 180 * Math.atan(Math.tan(global_fov / 180.0 * Math.PI / 2) / scale) / Math.PI;
+        let new_global_fov = Math.max(min_fov,Math.min(max_fov,Math.round(fov)));
+        if(new_global_fov != global_fov) {
+            global_fov = new_global_fov;
+            global_start_zoom_size = new_size;
+            global_start_zoom = global_fov;
+            updateFOV();
+        }
+    }
+
+
 	moveSky(global_prev_xy,xy);
 	global_prev_xy = xy;
     global_toch_start_time = null;
@@ -1338,6 +1376,10 @@ function manualUp(e)
 {
 	if(!global_prev_xy)
 		return;
+    
+    global_start_zoom = null;
+    global_start_zoom_size = null;
+
     var touch_end = Date.now();
     if(global_toch_start_time && touch_end - global_toch_start_time < 500) { 
         // no move and there is less then 0.5s delay between toch and release
