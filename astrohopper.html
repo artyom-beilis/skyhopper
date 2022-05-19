@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <style>
-body { font-size: 5mm ; color:red ; font-family: sans; background-color:black }
+body, td { font-size: 5mm ; color:red ; font-family: sans; background-color:black }
 a:link {color: red;}
 a:visited { color: red; }
 a:active { color:red; }
@@ -146,8 +146,8 @@ input[type=submit] { width:10mm;}
 <p><b>Settings (version)</b></p>
 <p>
 <button class="ui_but" onclick="resetAll();">&#x21bb;</button>
-<input class="dso_selector" id="small_screen" type="checkbox" onchange="smallScreen(this.checked)"   /><label for="small_screen" >Small UI</label> 
-<input class="dso_selector" id="NM_checked" type="checkbox" onchange="switchNightMode(this.checked)" /><label for="NM_checked" >Night</label>
+<input class="dso_selector" id="small_screen" type="checkbox" /><label for="small_screen" >Small UI</label> 
+<input class="dso_selector" id="NM_checked" type="checkbox"  /><label for="NM_checked" >Night</label>
 <input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full S.</label>
 </p>
 <table>
@@ -164,7 +164,7 @@ input[type=submit] { width:10mm;}
 <tr>
 	<td>Stars</td>
 	<td>
-		<button class="incdec_but" onclick="decMAG();">-</button> <button class="incdec_but" onclick="incMAG();">+</button>
+		<button class="incdec_but" onclick="starMagUpdate(-1);">-</button> <button class="incdec_but" onclick="starMagUpdate(1);">+</button>
 	</td>
 	<td>
 		<i>m&leq;</i><span id="mag_val">4</span>
@@ -214,16 +214,49 @@ input[type=submit] { width:10mm;}
 <form onsubmit="return hideSettingIfSelectionOk()" >
 <p> <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
 </form>
-<p><input class="dso_selector" id="align_dso_checked"  type="checkbox" onchange="global_align_on_dso  = this.checked;" /><label for="align_dso_checked" >Allow align on DSO</label></p>
-<p><input class="dso_selector" id="show_star_names_checked"  type="checkbox" checked="checked" onchange="global_show_star_names = this.checked;" /><label for="show_star_names_checked" >Show Star Names</label></p>
-<p><input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" onchange="global_show_obj.P  = this.checked;" /><label for="P_checked" >Planets</label></p>
-<p><input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Oc = this.checked;" /><label for="Oc_checked">Clusters and Clouds</label></p>
-<p><input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" onchange="global_show_obj.Gc = this.checked;" /><label for="Gc_checked">Globular Clusters</label></p>
-<p><input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ga = this.checked;" /><label for="Ga_checked">Galaxies</label></p>
-<p><input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ne = this.checked;" /><label for="Ne_checked">Nebulae</label></p>
-<p><input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" onchange="global_show_obj.Ca = this.checked;" /><label for="Ca_checked">Constellations</label></p>
-<p><input class="dso_selector" id="qs_hide_2" type="checkbox" checked="checked" onchange="showOnStartup(this.checked,2);" /><label for="qs_hide_2">Show Quick Start on Load</label></p>
-<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" onchange="global_show_obj.U = this.checked;" /><label for="U_checked">User Objects</label> <a id="edit_user_dso" href="javascript:toggleEditDSO();">[edit]</a></p>
+<table style="width:100%">
+<tr>
+    <td>
+        <input class="dso_selector" id="align_dso_checked"  type="checkbox" /><label for="align_dso_checked" >Align on DSO</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="show_star_names_checked"  type="checkbox" checked="checked" onchange="global_show_star_names = this.checked;" /><label for="show_star_names_checked" >Star Names</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" /><label for="Oc_checked">Open Clusters</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" /><label for="Gc_checked">Glob. Clusters</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" /><label for="Ne_checked">Nebulae</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" /><label for="Ga_checked">Galaxies</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" /><label for="P_checked" >Planets</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" /><label for="Ca_checked">Constellations</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input class="dso_selector" id="qs_hide_2" type="checkbox" checked="checked" onchange="showOnStartup(this.checked,2);" /><label for="qs_hide_2">Show Tutorial</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="pinch_zoom" type="checkbox" checked="checked" /><label for="pinch_zoom">Pinch Zoom</label>
+    </td>
+</tr>
+</table>
+<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" /><label for="U_checked">User Objects</label> <a id="edit_user_dso" href="javascript:toggleEditDSO();">[edit]</a></p>
 <div id="dso_edit" style="display:none;">
 <p>Name,RA(hh:mm:ss),DE(±dd:mm:ss)</p>
 <p>
@@ -293,6 +326,7 @@ var global_targets_list = [];
 var global_prev_xy=null;
 var global_start_zoom_size = null;
 var global_start_zoom = null;
+var global_allow_pinch_zoom = true;
 var global_toch_start_time = null;
 var global_target_index = -1;
 var global_align_index = -1;
@@ -445,21 +479,17 @@ function findTargetByName(name ='')
 		return false;
 	}
 }
-function incMAG()
+
+function starMagUpdate(offset)
 {
-	if(global_mag < 6)
-		global_mag += 1;
+	global_mag += offset;
+    global_mag = Math.max(1,Math.min(6,global_mag));
 	updateMAG()
-}
-function decMAG()
-{
-	if(global_mag > 1)
-		global_mag -=1;
-	updateMAG();
 }
 function updateMAG()
 {
 	document.getElementById("mag_val").innerHTML = global_mag + "";
+    saveMagVal(global_mag,"mag_val");
 }
 
 function incFOV()
@@ -1336,7 +1366,7 @@ function manualDown(e)
 {
 	global_prev_xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
     global_toch_start_time = Date.now(); 
-    if(e.touches.length == 2) {
+    if(e.touches.length == 2 && global_allow_pinch_zoom) {
         let dx = e.touches[0].clientX - e.touches[1].clientX;
         let dy = e.touches[0].clientY - e.touches[1].clientY;
         global_start_zoom = global_fov;
@@ -1350,7 +1380,7 @@ function manualMove(e)
 		return;
 	
 	var xy = {"x":e.touches[0].clientX,"y":e.touches[0].clientY };
-    if(e.touches.length == 2 && global_start_zoom) {
+    if(e.touches.length == 2 && global_start_zoom && global_allow_pinch_zoom) {
         let dx = e.touches[0].clientX - e.touches[1].clientX;
         let dy = e.touches[0].clientY - e.touches[1].clientY;
         let new_size = Math.sqrt(dx*dx + dy*dy);
@@ -1927,6 +1957,7 @@ function dsoMagUpdate(offset)
 	else if(global_dso_mag > 14)
 		global_dso_mag = 14;
 	document.getElementById('dso_level_val').innerHTML = '' + global_dso_mag;
+    saveMagVal(global_dso_mag,"dso_level_val");
 }
 
 function loadUserDSO()
@@ -1939,9 +1970,72 @@ function loadUserDSO()
 }
 
 
+function configureCheckboxOption(target,default_val,onchange)
+{
+    var name = 'opt_' + target;
+    var element = document.getElementById(target);
+    var svalue = window.localStorage.getItem(name);
+    if(!svalue) {
+        svalue = default_val ? '1' : '0';
+    }
 
+    var checked = !!parseInt(svalue);
+    element.checked = checked;
+    onchange(checked);
+    element.addEventListener('change',function(){
+        onchange(this.checked);
+        window.localStorage.setItem(name,this.checked ? '1' : '0');
+    });
+}
+
+function saveMagVal(val,name)
+{
+    window.localStorage.setItem('mag_' + name, '' + val);
+}
+function configSaveMag()
+{
+    var opts = [
+        {   name : "dso_level_val", 
+            setv: (x) => { global_dso_mag=x; dsoMagUpdate(0); } 
+        },
+        { 
+            name : "mag_val",
+            setv: (x) => { global_mag = x; starMagUpdate(0); }
+        }
+    ];
+    for(var i=0;i<opts.length;i++) {
+        var c = opts[i];
+        var sval = window.localStorage.getItem('mag_' + c.name);
+        if(!sval)
+            sval = document.getElementById(c.name).innerHTML;
+        c.setv(parseInt(sval));
+    }
+
+}
+
+function setupConfigurableElements()
+{
+    configureCheckboxOption('small_screen',false,smallScreen);
+    configureCheckboxOption('NM_checked',false,switchNightMode);
+    configureCheckboxOption('align_dso_checked',false,(v) => { global_align_on_dso = v; });
+    configureCheckboxOption('show_star_names_checked',true,(v) => { global_show_star_names = v; });
+    configureCheckboxOption('P_checked',true,(v) => { global_show_obj.P = v; });
+    configureCheckboxOption('Oc_checked',true,(v) => { global_show_obj.Oc = v; });
+    configureCheckboxOption('Gc_checked',true,(v) => { global_show_obj.Gc = v; });
+    configureCheckboxOption('Ga_checked',true,(v) => { global_show_obj.Ga = v; });
+    configureCheckboxOption('Ne_checked',true,(v) => { global_show_obj.Ne = v; });
+    configureCheckboxOption('Ca_checked',true,(v) => { global_show_obj.Ca = v; });
+    configureCheckboxOption('U_checked',true,(v) => { global_show_obj.U = v; });
+
+    // turn off by default on iOS
+    var agent = navigator.userAgent
+    var iOS = /iPad|iPhone|iPod/.test(agent);
+    configureCheckboxOption('pinch_zoom',!iOS,(v) => { global_allow_pinch_zoom = v; });
+}
 
 setupGyros();
+setupConfigurableElements();
+configSaveMag();
 // global drawing stuff
 var canvas = document.getElementById('myCanvas');
 canvas.width = document.body.clientWidth;

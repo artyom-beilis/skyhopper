@@ -1,5 +1,9 @@
-2022-05-06: v1.0.6
+2022-05-19: v1.0.6
 
+- All settings are now saved upon application restart with exception of: full screen mode and current field of view/zoom.
+- Rearranged settings menu to take less place on screen
+- Experimental support of pinch zoom added, it is disabled by default on iOS due to issues with "double zoom" by browser. Can be disabled or enabled in settings by unchecking "Pinch Zoom"
+- After updating to this version auto-update should work automatically.
 - Fixed handling of target selection on older iOS 10. Now the application uses touch events for target selection and not click only
 
 2022-05-06: v1.0.5

@@ -106,6 +106,17 @@ You can usually update the installed version of AstroHopper by refereshing the p
     1. Select a start that is closer on its azimuth to target object - altitude has much more accurate tracking.
     2. Correct altitude first and than search for the object on azimuth axis 
 
+-   _Pinch Zoom zooms full page instead of the application_
+
+    It related to configuration:
+
+    - Chrome: settings ->accessibility -> enable force zoom -> off
+    - Firefox:settings -> accessibility -> always enable zoom -> off
+    - Samsung Browser: settings ->appearance -> manual zoom -> off
+    - Edge: settings -> font size -> zoom on all sites -> off or settings -> Accessibility -> zoom on all websites -> off
+
+    Unfortunatelly there is no option to disable full web page zoom on iOS.
+
 ## Controls
 
 - Left side, from top to bottom:
@@ -132,7 +143,9 @@ You can usually update the installed version of AstroHopper by refereshing the p
     - Watch List selection and editing 
     - Search target by name field
     - Allow alignment using any DSO object. Use with care since it is hard to define a center of big DSO object like open cluster.
-    - Filtering of the Astronomical objects by type 
+    - Filtering of the Astronomical objects by type
+    - Enable/Disable pinch zoom
+    - Show quickstart tutorial on startup 
     - User Added Objects List
     - Status of geolocation and reload geolocation button
     - Sensors information
@@ -210,7 +223,8 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 ## Known Issues
 
-- Pinch zoom or double tap on iOS devices zooms the screen when not suppose to, pinch zoom is also zooming on Samsung Browser
+- Pinch zoom does not work properly on iOS - no way to disable browser zoom
+- Pinch zoom or double tap on iOS devices zooms the screen when not suppose to
 - On some iPad versions (iOS 12.5) the star/target selection does not work
 
 
