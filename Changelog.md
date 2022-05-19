@@ -1,3 +1,7 @@
+2022-05-19: v1.0.6.1
+
+- Auto update check
+
 2022-05-19: v1.0.6
 
 - All settings are now saved upon application restart with exception of: full screen mode and current field of view/zoom.
