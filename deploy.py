@@ -86,12 +86,26 @@ def deploy_files(target):
     for f in ['LICENSE','COPYING.md','manual.html','manifest.json']:
         copyf(f,target+ "/" + f)
 
+def add_ga():
+    print("Adding Google Analytics to the file")
+    with open('ga.html') as f:
+        cnt=f.read()
+    with open('astrohopper_deploy.html') as f:
+        page = f.read()
+    page = page.replace('</head>',cnt + '</head>')
+    with open('astrohopper_deploy.html','w')  as f:
+        f.write(page)
+
 def main():
     create_db()
     ver = get_ver()
     man = make_manual()
     embed(man,ver)
     embed_service_worker(ver)
+    if len(sys.argv) >= 2:
+        if sys.argv[1] == '-g':
+            add_ga()
+            del sys.argv[1]
     if len(sys.argv) == 2:
         deploy_files(sys.argv[1])
 
