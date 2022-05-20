@@ -1,3 +1,7 @@
+2022-05-20: v1.0.6.2
+
+- Added Google Analytics 
+
 2022-05-19: v1.0.6.1
 
 - Auto update check
