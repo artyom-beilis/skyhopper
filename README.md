@@ -46,6 +46,8 @@ Device Orientation Sensors:
 Geolocation (watch for No Geolocation message on screen):
 
 - Settings > Privacy > Location Services ON. Then scroll down to "Safari Web..." and check mark "While Using the App". For iOS 14.0 and above both precise and approximate location should work.
+    
+    Some users reported need for reboot of the device for these changes to take an effect.
 
 
 

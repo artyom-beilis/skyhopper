@@ -1,3 +1,7 @@
+2022-06-23: v1.0.7
+
+- Added more troubleshooting info for iOS
+
 2022-05-20: v1.0.6.2
 
 - Added Google Analytics 
