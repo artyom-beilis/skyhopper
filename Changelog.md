@@ -1,5 +1,6 @@
 2022-06-23: v1.0.7
 
+- Fixed issue #11 - adding "Veil Nebula" breaks watch list fw/bw options. The bug is related actually to any object not named by its primary name.
 - Added more troubleshooting info for iOS
 
 2022-05-20: v1.0.6.2

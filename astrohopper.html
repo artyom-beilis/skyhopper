@@ -1717,17 +1717,12 @@ function prevWatchList()
 
 }
 
+
 function watchListItemUpdate(offset)
 {
 	if(global_watchlist.current_list < 0 || global_watchlist.current_list >= global_watchlist.lists.length)
 		return;
 	var list = global_watchlist.lists[global_watchlist.current_list];
-	if(global_target_index != -1) {
-		var target = allstars[global_target_index];
-		if(!target.name || normalizeName(target.name) != normalizeName(list[global_watchlist.current_item].name)) {
-			offset = 0;
-		}
-	}
 	global_watchlist.current_item = (global_watchlist.current_item + offset + list.length) % list.length;
 	findTargetByName(list[global_watchlist.current_item].name);
 	markTarget();
