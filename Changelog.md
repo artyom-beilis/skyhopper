@@ -1,5 +1,6 @@
-2022-06-23: v1.0.7
+2022-11-07: v1.0.7
 
+- Various improvements of the manual - thanks for FredOS from CN forum
 - Fixed issue #11 - adding "Veil Nebula" breaks watch list fw/bw options. The bug is related actually to any object not named by its primary name.
 - Added more troubleshooting info for iOS
 
