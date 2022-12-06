@@ -3,6 +3,7 @@ import csv
 import sys
 import json
 import re
+import math
 
 
 global_dso_mag_limit = 14
@@ -153,35 +154,65 @@ def get_stars(allstars):
     return starpos
 
 
-def get_constellations(cons):
+def get_constellation_names():
     src_path = 'western_constellations_atlas_of_space/data/processed/centered_constellations.csv'
+    names=dict()
     with open(src_path,'r',encoding='latin1') as f:
         for i,row in enumerate(csv.reader(f)):
             if i <= 0:
                 continue
             name=row[0]
-            t=row[1]
-            ra=float(row[4])*15.0
-            de=float(row[5])
-            cons.append(dict(DE=de,RA=ra,AM=-1,name=name,t='Ca'))
-    return cons;
+            code=row[3]
+            names[code]=name
+    return names;
+def get_center_ra_de(starset):
+    sx=0.0
+    sy=0.0
+    sz=0.0
+    for ra,de in starset:
+        z=math.sin(de*math.pi/180)
+        xy = math.cos(de*math.pi/180)
+        x=math.sin(ra*math.pi/180)*xy
+        y=math.cos(ra*math.pi/180)*xy
+        sx+=x
+        sy+=y
+        sz+=z
+    norm=math.sqrt(sx*sx+sy*sy+sz*sz)
+    x = sx/norm
+    y = sy/norm
+    z = sz/norm
+    ra = math.atan2(x,y) * 180 /math.pi
+    de = math.asin(z) * 180 / math.pi
+    if ra < 0:
+        ra += 360
+    return ra,de
 
-def get_constellation_lines(starpos):
-    lines=[]
+
+
+def get_constellation_lines(starpos,names,cons):
+    lines =[]
     with open('western_constellations_atlas_of_space/data/stellarium_western_asterisms/constellationship.fab','r') as f:
         for line in f.readlines():
             row=line.split(' ')
+            name = names[row[0]]
+            starset=set()
             row=list(filter(lambda v:v!='',row))
             N=int(row[1])
             pairs = [int(v) for v in row[2:]]
             for k in range(N):
                 p0 = pairs[k*2]
                 p1 = pairs[k*2+1]
-                line=dict(r0=starpos[p0][0],
-                          d0=starpos[p0][1],
-                          r1=starpos[p1][0],
-                          d1=starpos[p1][1])
+                r0=starpos[p0][0]
+                d0=starpos[p0][1]
+                r1=starpos[p1][0]
+                d1=starpos[p1][1]
+                starset.add((r0,d0))
+                starset.add((r1,d1))
+                line=dict(r0=r0,d0=d0,r1=r1,d1=d1)
                 lines.append(line)
+
+            ra,de = get_center_ra_de(starset)
+            cons.append(dict(DE=de,RA=ra,AM=-1,name=name,t='Ca'))
     return lines
 
 def get_planets(dso):
@@ -236,8 +267,8 @@ def create_db():
     get_OpenNGC_DSO(objects)
     get_planets(objects)
     mapping = get_stars(objects);
-    get_constellations(objects);
-    lines = get_constellation_lines(mapping)
+    cnames=get_constellation_names()
+    lines = get_constellation_lines(mapping,cnames,objects)
     make_jsbd(objects,lines)
 
 

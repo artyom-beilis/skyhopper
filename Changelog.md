@@ -1,3 +1,7 @@
+2022-12-07: v1.0.8
+
+- Fixed issue #12 - Center of constellations database is highly inaccurate and leads to incorrect names location/collision between names. The location was recalculated from stars
+
 2022-11-07: v1.0.7
 
 - Various improvements of the manual - thanks for FredOS from CN forum
