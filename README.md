@@ -169,14 +169,14 @@ On screen controls:
 ## Watch List
 
 A user can create a custom watch list in advance to browse them easily during the night.
-There is `List` option in "Settings" menu.  It has  `[edit]` control to open watch list editing tool/
+There is `List` option in "Settings" menu.  It has  `[edit]` control to open watch list editing tool.
 
 A watch list is defined by a simple list of object names separated by space, new lines or commas. 
 For example below the "default" list:
 
     M411, M47, M49, M50, M44, M45
 
-Several named lists can be defined by giving watch list a name followed by `:`:
+Several named lists can be defined by giving watch list a name followed by `:`, for example:
 
     clusters: M41 M47 M49
      M50 M44 M45
