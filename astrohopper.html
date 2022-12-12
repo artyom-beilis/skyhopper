@@ -1723,8 +1723,13 @@ function watchListItemUpdate(offset)
 	if(global_watchlist.current_list < 0 || global_watchlist.current_list >= global_watchlist.lists.length)
 		return;
 	var list = global_watchlist.lists[global_watchlist.current_list];
+
+    // handle case you selected a different item and now by pressing '<' or '>' you select the target back
+    if(global_watchlist.current_index != global_target_index)
+        offset = 0;
 	global_watchlist.current_item = (global_watchlist.current_item + offset + list.length) % list.length;
 	findTargetByName(list[global_watchlist.current_item].name);
+    global_watchlist.current_index = global_target_index;
 	markTarget();
 }
 
@@ -1743,13 +1748,6 @@ function markTarget()
 }	
 
 
-function watchListNext()
-{
-	if(global_watchlist.current_list < 0 || global_watchlist.current_list >= global_watchlist.lists.length)
-		return;
-	global_watchlist.current_item = (global_watchlist.current_item + 1) % global_watchlist.lists[global_watchlist.current_list].length;
-}
-
 function selectWatchList(index)
 {
 	if(index < 0 || index >= global_watchlist.lists.length) {
@@ -1758,6 +1756,7 @@ function selectWatchList(index)
 		document.getElementById("wl_sel").innerHTML = "None";
 		global_watchlist.current_list = -1;
 		global_watchlist.current_item = -1;
+        global_watchlist.current_index = -1;
 	}
 	else {
 		document.getElementById("wl_ctl").style.display = "inline";
@@ -1765,6 +1764,7 @@ function selectWatchList(index)
 		global_watchlist.current_list = index;
 		global_watchlist.current_item = 0;
 		findTargetByName(global_watchlist.lists[index][0].name);
+        global_watchlist.current_item = global_target_index;
 	}
 	markTarget();
 }
