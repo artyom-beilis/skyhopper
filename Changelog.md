@@ -1,4 +1,4 @@
-2022-12-12: v1.0.8
+2022-12-16: v1.0.8
 
 - Fixed issue #12 - Center of constellations database is highly inaccurate and leads to incorrect names location/collision between names. The location was recalculated from stars
 - Restored previous behavior when other target is selected pressing on objects next/prev resores current item
