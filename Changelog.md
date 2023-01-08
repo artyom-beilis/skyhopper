@@ -1,3 +1,7 @@
+2023-01-08: v1.0.8.1
+
+- Fixed issue #13 - Compass based direction is not correct on some iOS devices, webkitCompassHeading rotates in inverse direction 
+
 2022-12-16: v1.0.8
 
 - Fixed issue #12 - Center of constellations database is highly inaccurate and leads to incorrect names location/collision between names. The location was recalculated from stars

@@ -1313,14 +1313,16 @@ function gyroListener(event)
 
 function deviceOrientationListenerIOS(event) {
 	if(!(event.webkitCompassHeading === null)) {
+        var abs_alpha = 360 - event.webkitCompassHeading;
 		if(global_use_compass)
-			gdata.alpha = event.webkitCompassHeading;
-		gdata.compass_alpha = event.webkitCompassHeading;
+			gdata.alpha = abs_alpha;
+		gdata.compass_alpha = abs_alpha
+	    formatValue("ang_c",abs_alpha);
 	}
 	else {
 		noCompass();
+	    formatValue("ang_c",null);
 	}
-	formatValue("ang_c",event.webkitCompassHeading);
 }
 
 function deviceOrientationListener(event) {
