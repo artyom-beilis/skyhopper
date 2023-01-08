@@ -1,6 +1,6 @@
-2023-01-08: v1.0.8.1
+2023-01-08: v1.0.9
 
-- Fixed issue #13 - Compass based direction is not correct on some iOS devices, webkitCompassHeading rotates in inverse direction 
+- Fixed issue #13 - Compass based direction is not correct on all iOS devices, webkitCompassHeading is `360-alpha` in standard API.
 
 2022-12-16: v1.0.8
 
