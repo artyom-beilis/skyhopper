@@ -230,7 +230,6 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 - Pinch zoom does not work properly on iOS - no way to disable browser zoom
 - Pinch zoom or double tap on iOS devices zooms the screen when not supposed to
 - On some iPad versions (iOS 12.5) the star/target selection does not work
-- On some older iPhones, such as the 6s switch east and west (i.e. W is shown as 90 instead of 270).
 
 
 ## Reporting Bugs and Getting Support
