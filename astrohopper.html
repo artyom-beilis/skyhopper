@@ -1266,7 +1266,15 @@ function selectionEvent(e)
 function dblclickEvent(e)
 {
 	if (allstars[global_target_index].name) {
-		window.open("https://en.wikipedia.org/w/index.php?search=" + allstars[global_target_index].name);
+		const regex = /M(\d*)/gm; // identify Messier objects and target them by their full name
+		var target_name = "";
+		var match_target_messier = regex.exec(allstars[global_target_index].name);
+		if (match_target_messier) { 
+			target_name = "Messier " + match_target_messier[1]
+		} else {
+			target_name = allstars[global_target_index].name;
+		}
+		window.open("https://en.wikipedia.org/w/index.php?search=" + target_name);
 	}
 }
 
