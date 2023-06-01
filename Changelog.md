@@ -1,3 +1,7 @@
+2023-06-01: v1.0.10b
+
+- Open wikipedia page on doubletap
+
 2023-01-08: v1.0.9
 
 - Fixed issue #13 - Compass based direction is not correct on all iOS devices, webkitCompassHeading is `360-alpha` in standard API.
