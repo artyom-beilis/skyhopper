@@ -63,6 +63,8 @@ input[type=submit] { width:10mm;}
 	<button class="comp_but nocompass_background" id="nocompass_button" style="display:none">&nbsp;</button>
 	<button class="comp_but manual_background" id="hand_button" style="display:none;" onclick="manualMode();">&nbsp;</button>
 	<button class="comp_but compass_background" id="compass_button" style="display:none" onclick="compassMode();">&nbsp;</button>
+	
+	
 </p>
 <div class="only_full">
 <p>
@@ -1260,6 +1262,13 @@ function selectionEvent(e)
 		global_expecting_select(min_index);
 	}
 }
+	
+function dblclickEvent(e)
+{
+	if (allstars[global_target_index].name) {
+		window.open("https://en.wikipedia.org/w/index.php?search=" + allstars[global_target_index].name);
+	}
+}
 
 function formatLatLon(id,deg,pos,neg)
 {
@@ -2049,6 +2058,7 @@ incDecLF(0);
     showOnStartup(qs,-1);
 }
 document.body.addEventListener('click',selectionEvent);
+document.body.addEventListener('dblclick',dblclickEvent);
 document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);
 document.body.addEventListener('touchcancel',manualUp);
