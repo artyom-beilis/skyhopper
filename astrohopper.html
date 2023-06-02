@@ -18,6 +18,12 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 .only_tiny { display : none }
 .only_tiny_tr { display : none }
 .only_full { display : inline }
+#search_field_main {
+    float:right;
+    width:20mm;
+    margin-right:1mm;
+    border-radius:2mm;
+}
 
 .manual_background {
     background: url(manual-blk.png) no-repeat center center;
@@ -26,6 +32,11 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 
 .compass_background {
     background: url(compass-blk.png) no-repeat center center;
+    background-size: 10mm 10mm;
+}
+
+.wiki_background {
+    background: url(wiki.png) no-repeat center center;
     background-size: 10mm 10mm;
 }
 
@@ -43,7 +54,7 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 input[type=text], input[type=text]:focus, textarea, input[type=submit]{
 	border: 2px solid red;
 	color:red;
-	background:black;
+	background-color:black;
 }
 
 input[type=text], input[type=text]:focus, input[type=submit] {
@@ -63,8 +74,9 @@ input[type=submit] { width:10mm;}
 	<button class="comp_but nocompass_background" id="nocompass_button" style="display:none">&nbsp;</button>
 	<button class="comp_but manual_background" id="hand_button" style="display:none;" onclick="manualMode();">&nbsp;</button>
 	<button class="comp_but compass_background" id="compass_button" style="display:none" onclick="compassMode();">&nbsp;</button>
-	
-	
+    <span class="only_full">
+        <input id="search_field_main" class="search_field" type="text" value="Search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" />
+    </span>
 </p>
 <div class="only_full">
 <p>
@@ -79,6 +91,9 @@ input[type=submit] { width:10mm;}
 <p class="only_tiny"><button class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
 </p>
 <p style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
+<p style="display:none" id="show_info">
+    <button  class="incdec_but wiki_background" onclick="showObjectInfo();" >&nbsp;</button>
+</p>
 
 <p id="gps">No Geolocation</p>
 <div id="object_log" style="display:none">
@@ -136,6 +151,12 @@ input[type=submit] { width:10mm;}
             <button class="incdec_but settings_background">&nbsp;</button>&nbsp;&#8594;&nbsp;<button class="incdec_but">?</button>
         </p>
     </div>
+</div>
+<div class="config_div" id="wiki_info" style="display:none; position:absolute; left:5%; top:5%; right:5%; bottom:5%; z-index:3; padding: 1% 1% 1% 1%; background:black; border: 1px solid red ">
+    <span style="position:absolute; right:1mm; top:1mm">
+        <button class="incdec_but" onclick="hideWiki();">X</button>
+    </span>
+    <iframe id="wiki_iframe" style="width:100%; height:100%"></iframe>
 </div>
 <div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
 <button class="ui_but" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
@@ -214,7 +235,7 @@ input[type=submit] { width:10mm;}
 	<p id="wl_errors"></p>
 </div>
 <form onsubmit="return hideSettingIfSelectionOk()" >
-<p> <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
+<p class="only_tiny" > <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
 </form>
 <table style="width:100%">
 <tr>
@@ -255,6 +276,14 @@ input[type=submit] { width:10mm;}
     </td>
     <td>
         <input class="dso_selector" id="pinch_zoom" type="checkbox" checked="checked" /><label for="pinch_zoom">Pinch Zoom</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input class="dso_selector" id="wiki_info_select" type="checkbox" checked="checked" onchange="wikiInfoConfig();" /><label for="wiki_info_select">Wiki Info</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="wiki_info_night_select" type="checkbox" checked="checked" onchange="wikiInfoConfig();" /><label for="wiki_info_night_select">Night Wiki Info</label>
     </td>
 </tr>
 </table>
@@ -447,6 +476,30 @@ function normalizeName(name)
     return name;
 }
 
+function mainSearchOnSubmit()
+{
+    document.getElementById('search_field_main').blur();
+    return false;
+}
+
+function mainSearchDoneCheck(e)
+{
+    if(e.key == "Enter") {
+        mainSearchOnSubmit();
+    }
+}
+function mainSearchFindTarget(name)
+{
+    findTargetByName(name.trim());
+    var el = document.getElementById('search_field_main');
+    el.style.textDecoration = (global_target_index>=0) ? "none" : "line-through";
+}
+function mainSearchFocus()
+{
+    document.getElementById('search_field_main').value="";
+    event.stopPropagation();
+}
+
 function findTargetByName(name ='')
 {
 	var found = document.getElementById('find_status')
@@ -473,11 +526,13 @@ function findTargetByName(name ='')
 	if(found_index >= 0) {
 		global_target_index = allstars_index_name.index[found_index];
 		found.innerHTML = allstars[global_target_index].name;
+        showHideInfoIcon();
 		return true;
 	}
 	else {
 		global_target_index = -1;
 		found.innerHTML = '';
+        showHideInfoIcon();
 		return false;
 	}
 }
@@ -552,6 +607,7 @@ function resetAll()
 	global_expecting_select = selectTarget;
 	findTargetByName();
 	global_target_index = -1;
+    showHideInfoIcon();
 	document.getElementById('find_status').innerHTML = '';
 	global_align_index = -1;
 	setUseGyro(false);
@@ -1240,6 +1296,8 @@ function selectTarget(index)
 {
 	findTargetByName();
 	global_target_index = index;
+    showHideInfoIcon()
+
 	//global_expecting_select = null;
 }
 
@@ -1263,9 +1321,23 @@ function selectionEvent(e)
 	}
 }
 	
-function dblclickEvent(e)
+function isOpenWikiAllowed()
 {
-	if (allstars[global_target_index].name) {
+    var has_obj = global_target_index >= 0 && allstars[global_target_index].name;
+    if(!has_obj)
+        return false;
+    var enabled = document.getElementById('wiki_info_select').checked;
+    if(!enabled)
+        return false;
+    var nm_enabled = document.getElementById('wiki_info_night_select').checked;
+    if(global_style == global_night_style && !nm_enabled)
+        return false;
+    return true;
+}
+
+function showObjectInfo()
+{
+	if (isOpenWikiAllowed()) {
 		const regex = /^M(\d*)$/gm; // identify Messier objects and target them by their full name
 		var target_name = "";
 		var match_target_messier = regex.exec(allstars[global_target_index].name);
@@ -1274,8 +1346,34 @@ function dblclickEvent(e)
 		} else {
 			target_name = allstars[global_target_index].name;
 		}
-		window.open("https://en.wikipedia.org/w/index.php?search=" + target_name);
+		showWiki("https://en.wikipedia.org/w/index.php?search=" + target_name);
 	}
+}
+
+function wikiInfoConfig()
+{
+    showHideInfoIcon();
+}
+
+function showHideInfoIcon()
+{
+    var el = document.getElementById('show_info');
+    if(isOpenWikiAllowed())
+        el.style.display='block';
+    else
+        el.style.display='none';
+}
+
+function hideWiki()
+{
+    document.getElementById('wiki_info').style.display = 'none';
+    document.getElementById('wiki_iframe').src = '';
+}
+
+function showWiki(url)
+{
+    document.getElementById('wiki_iframe').src = url;
+    document.getElementById('wiki_info').style.display = 'inline';
 }
 
 function formatLatLon(id,deg,pos,neg)
@@ -1767,6 +1865,7 @@ function markTarget()
 }	
 
 
+
 function selectWatchList(index)
 {
 	if(index < 0 || index >= global_watchlist.lists.length) {
@@ -1783,7 +1882,7 @@ function selectWatchList(index)
 		global_watchlist.current_list = index;
 		global_watchlist.current_item = 0;
 		findTargetByName(global_watchlist.lists[index][0].name);
-        global_watchlist.current_item = global_target_index;
+		global_watchlist.current_index = global_target_index;
 	}
 	markTarget();
 }
@@ -1928,6 +2027,7 @@ function setupGyros()
 function switchNightMode(is_night)
 {
 	global_style = is_night ? global_night_style : global_day_style;
+    showHideInfoIcon();
 }
 
 
@@ -2040,6 +2140,8 @@ function setupConfigurableElements()
     configureCheckboxOption('Ne_checked',true,(v) => { global_show_obj.Ne = v; });
     configureCheckboxOption('Ca_checked',true,(v) => { global_show_obj.Ca = v; });
     configureCheckboxOption('U_checked',true,(v) => { global_show_obj.U = v; });
+    configureCheckboxOption('wiki_info_select',true,(v) => { });
+    configureCheckboxOption('wiki_info_night_select',false,(v) => { });
 
     // turn off by default on iOS
     var agent = navigator.userAgent
@@ -2066,12 +2168,11 @@ incDecLF(0);
     showOnStartup(qs,-1);
 }
 document.body.addEventListener('click',selectionEvent);
-document.body.addEventListener('dblclick',dblclickEvent);
 document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);
 document.body.addEventListener('touchcancel',manualUp);
 document.body.addEventListener('touchmove',manualMove);
-dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but"],["click","touchstart","touchend","touchmove","touchcancel"]);
+dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but","search_field"],["click","touchstart","touchend","touchmove","touchcancel"]);
 global_expecting_select = selectTarget;
 
 window.addEventListener("load", () => {
