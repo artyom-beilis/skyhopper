@@ -18,11 +18,28 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 .only_tiny { display : none }
 .only_tiny_tr { display : none }
 .only_full { display : inline }
+.only_tiny_b { display : none }
+#search_field_main_ok {
+    float:right;
+    height:10mm;
+    border:0px;
+    margin-right:1mm;
+    display:none;
+    background-color: transparent;
+}
 #search_field_main {
     float:right;
-    width:20mm;
     margin-right:1mm;
     border-radius:2mm;
+    width:15mm;
+    padding-left:1mm;
+    font-size:66%;
+}
+
+#search_field_main:focus {
+    padding:0;
+    width:30mm;
+    font-size:100%;
 }
 
 .manual_background {
@@ -37,6 +54,11 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 
 .wiki_background {
     background: url(wiki.png) no-repeat center center;
+    background-size: 10mm 10mm;
+}
+
+.search_background {
+    background: url(search.png) no-repeat center center;
     background-size: 10mm 10mm;
 }
 
@@ -75,7 +97,9 @@ input[type=submit] { width:10mm;}
 	<button class="comp_but manual_background" id="hand_button" style="display:none;" onclick="manualMode();">&nbsp;</button>
 	<button class="comp_but compass_background" id="compass_button" style="display:none" onclick="compassMode();">&nbsp;</button>
     <span class="only_full">
-        <input id="search_field_main" class="search_field" type="text" value="Search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" />
+        <input id="search_field_main" class="search_field" type="text" value="search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" onfocusout="mainSearchOnFocusChange(false);" onfocusin="mainSearchOnFocusChange(true)" />
+	    <button class="comp_but search_background" id="main_search_button" style="display:none; margin-right:1mm;" onclick="reShearchMain();">&nbsp;</button>
+        <button id="search_field_main_ok" ></button>
     </span>
 </p>
 <div class="only_full">
@@ -235,7 +259,7 @@ input[type=submit] { width:10mm;}
 	<p id="wl_errors"></p>
 </div>
 <form onsubmit="return hideSettingIfSelectionOk()" >
-<p class="only_tiny" > <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
+<p> <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
 </form>
 <table style="width:100%">
 <tr>
@@ -421,9 +445,11 @@ function smallScreen(v)
 {
 	var tiny = v ? 'inline' : 'none';
 	var tiny_tr = v ? 'table-row' : 'none';
+	var tiny_b = v ? 'block' : 'none';
 	var full = v ? 'none' : 'inline';
 	setDisplayByClass('only_tiny_tr',tiny_tr);
 	setDisplayByClass('only_tiny',tiny);
+	setDisplayByClass('only_tiny_b',tiny_b);
 	setDisplayByClass('only_full',full);
 }
 
@@ -476,6 +502,32 @@ function normalizeName(name)
     return name;
 }
 
+function reShearchMain()
+{
+    findTargetByName(document.getElementById('search_field_main').value);
+}
+
+function mainSearchOnFocusChange(val)
+{
+    if(!val) {
+        var isOk = document.getElementById('search_field_main_ok');
+        isOk.style.display = 'none';
+        var el =  document.getElementById('search_field_main');
+        var content = el.value;
+        reShearchMain();
+        if(content.trim()=='') {
+            el.value='search';
+        }
+    }
+    var but = document.getElementById('main_search_button');
+    if(!val && global_target_index >= 0) {
+        but.style.display='inline';
+    }
+    else {
+        but.style.display='none';
+    }
+}
+
 function mainSearchOnSubmit()
 {
     document.getElementById('search_field_main').blur();
@@ -492,7 +544,9 @@ function mainSearchFindTarget(name)
 {
     findTargetByName(name.trim());
     var el = document.getElementById('search_field_main');
-    el.style.textDecoration = (global_target_index>=0) ? "none" : "line-through";
+    var isOk = document.getElementById('search_field_main_ok');
+    isOk.style.display = 'inline';
+    isOk.innerHTML= (global_target_index>=0) ? "✓" : "✗";;
 }
 function mainSearchFocus()
 {
