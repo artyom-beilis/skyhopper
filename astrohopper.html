@@ -113,7 +113,7 @@ input[type=submit] { width:10mm;}
 <body>
 <canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
 <div class="only_full">
-    <input id="search_field_main" class="search_field" type="text" value="search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" onfocusout="mainSearchOnFocusChange(false);" onfocusin="mainSearchOnFocusChange(true)" />
+    <input id="search_field_main" class="search_field" autocomplete="off" type="text" value="search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" onfocusout="mainSearchOnFocusChange(false);" onfocusin="mainSearchOnFocusChange(true)" />
     <button class="incdec_but search_background" id="main_search_button" style="display:none; margin-right:1mm;" onclick="reShearchMain();">&nbsp;</button>
     <button id="search_field_main_ok" ></button>
 </div>
@@ -324,15 +324,15 @@ input[type=submit] { width:10mm;}
 </tr>
 <tr>
     <td>
+        &nbsp;
+    </td>
+    <td>
         Wiki:
         <select id="wiki_info_opt" onchange="wikiInfoConfig()">
-            <option value="no">No</option>
+            <option value="no">Never</option>
             <option selected value="day">Day Only</option>
             <option value="always">Always</option>
         </select>
-    </td>
-    <td>
-        &nbsp;
     </td>
 </tr>
 </table>
