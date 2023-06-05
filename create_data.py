@@ -216,7 +216,7 @@ def get_constellation_lines(starpos,names,cons):
     return lines
 
 def get_planets(dso):
-    for name in ['Mercury','Venus','Mars','Jupiter','Saturn','Neptune','Uranus']:
+    for name in ['Moon','Mercury','Venus','Mars','Jupiter','Saturn','Neptune','Uranus']:
         dso.append(dict(DE=-1,RA=-1,AM=-1,name=name,t='P'))
 
 

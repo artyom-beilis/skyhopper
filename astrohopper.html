@@ -352,11 +352,12 @@ input[type=submit] { width:10mm;}
 MANUAL
 </div>
 
-<script src="vsop87-multilang/Languages/JavaScript/vsop87a_xsmall.js"></script>
+<script src="vsop87a_combined.js"></script>
+<script src="vsop87-multilang/Languages/JavaScript/CelestialProgrammingReduce.js"></script> 
 <script>
 vsop87a_full = vsop87a_xsmall;
+vsop87a_full_velocities = vsop87a_milli_velocities;
 </script>
-<script src="vsop87-multilang/Languages/JavaScript/astrolib.js"></script>
 <script src="jsdb.js"></script>
 <script>
 
@@ -1236,17 +1237,23 @@ function logObject(thestar)
 	}
 }
 
+
 function getSolarSystemObject(p)
 {
-	var body = astrolib.bodies.indexOf(p);
-	var r2d = 180 / Math.PI;
-	var d2r = Math.PI / 180;
-	var rLat = gdata.lat * d2r;
-	var rLon = gdata.lon * d2r;
-	var jd = astrolib.convertDateToJulianDate(new Date());
-	var RaDec = astrolib.getBodyRaDec(jd,body,rLat,rLon,false);
-	var RA = RaDec[2];
-	var DEC = RaDec[1];
+    var r2d = 180 / Math.PI;
+    var d2r = Math.PI / 180;
+    var rLat = gdata.lat * d2r;
+    var rLon = gdata.lon * d2r;
+    var date = new Date();
+    // actually same
+    //var jd = gdata.time * 1e-3 / 86400.0 + 2440587.5;
+    var date = new Date();
+    var jd = JulianDate.gregorianDateToJulianDate(date.getUTCFullYear(),date.getUTCMonth()+1,date.getUTCDate(),date.getUTCHours(),date.getUTCMinutes(),date.getUTCSeconds());
+    var body = CPReduce.bodies.indexOf(p);
+    var res =  CPReduce.reduce(body,jd,[rLat,rLon,0]);
+    var RA = res[0];
+    var DEC = res[1];
+
 	return { "RA" : RA * r2d, "DE": DEC *r2d, "name": p, "AM" : -1 };
 }
 
@@ -1712,7 +1719,7 @@ function parseRA(svalue)
 {
     const re_float = /^(\d+\.\d+)$/;
     const re_colon = /^(\d+):(\d+)(?::(\d+(.\d+)?))?$/;
-    const re_hms = /^(\d+)[hH \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|′′|″|''))?$/;
+    const re_hms = /^(\d+)[hH \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|′′|″|''|"))?$/;
     const re_space = /^(\d+)\s+(\d+)(?:\s+(\d+(.\d+)?))?$/;
     var res = svalue.match(re_float);
     var deg = null;
@@ -1742,7 +1749,7 @@ function parseDEC(svalue)
 {
     const re_float = /^([+-−]?\d+.\d+?)$/;
     const re_colon = /^([-+−]?)(\d+):(\d+)(?::(\d+(.\d+)?))?$/;
-    const re_dms = /^([-+−]?)(\d+)[dD° \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|″|′′|''))?$/;
+    const re_dms = /^([-+−]?)(\d+)[dD° \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|″|′′|''|"))?$/;
     const re_space = /^([-+−]?)(\d+)\s+(\d+)(?:\s+(\d+(.\d+)?))?$/;
     var res = svalue.match(re_float)
     if(res) {
@@ -1783,7 +1790,7 @@ function toggleUI(link_id,ui_id)
 
 function htmlEscape(v)
 {
-    return v.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/&/g,'&amp;').replace(/"/g,"&quot;").replace(/'/g,'&#x39;')
+    return v.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/&/g,'&amp;').replace(/"/g,"&quot;").replace(/'/g,'&#39;')
 }
 
 function discardUserDSO()
