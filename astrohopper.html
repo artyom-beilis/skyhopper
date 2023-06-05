@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <style>
-body, td { font-size: 5mm ; color:red ; font-family: sans; background-color:black }
+body, td { margin:3mm 0 0 0; font-size: 5mm ; color:red ; font-family: sans; background-color:black }
 a:link {color: red;}
 a:visited { color: red; }
 a:active { color:red; }
@@ -19,17 +19,30 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 .only_tiny_tr { display : none }
 .only_full { display : inline }
 .only_tiny_b { display : none }
+
 #search_field_main_ok {
-    float:right;
+    position:absolute;
+    top:31mm;
+    right:10%;
     height:10mm;
     border:0px;
-    margin-right:1mm;
+    margin-left:1mm;
     display:none;
     background-color: transparent;
 }
+
+#main_search_button {
+    position:absolute;
+    right:27mm;
+    margin:0;
+    top:3mm;
+}
+
 #search_field_main {
-    float:right;
-    margin-right:1mm;
+    position:absolute;
+    right:12mm;
+    top:3mm;
+    margin:0;
     border-radius:2mm;
     width:15mm;
     padding-left:1mm;
@@ -37,9 +50,19 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 }
 
 #search_field_main:focus {
+    position:absolute;
+    right:10%;
+    left:10%;
+    top:31mm;
     padding:0;
-    width:30mm;
+    width:80%;
     font-size:100%;
+}
+
+
+.first_line_controls {
+    padding:0;
+    margin:1mm 1mm 1mm 1mm;
 }
 
 .manual_background {
@@ -89,45 +112,42 @@ input[type=submit] { width:10mm;}
 </style>
 <body>
 <canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
-<p>
+<div class="only_full">
+    <input id="search_field_main" class="search_field" type="text" value="search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" onfocusout="mainSearchOnFocusChange(false);" onfocusin="mainSearchOnFocusChange(true)" />
+    <button class="incdec_but search_background" id="main_search_button" style="display:none; margin-right:1mm;" onclick="reShearchMain();">&nbsp;</button>
+    <button id="search_field_main_ok" ></button>
+</div>
+<p class="first_line_controls" >
 	<span class="only_full"><button class="ui_but" onclick="align();">Align</button></span>
 	<span class="only_tiny"><button class="incdec_but" onclick="align();">&#x25ce;</button></span>
-	<span class="only_tiny" id="alignment_tiny"></span><span class="only_full" id="alignment"></span> <span id="countdown"></span>
+    <span id="countdown"></span>
+    <span class="only_tiny" id="alignment_tiny"></span><span class="only_full" id="alignment"></span> 
 	<button class="comp_but nocompass_background" id="nocompass_button" style="display:none">&nbsp;</button>
 	<button class="comp_but manual_background" id="hand_button" style="display:none;" onclick="manualMode();">&nbsp;</button>
 	<button class="comp_but compass_background" id="compass_button" style="display:none" onclick="compassMode();">&nbsp;</button>
-    <span class="only_full">
-        <input id="search_field_main" class="search_field" type="text" value="search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" onfocusout="mainSearchOnFocusChange(false);" onfocusin="mainSearchOnFocusChange(true)" />
-	    <button class="comp_but search_background" id="main_search_button" style="display:none; margin-right:1mm;" onclick="reShearchMain();">&nbsp;</button>
-        <button id="search_field_main_ok" ></button>
-    </span>
 </p>
-<div class="only_full">
-<p>
+<p class="first_line_controls only_full_b">
 		<button class="incdec_but" onclick="incFOV();">-</button>
 		<button class="incdec_but" onclick="decFOV();">+</button>
 		&angle;<span class="fov_val">60&deg;</span>
-		<span style="float:right">
-			<button class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
-		</span>
+		<button style="display:inline" class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
 </p>
-</div>
-<p class="only_tiny"><button class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
+<p class="only_tiny_b first_line_controls"><button class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
 </p>
-<p style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
-<p style="display:none" id="show_info">
+<p class="first_line_controls" style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
+<p class="first_line_controls" style="display:none" id="show_info">
     <button  class="incdec_but wiki_background" onclick="showObjectInfo();" >&nbsp;</button>
 </p>
 
-<p id="gps">No Geolocation</p>
+<p class="first_line_controls" id="gps">No Geolocation</p>
 <div id="object_log" style="display:none">
 <p>Sirius:<span id="Sirius_alt"></span>, <span id="Sirius_az"></span></p>
 <p>Mars:<span id="Mars_alt"></span>, <span id="Mars_az"></span></p>
 <p>Rigel:<span id="Rigel_alt"></span>, <span id="Rigel_az"></span></p>
 <p>Jupiter:<span id="Jupiter_alt"></span>, <span id="Jupiter_az"></span></p>
 </div>
-<p id="orient"></p>
-<p id="status"></p>
+<p class="first_line_controls" id="orient"></p>
+<p class="first_line_controls" id="status"></p>
 <div class="config_div" id="quick_start" style="display:none; position:absolute; left:10%; top:10%; z-index:4 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:left ">
     <span style="position:absolute; right:1mm; top:1mm">
         <button class="incdec_but" onclick="qsHide()">X</button>
@@ -447,10 +467,12 @@ function smallScreen(v)
 	var tiny_tr = v ? 'table-row' : 'none';
 	var tiny_b = v ? 'block' : 'none';
 	var full = v ? 'none' : 'inline';
+	var full_b = v ? 'none' : 'block';
 	setDisplayByClass('only_tiny_tr',tiny_tr);
 	setDisplayByClass('only_tiny',tiny);
 	setDisplayByClass('only_tiny_b',tiny_b);
 	setDisplayByClass('only_full',full);
+	setDisplayByClass('only_full_b',full_b);
 }
 
 
@@ -725,6 +747,8 @@ function selectAlignWithTimer(index,start_val=3)
 		selectAlign(index);
 	}
 	else {
+        document.getElementById("alignment").innerHTML = '';
+        document.getElementById("alignment_tiny").innerHTML = '';
 		cd.innerHTML = start_val.toFixed(1) + "s";
 		setTimeout(function() {
 			selectAlignWithTimer(index,start_val - 0.1);
