@@ -186,6 +186,8 @@ It is possible to add user comment between `(` and `)` to explain the object id.
 
     Galaxies: M31 (Andromeda), M64 (Black Eye)
 
+_Note:_ if you adding a comment or use a name that contains spaces you need to add a comma `,` as a seprator
+
 Lists can be selected by pressing `<` and `>` buttons in "Lists" control. When the list is selected two buttons `<` and `>` are shown in main screen under "Align" button. They allow browsing the objects forward and backward. The current selected object's name is shown under the controls.
 
 The watch lists are stored at your phone on per domain basis. They are kept even when you reopen the app. 
