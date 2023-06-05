@@ -1526,7 +1526,7 @@ function parseRA(svalue)
 {
     const re_float = /^(\d+\.\d+)$/;
     const re_colon = /^(\d+):(\d+)(?::(\d+(.\d+)?))?$/;
-    const re_hms = /^(\d+)[hH \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|′′|″|''))?$/;
+    const re_hms = /^(\d+)[hH \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|′′|″|''|"))?$/;
     const re_space = /^(\d+)\s+(\d+)(?:\s+(\d+(.\d+)?))?$/;
     var res = svalue.match(re_float);
     var deg = null;
@@ -1556,7 +1556,7 @@ function parseDEC(svalue)
 {
     const re_float = /^([+-−]?\d+.\d+?)$/;
     const re_colon = /^([-+−]?)(\d+):(\d+)(?::(\d+(.\d+)?))?$/;
-    const re_dms = /^([-+−]?)(\d+)[dD° \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|″|′′|''))?$/;
+    const re_dms = /^([-+−]?)(\d+)[dD° \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|″|′′|''|"))?$/;
     const re_space = /^([-+−]?)(\d+)\s+(\d+)(?:\s+(\d+(.\d+)?))?$/;
     var res = svalue.match(re_float)
     if(res) {
