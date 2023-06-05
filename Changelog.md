@@ -1,6 +1,11 @@
-2023-06-01: v1.0.10b
+2023-06-05: v1.0.10
 
-- Open wikipedia page on doubletap
+- Added object search box to main screen to improve searching experience
+- Now you can open Wikipedia information page about selected object by pressing "W" button - developed together with Robert Barron.
+- Added Moon to the objects list
+- Fixed parsing of RA/DEC in user object to allow double quote as seconds mark
+- FIxed incorrect escaping of error message in user object parsing
+- Documentation improvement of observation list formatting
 
 2023-01-08: v1.0.9
 

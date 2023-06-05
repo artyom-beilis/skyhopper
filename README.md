@@ -36,7 +36,10 @@ When AstroHopper starts, a Quick Start Guide appears.  You can also get help by 
 5. Move the telescope till these numbers are close to zero - at this point your telescope should point to the requested object
 6. In order to move to next object - repeat the alignment process from the step 1 since the built-in cellphone gyros don't keep the accuracy for a long time or multiple movements
 
-Here you can find a demonstration and tutorial video created by Nir Zonshine: <https://youtu.be/AtArqBLWWJ8>
+Tutorial and Introduction Videos:
+
+- Here you can find a demonstration and tutorial video created by Nir Zonshine: <https://youtu.be/AtArqBLWWJ8>
+- Another very good review created by John Dreese (a.k.a. Reflactor) can be found here: <https://youtu.be/6-_58mSGz1Q>
 
 ## Notes for iOS Users
 
@@ -129,10 +132,12 @@ You can usually update the installed version of AstroHopper by refreshing the pa
     - Field of view - modify with `+`, `-` to adjust 
     - If watch list is selected `<`,`>` controls for browsing watch list object. Selected object name is shown below
 
-- Right side, from top to bottom
+- Right side, from top to bottom, right to left
 
     - `⚙` - settings button
+    - Object search box, allows to enter object name or code. Once found press Enter on keyboard. Note if you want to do same search once again, press on the "Magnifing Glass" and it would return to the selected object.
     - `✋` - switch to manual mode, "_compass_" switch to compass mode, "_compass crossed_" - no compass available use manual mode only
+    - `W` - appears when a named object selected - pressing on it opens Wikipedia page about the object, requires network.
 
 - Settings Menu (accessed from gear `⚙` icon):
 
@@ -149,10 +154,12 @@ You can usually update the installed version of AstroHopper by refreshing the pa
     - Allow alignment using any DSO object. Use with care since it is hard to define a center of big DSO object like open cluster.
     - Filtering of the Astronomical objects by type
     - Enable/Disable pinch zoom
+    - Wiki information configuration
     - Show quick-start tutorial on startup 
     - User Added Objects List
     - Status of geolocation and reload geolocation button
     - Sensors information
+
 
 ## Controls in Small Screen Mode
 
@@ -165,6 +172,15 @@ On screen controls:
     - Manual `✋` or "_compass_" mode
     - Settings Menu: `⚙`
 
+- Left `W` - appears when a named object selected - pressing on it opens Wikipedia page about the object, requires network
+
+## Wikipedia Page Info
+
+When `W` button appears you can tap on it and open a frame with Wikipedia page about the selected object.
+
+_Note:_ But be careful - the app has no control over style of the page and by default it would be black text over white page. It is something not desirable for night vision.
+
+Thus by default the Wiki page info support is disabled in Night mode. You can change behavior in settings menu "Wiki".
 
 ## Watch List
 
@@ -186,7 +202,7 @@ It is possible to add user comment between `(` and `)` to explain the object id.
 
     Galaxies: M31 (Andromeda), M64 (Black Eye)
 
-_Note:_ if you adding a comment or use a name that contains spaces you need to add a comma `,` as a seprator
+_Note:_ if you adding a comment or use a name that contains spaces you need to add a comma `,` as a separator
 
 Lists can be selected by pressing `<` and `>` buttons in "Lists" control. When the list is selected two buttons `<` and `>` are shown in main screen under "Align" button. They allow browsing the objects forward and backward. The current selected object's name is shown under the controls.
 
@@ -241,7 +257,7 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 ## Copyrights
 
-(C) 2021-2022 Artyom Beilis.
+(C) 2021-2023 Artyom Beilis.
 
 It is an open source web application licensed under GPL license. It may work only with well working sensors. No warranty of any kind is given. For detailed copyrights
 of different parts of the project refer to <https://github.com/artyom-beilis/skyhopper/blob/main/COPYING.md>
