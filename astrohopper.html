@@ -324,10 +324,15 @@ input[type=submit] { width:10mm;}
 </tr>
 <tr>
     <td>
-        <input class="dso_selector" id="wiki_info_select" type="checkbox" checked="checked" onchange="wikiInfoConfig();" /><label for="wiki_info_select">Wiki Info</label>
+        Wiki:
+        <select id="wiki_info_opt" onchange="wikiInfoConfig()">
+            <option value="no">No</option>
+            <option selected value="day">Day Only</option>
+            <option value="always">Always</option>
+        </select>
     </td>
     <td>
-        <input class="dso_selector" id="wiki_info_night_select" type="checkbox" checked="checked" onchange="wikiInfoConfig();" /><label for="wiki_info_night_select">Night Wiki Info</label>
+        &nbsp;
     </td>
 </tr>
 </table>
@@ -1411,10 +1416,10 @@ function isOpenWikiAllowed()
     var has_obj = global_target_index >= 0 && allstars[global_target_index].name;
     if(!has_obj)
         return false;
-    var enabled = document.getElementById('wiki_info_select').checked;
-    if(!enabled)
+    var enabled = document.getElementById('wiki_info_opt').value;
+    if(enabled == 'no')
         return false;
-    var nm_enabled = document.getElementById('wiki_info_night_select').checked;
+    var nm_enabled = enabled == 'always';
     if(global_style == global_night_style && !nm_enabled)
         return false;
     return true;
@@ -2168,6 +2173,22 @@ function loadUserDSO()
     resetUserDSOsAndMergeNewToAllStars(dso);
 }
 
+function configureValueOption(target,default_val,onchange)
+{
+    var name = 'opt_' + target;
+    var element = document.getElementById(target);
+    var value = window.localStorage.getItem(name);
+    if(!value) {
+        value = default_val;
+    }
+
+    element.value = value;
+    onchange(value);
+    element.addEventListener('change',function(){
+        onchange(this.checked);
+        window.localStorage.setItem(name,this.value);
+    });
+}
 
 function configureCheckboxOption(target,default_val,onchange)
 {
@@ -2225,8 +2246,7 @@ function setupConfigurableElements()
     configureCheckboxOption('Ne_checked',true,(v) => { global_show_obj.Ne = v; });
     configureCheckboxOption('Ca_checked',true,(v) => { global_show_obj.Ca = v; });
     configureCheckboxOption('U_checked',true,(v) => { global_show_obj.U = v; });
-    configureCheckboxOption('wiki_info_select',true,(v) => { });
-    configureCheckboxOption('wiki_info_night_select',false,(v) => { });
+    configureCheckboxOption('wiki_info_opt','day',(v) => { });
 
     // turn off by default on iOS
     var agent = navigator.userAgent
