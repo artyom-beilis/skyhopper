@@ -1429,14 +1429,21 @@ function showObjectInfo()
 {
 	if (isOpenWikiAllowed()) {
 		const regex = /^M(\d*)$/gm; // identify Messier objects and target them by their full name
+		const ngc_regex = /^(NGC|IC)(\d*)$/gm; // identify NGC/IC objects and target them by their full name
+        var src_name = allstars[global_target_index].name;
 		var target_name = "";
-		var match_target_messier = regex.exec(allstars[global_target_index].name);
+		var match_target_messier = regex.exec(src_name);
+		var match_target_ngc = ngc_regex.exec(src_name);
 		if (match_target_messier) { 
 			target_name = "Messier " + match_target_messier[1]
-		} else {
-			target_name = allstars[global_target_index].name;
+		} 
+        else if(match_target_ngc) {
+            target_name = match_target_ngc[1]+' '+match_target_ngc[2];
+        }
+        else {
+			target_name = src_name;
 		}
-		showWiki("https://en.wikipedia.org/w/index.php?search=" + target_name);
+		showWiki("https://en.wikipedia.org/w/index.php?search=" + encodeURIComponent(target_name));
 	}
 }
 
