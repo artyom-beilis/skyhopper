@@ -178,7 +178,7 @@ On screen controls:
 
 When `W` button appears you can tap on it and open a frame with Wikipedia page about the selected object.
 
-_Note:_ But be careful - the app has no control over style of the page and by default it would be black text over white page. It is something not desirable for night vision.
+_Note:_ But be careful - the app has no control over style of the page and by default it would be black text over white page. It is something not desirable for night vision. To improve this, you can tweak your browser settings or use a specific browser extension such as [Dark Reader](https://darkreader.org), however white text or bright images may still disturb your night vision.
 
 Thus by default the Wiki page info support is disabled in Night mode. You can change behavior in settings menu "Wiki".
 
