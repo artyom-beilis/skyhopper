@@ -1,3 +1,9 @@
+2023-11-15: v1.0.11
+
+- Documentation update
+- Fixed URL formatting for wikipedia
+- We want you back...
+
 2023-06-05: v1.0.10
 
 - Added object search box to main screen to improve searching experience

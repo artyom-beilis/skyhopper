@@ -102,12 +102,15 @@ input[type=text], input[type=text]:focus, textarea, input[type=submit]{
 	background-color:black;
 }
 
+
 input[type=text], input[type=text]:focus, input[type=submit] {
 	height:10mm;
 	font-size:5mm;
         padding: 0;
 	vertical-align: middle; background-color:black; 
 }
+
+
 input[type=submit] { width:10mm;}
 </style>
 <body>
@@ -162,6 +165,9 @@ input[type=submit] { width:10mm;}
         </p>
         <img style="float:right" width="50%" src="images/qs_1_1.png" alt="Setup" />
         <p>Connect the smartphone to the optical tube such that its top points to the viewing direction and it lies flat on the tube.</p>
+        <hr style="border-color:red">
+        <p><i><a href="https://stories.bringthemhomenow.net/">We want you back.</a></i></p>
+        <p><b>Stand with Israel against terror!</b></p>
     </div>
     <div id="qs_2" style="display:none;">
         <p>
@@ -2146,14 +2152,14 @@ function incDecLF(dsize)
 function getShowOnStartup(show)
 {
     var storage = window.localStorage;
-    var qs_hide = storage.getItem('qs_hide')
+    var qs_hide = storage.getItem('qs_hide_v2')
     var qs_hide = qs_hide ? parseInt(qs_hide) : 0;
     return !qs_hide;
 }
 
 function showOnStartup(show,src)
 {
-    window.localStorage.setItem('qs_hide',(show ? '0' : '1'));
+    window.localStorage.setItem('qs_hide_v2',(show ? '0' : '1'));
     if(src != 1)
         document.getElementById('qs_hide_1').checked = !show;
     if(src != 2)
