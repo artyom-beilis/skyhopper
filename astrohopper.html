@@ -166,7 +166,7 @@ input[type=submit] { width:10mm;}
         <img style="float:right" width="50%" src="images/qs_1_1.png" alt="Setup" />
         <p>Connect the smartphone to the optical tube such that its top points to the viewing direction and it lies flat on the tube.</p>
         <hr style="border-color:red">
-        <p><i><a href="https://stories.bringthemhomenow.net/">We want you back.</a></i></p>
+        <p><i><a href="https://stories.bringthemhomenow.net/">Bring them home now!</a></i></p>
         <p><b>Stand with Israel against terror!</b></p>
     </div>
     <div id="qs_2" style="display:none;">
@@ -1501,6 +1501,7 @@ function showpos(position)
 	document.getElementById("gps").style.display='none';
 }
 
+
 function requestGeolocation()
 {
   if (navigator.geolocation) {
@@ -1765,9 +1766,9 @@ function parseRA(svalue)
 
 function parseDEC(svalue)
 {
-    const re_float = /^([+-−]?\d+.\d+?)$/;
+    const re_float = /^([+-−]?\d+\.\d+?)$/;
     const re_colon = /^([-+−]?)(\d+):(\d+)(?::(\d+(.\d+)?))?$/;
-    const re_dms = /^([-+−]?)(\d+)[dD° \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|″|′′|''|"))?$/;
+    const re_dms = /^([-+−]?)(\d+)[dD° \t]\s*(\d+)[mM'′]\s*(?:(\d+(.\d+)?)(?:s|S|″|′′|''))?$/;
     const re_space = /^([-+−]?)(\d+)\s+(\d+)(?:\s+(\d+(.\d+)?))?$/;
     var res = svalue.match(re_float)
     if(res) {
@@ -1784,12 +1785,13 @@ function parseDEC(svalue)
     var m = parseInt(res[3]);
     var s = 0;
     if(res[4]) {
-        s = parseFloat(res[3]);
+        s = parseFloat(res[4]);
     }
-    if(d  > 90 || m >= 60 || s >= 60)
+    if(d > 90 || m >= 60 || s >= 60)
         return null;
     return sig*(d + (60 * m + s) / 3600.0);
 }
+
 
 
 function toggleUI(link_id,ui_id)
