@@ -96,14 +96,14 @@ button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vert
 }
 
 
-input[type=text], input[type=text]:focus, textarea, input[type=submit]{
+input[type=text], input[type=text]:focus, textarea, input[type=submit], input[type=number] {
 	border: 2px solid red;
 	color:red;
 	background-color:black;
 }
 
 
-input[type=text], input[type=text]:focus, input[type=submit] {
+input[type=text], input[type=text]:focus, input[type=submit], input[type=number] {
 	height:10mm;
 	font-size:5mm;
         padding: 0;
@@ -354,6 +354,11 @@ input[type=submit] { width:10mm;}
 <hr>
 <p><button class="incdec_but" onclick="requestGeolocation();">&#x21bb;</button> GPS: <span id="lat">Unknown</span>, <span id="lon">Unknown</span></p>
 <p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span> UTC=<span id="utc_time"></span></p>
+<table>
+<th><td colspan="2" style="text-align:left">GPS Override</td></th>
+<tr><td>Lat:</td><td><input type="number" min="-90" max=90" value="" id="manual_lat" oninput="updateManualLatLon()"></td></tr>
+<tr><td>Lon:</td><td><input type="number" min="-180" max=180" value="" id="manual_lon" oninput="updateManualLatLon()"></td></tr>
+</table>
 </div>
 
 <div style="position:absolute; left:0; top:0; z-index:5; width:100%; background:black; display:none;" id="manual">
@@ -1504,7 +1509,11 @@ function showpos(position)
 
 function requestGeolocation()
 {
-  if (navigator.geolocation) {
+  var manualLocation = getManualLatLonOverrideValues();
+  if(manualLocation != null) {
+      showpos(manualLocation);
+  }
+  else if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showpos);
   }
 }
@@ -2068,6 +2077,38 @@ function loadWL()
 	document.getElementById("user_wl").value = wl_text;
 }
 
+function getManualLatLonOverrideValues()
+{
+    var lat = parseFloat(document.getElementById('manual_lat').value);
+    var lon = parseFloat(document.getElementById('manual_lon').value);
+    if(isNaN(lat) || isNaN(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180)
+        return null;
+    return {"coords":{"latitude":lat,"longitude":lon}}
+}
+
+function updateManualLatLon()
+{
+    var res = getManualLatLonOverrideValues();
+    if(res != null) {
+        showpos(res);
+    }
+    var lat = document.getElementById('manual_lat').value;
+    var lon = document.getElementById('manual_lon').value;
+    if((lat == '' && lon=='') || res != null) {
+        window.localStorage.setItem('lat_lon',lat + ';' + lon)
+    }
+}
+
+function loadLatLon()
+{
+	var latlon_text = window.localStorage.getItem("lat_lon");
+	if(!latlon_text)
+		latlon_text = ";";
+    var latlon = latlon_text.split(';');
+    document.getElementById('manual_lat').value = latlon[0];
+    document.getElementById('manual_lon').value = latlon[1];
+}
+
 function toggleEditWL()
 {
 	toggleUI('list_edit_toggle','wl_edit');
@@ -2277,6 +2318,7 @@ var canvas = document.getElementById('myCanvas');
 canvas.width = document.body.clientWidth;
 canvas.height = document.body.clientHeight;
 var context = canvas.getContext('2d');
+loadLatLon();
 setTimeout(getLocation,500)
 setTimeout(plotStars,1000)
 loadUserDSO();

@@ -1,3 +1,8 @@
+2024-04-20: v1.0.12
+
+- Fixed DEC parsing in user object list for certain formats
+- Added option to set geolocation manually
+
 2023-11-15: v1.0.11
 
 - Documentation update
