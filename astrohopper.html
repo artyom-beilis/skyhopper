@@ -222,6 +222,7 @@ input[type=submit] { width:10mm;}
 <input class="dso_selector" id="small_screen" type="checkbox" /><label for="small_screen" >Small UI</label> 
 <input class="dso_selector" id="NM_checked" type="checkbox"  /><label for="NM_checked" >Night</label>
 <input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full S.</label>
+<input class="dso_selector" id="SWL_checked" type="checkbox" onchange="toggleSWL(this.checked)" /><label for="SWL_checked" >Screen Wake Lock</label>
 </p>
 <table>
 <tr class="only_tiny_tr">
@@ -518,6 +519,21 @@ function toggleFS(fs)
 	else {
 		document.exitFullscreen();
 	}
+}
+
+let wakeLock = null;
+
+async function toggleSWL(swl) {
+  try {
+    if (swl) {
+      wakeLock = await navigator.wakeLock.request('screen');
+    } else if (wakeLock) {
+      await wakeLock.release();
+      wakeLock = null;
+    }
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
 }
 
 
