@@ -2310,6 +2310,7 @@ function setupConfigurableElements()
 {
     configureCheckboxOption('small_screen',false,smallScreen);
     configureCheckboxOption('NM_checked',false,switchNightMode);
+    configureCheckboxOption('SWL_checked',false,toggleSWL)
     configureCheckboxOption('align_dso_checked',false,(v) => { global_align_on_dso = v; });
     configureCheckboxOption('show_star_names_checked',true,(v) => { global_show_star_names = v; });
     configureCheckboxOption('P_checked',true,(v) => { global_show_obj.P = v; });
