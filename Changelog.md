@@ -1,3 +1,7 @@
+2025-03-03: v1.0.13
+
+- Added option to keep the screen on. Thanks to contribution by RichardHum
+
 2024-04-20: v1.0.12
 
 - Fixed DEC parsing in user object list for certain formats
