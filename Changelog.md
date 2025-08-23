@@ -1,3 +1,7 @@
+2025-08-24: v1.0.14
+
+- Added localization support. Current translations are to Hebrew
+
 2025-03-03: v1.0.13
 
 - Added option to keep the screen on. Thanks to contribution by RichardHum
