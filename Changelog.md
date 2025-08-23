@@ -1,6 +1,7 @@
 2025-08-24: v1.0.14
 
 - Added localization support. Current translations are to Hebrew
+- Fix white borders around PWA icon on Android by Maurycy (10maurycy10)
 
 2025-03-03: v1.0.13
 
