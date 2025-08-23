@@ -208,8 +208,6 @@ Lists can be selected by pressing `<` and `>` buttons in "Lists" control. When t
 
 The watch lists are stored at your phone on per domain basis. They are kept even when you reopen the app. 
 
-_Note:_ if you accessing the app from different location (for example from local server) than it is stored separately, so prepare the list in advance.
-
 ## User Objects
 
 This application does not contain every possible star or DSO. If you want to access objects that are not listed in the database you can add them via "User Objects" in settings menu.
@@ -227,8 +225,6 @@ This is an example of such a list:
 
 The user objects are stored on your phone on per domain basis. They are kept even when you reopen the app. 
 
-_Note:_ if you are accessing the app from different location (for example from local server) than it is stored separately, so prepare the list in advance.
-
 
 ## Equatorial Mount Users
 
@@ -237,11 +233,6 @@ The application assumes you work with alt-azimuth mount. If you are using equato
 If the targets are close to poles and significant changes in right ascension are required for the hop any misalignment error between cell phone axis and telescope axis will affect the accuracy. Final error can be calculated as 2e⋅sin(Δα/2)⋅sin(δ), where e - misalignment error between cell phone and telescope, Δα - change in right ascension required for the hop and δ - declination of the target.
 
 So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended.
-
-## Road Map
-
-1. Develop procedure for phone alignment for equatorial mounts.
-2. Implement zoom-via-pinch.
 
 ## Known Issues
 
@@ -257,7 +248,7 @@ So it may not work reliably for equatorial mounts. Alt-Az mounts are recommended
 
 ## Copyrights
 
-(C) 2021-2023 Artyom Beilis.
+(C) 2021-2025 Artyom Beilis.
 
 It is an open source web application licensed under GPL license. It may work only with well working sensors. No warranty of any kind is given. For detailed copyrights
 of different parts of the project refer to <https://github.com/artyom-beilis/skyhopper/blob/main/COPYING.md>

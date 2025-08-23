@@ -1,3 +1,4 @@
+import glob
 import re
 import os
 import sys
@@ -6,6 +7,7 @@ import shutil
 import base64
 
 from create_data import create_db
+from po import tojson
 
 def copyf(src,tgt):
     print("Copying %s -> %s" % (src,tgt))
@@ -19,18 +21,20 @@ def get_ver():
 
 
 
-def make_manual():
-    with open("README.md", "r",encoding="utf-8") as input_file:
+def make_manual(lang = None):
+    path = 'README.md' if lang is None else 'po/README_%s.md' % lang
+    with open(path, "r",encoding="utf-8") as input_file:
         text = input_file.read()
         md  = markdown.Markdown(extensions=['toc'])
         html = md.convert(text)
-
-    with open("manual.html", "w",encoding="utf-8") as output_file:
-        with open('header.html','r') as f:
-            output_file.write(f.read())
-        output_file.write(html)
-        with open('footer.html','r') as f:
-            output_file.write(f.read())
+    
+    if lang is not None:
+        with open("manual.html", "w",encoding="utf-8") as output_file:
+            with open('header.html','r') as f:
+                output_file.write(f.read())
+            output_file.write(html)
+            with open('footer.html','r') as f:
+                output_file.write(f.read())
     return html
 
 
@@ -46,9 +50,15 @@ def png_encode(path):
         b64png = base64.b64encode(png).decode()
     return 'data:image/png;base64,%s' % b64png
 
+def combine_manuals(mans):
+    res = []
+    for lang in mans:
+        res.append("<div id='manual_tr_%s' class='r2l manual_section'>\n%s\n</div>\n" % (lang,mans[lang]))
+    return '\n'.join(res)
+
 def embed(manual,version):
     script=re.compile(r'^<script src="(.*)"></script>')
-    ver=re.compile(r'.*Settings \((version)\).*')
+    ver=re.compile(r'.* \((version)\).*')
     urlpng=re.compile(r'^(.*)url\(([a-z0-9_\-]*\.png)\)(.*)$')
     urlpng2=re.compile(r'^(.*<img.*)src="([a-z0-9_\-\/]*\.png)"(.*)$')
     
@@ -99,8 +109,12 @@ def add_ga():
 def main():
     create_db()
     ver = get_ver()
-    man = make_manual()
-    embed(man,ver)
+    manuals = dict()
+    manuals["en"] = make_manual()
+    for man in glob.glob("po/README_*.md"):
+        lang = man.replace('po/README_','').replace('.md','')
+        manuals[lang] = make_manual(lang)
+    embed(combine_manuals(manuals),ver)
     embed_service_worker(ver)
     if len(sys.argv) >= 2:
         if sys.argv[1] == '-g':

@@ -121,7 +121,7 @@ input[type=submit] { width:10mm;}
     <button id="search_field_main_ok" ></button>
 </div>
 <p class="first_line_controls" >
-	<span class="only_full"><button class="ui_but" onclick="align();">Align</button></span>
+	<span class="only_full"><button class="ui_but tr" onclick="align();">Align</button></span>
 	<span class="only_tiny"><button class="incdec_but" onclick="align();">&#x25ce;</button></span>
     <span id="countdown"></span>
     <span class="only_tiny" id="alignment_tiny"></span><span class="only_full" id="alignment"></span> 
@@ -142,7 +142,7 @@ input[type=submit] { width:10mm;}
     <button  class="incdec_but wiki_background" onclick="showObjectInfo();" >&nbsp;</button>
 </p>
 
-<p class="first_line_controls" id="gps">No Geolocation</p>
+<p class="first_line_controls tr" id="gps">No Geolocation</p>
 <div id="object_log" style="display:none">
 <p>Sirius:<span id="Sirius_alt"></span>, <span id="Sirius_az"></span></p>
 <p>Mars:<span id="Mars_alt"></span>, <span id="Mars_az"></span></p>
@@ -151,42 +151,42 @@ input[type=submit] { width:10mm;}
 </div>
 <p class="first_line_controls" id="orient"></p>
 <p class="first_line_controls" id="status"></p>
-<div class="config_div" id="quick_start" style="display:none; position:absolute; left:10%; top:10%; z-index:4 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:left ">
+<div class="config_div r2l" id="quick_start" style="display:none; position:absolute; left:10%; top:10%; z-index:4 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ">
     <span style="position:absolute; right:1mm; top:1mm">
         <button class="incdec_but" onclick="qsHide()">X</button>
     </span>
-    <h3>Quick Start Guide</h3>
-    <p><input class="dso_selector" id="qs_hide_1" type="checkbox" onchange="showOnStartup(!this.checked,1)" /><label for="qs_hide_1" >Don't show on startup</label></p>
+    <h3 class="tr" style="text-align:center" >Quick Start Guide</h3>
+    <p><input class="dso_selector" id="qs_hide_1" type="checkbox" onchange="showOnStartup(!this.checked,1)" /><label for="qs_hide_1" class="tr" >Don't show on startup</label></p>
     <div id="qs_1">
         <p>
-            <button class="ui_but" disabled style="color:#800">&lt; Prev</button>
-            <button class="ui_but" onclick="qsShowHide(2,1)">Next &gt;</button>
+            <button class="ui_but tr" disabled style="color:#800">&lt; Prev</button>
+            <button class="ui_but tr" onclick="qsShowHide(2,1)">Next &gt;</button>
         
         </p>
         <img style="float:right" width="50%" src="images/qs_1_1.png" alt="Setup" />
-        <p>Connect the smartphone to the optical tube such that its top points to the viewing direction and it lies flat on the tube.</p>
+        <p class="tr">Connect the smartphone to the optical tube such that its top points to the viewing direction and it lies flat on the tube.</p>
         <hr style="border-color:red">
-        <p><i><a href="https://stories.bringthemhomenow.net/">Bring them home now!</a></i></p>
-        <p><b>Stand with Israel against terror!</b></p>
+        <p><i><a href="https://stories.bringthemhomenow.net/" class="tr">Bring them home now!</a></i></p>
+        <p><b class="tr">Stand with Israel against terror!</b></p>
     </div>
     <div id="qs_2" style="display:none;">
         <p>
-            <button class="ui_but" onclick="qsShowHide(1,2)">&lt; Prev</button>
-            <button class="ui_but" onclick="qsShowHide(3,2)">Next &gt;</button>
+            <button class="ui_but tr" onclick="qsShowHide(1,2)">&lt; Prev</button>
+            <button class="ui_but tr" onclick="qsShowHide(3,2)">Next &gt;</button>
         </p>
         <img style="float:right"  width="50%" src="images/qs_2_1.png" alt="Setup" />
-        <p>Point the telescope to an easily identifiable star or planet <strong>nearby</strong> an object you want to find. For example in order to find M41 or M47, point the telescope to Sirius &mdash; this is going to be the <em>alignment star</em>.</p>
-        <p>When the telescope is pointing to the alignment star tap <button class="ui_but">Align</button> button and tap on the alignment star on the map. Once the application is aligned, it tracks the telescope movement using smartphone's sensors.</p>
+        <p class="tr">Point the telescope to an easily identifiable star or planet <strong>nearby</strong> an object you want to find. For example in order to find M41 or M47, point the telescope to Sirius &mdash; this is going to be the <em>alignment star</em>.</p>
+        <p class="tr">When the telescope is pointing to the alignment star tap <button class="ui_but">Align</button> button and tap on the alignment star on the map. Once the application is aligned, it tracks the telescope movement using smartphone's sensors.</p>
     </div>
     <div id="qs_3" style="display:none;">
         <p>
-            <button class="ui_but" onclick="qsShowHide(2,3)">&lt; Prev</button>
-            <button class="ui_but" onclick="qsShowHide(4,3)">Next &gt;</button>
+            <button class="ui_but tr" onclick="qsShowHide(2,3)">&lt; Prev</button>
+            <button class="ui_but tr" onclick="qsShowHide(4,3)">Next &gt;</button>
         </p>
-        <p>If you can't see the alignment star on the map, there may be a common compass accuracy problem.</p>
-        <p>In such a case tap on <button class="incdec_but manual_background">&nbsp;</button> to switch to manual mode and scroll the map left
+        <p class="tr">If you can't see the alignment star on the map, there may be a common compass accuracy problem.</p>
+        <p class="tr">In such a case tap on <button class="incdec_but manual_background">&nbsp;</button> to switch to manual mode and scroll the map left
            or right till you see the alignment star.</p>
-        <p>Then tap <button class="ui_but">Align</button> and tap on the alignment star on the map as usual.</p>
+        <p class="tr">Then tap <button class="ui_but">Align</button> and tap on the alignment star on the map as usual.</p>
     </div>
     <div id="qs_4" style="display:none;">
         <p>
@@ -194,11 +194,10 @@ input[type=submit] { width:10mm;}
             <button class="ui_but" disabled style="color:#800">Next &gt;</button>
         </p>
         <img style="float:right"  width="50%" src="images/qs_3_1.png" alt="Setup" />
-        <p>Once aligned, tap on the object you want to find (for example M41, M47) and follow the direction line on the map till you reach the target. Now you can observe the object you selected.</p>
-        <p>It is recommended to repeat alignment for each new target you want to find</p>
-        <p>For detailed instruction and troubleshooting please refer to the <a href="https://youtu.be/AtArqBLWWJ8">[Video&nbsp;Tutorial]</a>
-          and to the integrated manual via:
-            <button class="incdec_but settings_background">&nbsp;</button>&nbsp;&#8594;&nbsp;<button class="incdec_but">?</button>
+        <p class="tr">Once aligned, tap on the object you want to find (for example M41, M47) and follow the direction line on the map till you reach the target. Now you can observe the object you selected.</p>
+        <p class="tr">It is recommended to repeat alignment for each new target you want to find</p>
+        <p><span class="tr">For detailed instruction and troubleshooting please refer to the <a href="https://youtu.be/AtArqBLWWJ8">[Video&nbsp;Tutorial]</a>
+          and to the integrated manual via:</span> <button class="incdec_but settings_background">&nbsp;</button>&nbsp;&#8594;&nbsp;<button class="incdec_but">?</button>
         </p>
     </div>
 </div>
@@ -209,25 +208,32 @@ input[type=submit] { width:10mm;}
     <iframe id="wiki_iframe" style="width:100%; height:100%"></iframe>
 </div>
 <div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
-<button class="ui_but" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
+<button class="ui_but tr" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
 </div>
 <div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
 <span style="position:absolute; right:1mm; top:1mm">
 <button class="incdec_but" onclick="showManual(true)">?</button>
 <button class="incdec_but" onclick="showConfig('none');">X</button>
 </span>
-<p><b>Settings (version)</b></p>
+<div class="r2l">
+<p style="text-align:center"><b><span  class="tr">Settings</span> (version)</b></p>
 <p>
 <button class="ui_but" onclick="resetAll();">&#x21bb;</button>
-<input class="dso_selector" id="small_screen" type="checkbox" /><label for="small_screen" >Small UI</label> 
-<input class="dso_selector" id="NM_checked" type="checkbox"  /><label for="NM_checked" >Night</label>
-<input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" >Full S.</label>
+<input class="dso_selector" id="small_screen" type="checkbox" /><label for="small_screen" class="tr" >Small UI</label> 
+<input class="dso_selector" id="NM_checked" type="checkbox"  /><label for="NM_checked" class="tr">Night</label>
+<input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" class="tr">Full S.</label>
 </p><p>
-<input class="dso_selector" id="SWL_checked" type="checkbox" onchange="toggleSWL(this.checked)" /><label for="SWL_checked" >Keep Screen On</label>
+<input class="dso_selector" id="SWL_checked" type="checkbox" onchange="toggleSWL(this.checked)" /><label for="SWL_checked" class="tr">Keep Screen On</label>
+</p>
+<p>
+    <select id="lang_select">
+        <option value="en">English</option>
+        <option value="he">עברית</option>
+    </select>
 </p>
 <table>
 <tr class="only_tiny_tr">
-	<td>FOV</td>
+	<td class="tr">FOV</td>
 	<td>
 		<button class="incdec_but" onclick="incFOV();">-</button> <button class="incdec_but" onclick="decFOV();">+</button>
 	</td>
@@ -237,7 +243,7 @@ input[type=submit] { width:10mm;}
 	<td>&nbsp;</td>
 </tr>
 <tr>
-	<td>Stars</td>
+	<td class="tr">Stars</td>
 	<td>
 		<button class="incdec_but" onclick="starMagUpdate(-1);">-</button> <button class="incdec_but" onclick="starMagUpdate(1);">+</button>
 	</td>
@@ -247,7 +253,7 @@ input[type=submit] { width:10mm;}
 	<td>&nbsp;</td>
 </tr>
 <tr>
-	<td>DSO</td>
+	<td class="tr">DSO</td>
 	<td>
 		<button class="incdec_but" onclick="dsoMagUpdate(-1);">-</button> <button class="incdec_but" onclick="dsoMagUpdate(1)">+</button>
 	</td>
@@ -257,17 +263,17 @@ input[type=submit] { width:10mm;}
 	<td>&nbsp;</td>
 </tr>
 <tr>
-	<td>List</td>
+	<td class="tr">List</td>
 	<td>
 		<button  class="incdec_but" onclick="prevWatchList();">&lt;</button> <button class="incdec_but" onclick="nextWatchList()">&gt;</button>
 	</td>
-	<td id="wl_sel">None</td>
+	<td class="tr" id="wl_sel">None</td>
 	<td>
-		<a id="list_edit_toggle" href="javascript:toggleEditWL()">[edit]</a>
+		<a class="tr" id="list_edit_toggle" href="javascript:toggleEditWL()">[edit]</a>
 	</td>
 </tr>
 <tr>
-	<td>Font</td>
+	<td class="tr">Font</td>
 	<td>
 		<button class="incdec_but" onclick="incDecLF(-1);">-</button> <button class="incdec_but" onclick="incDecLF(1)">+</button>
 	</td>
@@ -278,12 +284,12 @@ input[type=submit] { width:10mm;}
 </tr>
 </table>
 
-<div id="wl_edit" style="display:none;">
+<div class='l2r' id="wl_edit" style="display:none;">
 	<p>name: dso1, dso2, dso3, &#x2026;</p>
 	<p>
 	    <textarea id="user_wl" style="width:80%" rows="5"></textarea>
 	</p>
-	<p><button class="ui_but" onclick="saveWL();" >Save</button> <button class="ui_but" onclick="discardWL();" >Discard</button></p>
+	<p><button class="ui_but tr" onclick="saveWL();" >Save</button> <button class="ui_but tr" onclick="discardWL();" >Discard</button></p>
 	<p id="wl_errors"></p>
 </div>
 <form onsubmit="return hideSettingIfSelectionOk()" >
@@ -292,42 +298,42 @@ input[type=submit] { width:10mm;}
 <table style="width:100%">
 <tr>
     <td>
-        <input class="dso_selector" id="align_dso_checked"  type="checkbox" /><label for="align_dso_checked" >Align on DSO</label>
+        <input class="dso_selector" id="align_dso_checked"  type="checkbox" /><label for="align_dso_checked" class="tr" >Align on DSO</label>
     </td>
     <td>
-        <input class="dso_selector" id="show_star_names_checked"  type="checkbox" checked="checked" onchange="global_show_star_names = this.checked;" /><label for="show_star_names_checked" >Star Names</label>
-    </td>
-</tr>
-<tr>
-    <td>
-        <input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" /><label for="Oc_checked">Open Clusters</label>
-    </td>
-    <td>
-        <input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" /><label for="Gc_checked">Glob. Clusters</label>
+        <input class="dso_selector" id="show_star_names_checked"  type="checkbox" checked="checked" onchange="global_show_star_names = this.checked;" /><label for="show_star_names_checked" class="tr" >Star Names</label>
     </td>
 </tr>
 <tr>
     <td>
-        <input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" /><label for="Ne_checked">Nebulae</label>
+        <input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" /><label for="Oc_checked" class="tr">Open Clusters</label>
     </td>
     <td>
-        <input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" /><label for="Ga_checked">Galaxies</label>
-    </td>
-</tr>
-<tr>
-    <td>
-        <input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" /><label for="P_checked" >Planets</label>
-    </td>
-    <td>
-        <input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" /><label for="Ca_checked">Constellations</label>
+        <input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" /><label for="Gc_checked" class="tr">Glob. Clusters</label>
     </td>
 </tr>
 <tr>
     <td>
-        <input class="dso_selector" id="qs_hide_2" type="checkbox" checked="checked" onchange="showOnStartup(this.checked,2);" /><label for="qs_hide_2">Show Tutorial</label>
+        <input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" /><label for="Ne_checked" class="tr">Nebulae</label>
     </td>
     <td>
-        <input class="dso_selector" id="pinch_zoom" type="checkbox" checked="checked" /><label for="pinch_zoom">Pinch Zoom</label>
+        <input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" /><label for="Ga_checked" class="tr">Galaxies</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" /><label for="P_checked"  class="tr">Planets</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" /><label for="Ca_checked" class="tr">Constellations</label>
+    </td>
+</tr>
+<tr>
+    <td>
+        <input class="dso_selector" id="qs_hide_2" type="checkbox" checked="checked" onchange="showOnStartup(this.checked,2);" /><label for="qs_hide_2" class="tr">Show Tutorial</label>
+    </td>
+    <td>
+        <input class="dso_selector" id="pinch_zoom" type="checkbox" checked="checked" /><label for="pinch_zoom" class="tr">Pinch Zoom</label>
     </td>
 </tr>
 <tr>
@@ -335,32 +341,35 @@ input[type=submit] { width:10mm;}
         &nbsp;
     </td>
     <td>
-        Wiki:
-        <select id="wiki_info_opt" onchange="wikiInfoConfig()">
-            <option value="no">Never</option>
-            <option selected value="day">Day Only</option>
-            <option value="always">Always</option>
+        <span class="tr">Wiki</span>:
+        <select id="wiki_info_opt">
+            <option value="no" class="tr">Never</option>
+            <option selected value="day" class="tr">Day Only</option>
+            <option value="always" class="tr">Always</option>
         </select>
     </td>
 </tr>
 </table>
-<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" /><label for="U_checked">User Objects</label> <a id="edit_user_dso" href="javascript:toggleEditDSO();">[edit]</a></p>
-<div id="dso_edit" style="display:none;">
+<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" /><label for="U_checked" class="tr">User Objects</label> <a class="tr" id="edit_user_dso" href="javascript:toggleEditDSO();">[edit]</a></p>
+<div class='l2r' id="dso_edit" style="display:none;">
 <p>Name,RA(hh:mm:ss),DE(±dd:mm:ss)</p>
 <p>
     <textarea id="user_dso" style="width:80%" rows="5"></textarea>
 </p>
-<p><button class="ui_but" onclick="saveUserDSO();" >Save</button> <button class="ui_but" onclick="discardUserDSO();" >Discard</button></p>
+<p><button class="ui_but tr" onclick="saveUserDSO();" >Save</button> <button class="ui_but tr" onclick="discardUserDSO();" >Discard</button></p>
 <p id="dso_errors"></p>
 </div>
 <hr>
-<p><button class="incdec_but" onclick="requestGeolocation();">&#x21bb;</button> GPS: <span id="lat">Unknown</span>, <span id="lon">Unknown</span></p>
-<p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span> UTC=<span id="utc_time"></span></p>
+<div class="l2r">
+    <p><button class="incdec_but" onclick="requestGeolocation();">&#x21bb;</button> GPS: <span id="lat">Unknown</span>, <span id="lon">Unknown</span></p>
+    <p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span> UTC=<span id="utc_time"></span></p>
+</div>
 <table>
-<th><td colspan="2" style="text-align:left">GPS Override</td></th>
-<tr><td>Lat:</td><td><input type="number" min="-90" max=90" value="" id="manual_lat" oninput="updateManualLatLon()"></td></tr>
-<tr><td>Lon:</td><td><input type="number" min="-180" max=180" value="" id="manual_lon" oninput="updateManualLatLon()"></td></tr>
+<th><td colspan="2" style="text-align:left" class="tr">GPS Override</td></th>
+<tr><td class="tr">Lat:</td><td><input type="number" min="-90" max=90" value="" id="manual_lat" oninput="updateManualLatLon()"></td></tr>
+<tr><td class="tr">Lon:</td><td><input type="number" min="-180" max=180" value="" id="manual_lon" oninput="updateManualLatLon()"></td></tr>
 </table>
+</div> <!-- RTL div -->
 </div>
 
 <div style="position:absolute; left:0; top:0; z-index:5; width:100%; background:black; display:none;" id="manual">
@@ -371,6 +380,7 @@ MANUAL
 </div>
 
 <script src="vsop87a_combined.js"></script>
+<script src="po/messages.js"></script>
 <script src="vsop87-multilang/Languages/JavaScript/CelestialProgrammingReduce.js"></script> 
 <script>
 vsop87a_full = vsop87a_xsmall;
@@ -378,6 +388,8 @@ vsop87a_full_velocities = vsop87a_milli_velocities;
 </script>
 <script src="jsdb.js"></script>
 <script>
+
+var g_original = null;
 
 var global_day_style = {
 	cross 		: 'blue',
@@ -430,7 +442,7 @@ var global_expected_frame_rate_ms = 66;
 var global_use_compass = false;
 var global_dso_mag = parseInt(document.getElementById('dso_level_val').innerHTML);
 var global_large_font = 0;
-
+var global_lang = 'en';
 var global_fov_values = [7,15,30,60,90,120,150]
 var global_fov = 60;
 var global_mag = 4;
@@ -572,7 +584,7 @@ function mainSearchOnFocusChange(val)
         var content = el.value;
         reShearchMain();
         if(content.trim()=='') {
-            el.value='search';
+            el.value=_tr("search");
         }
     }
     var but = document.getElementById('main_search_button');
@@ -700,7 +712,7 @@ function setUseGyro(val,message=null,message_tiny=null)
 		var status = message;
 	}
 	else {
-		var status= global_use_gyro ? "Aligned" : "Not Aligned";
+		var status= global_use_gyro ? _tr("Aligned") : _tr("Not Aligned");
 	}
 	if(message_tiny) {
 		var status_t = message_tiny;
@@ -732,7 +744,7 @@ function align()
 		// keep bearing
 		gdata.alpha_user_offset = gdata.alpha_gyro + gdata.alpha_diff - gdata.alpha;
 	}
-	setUseGyro(false,"Select Star","?");
+	setUseGyro(false,_tr("Select Star"),"?");
 	global_align_index = -1;
 	global_expecting_select = selectAlignWithTimer;
 }
@@ -1549,7 +1561,7 @@ function gyroListener(event)
 		document.getElementById("orient").innerHTML = '';
 	}
 	else {
-		document.getElementById("orient").innerHTML = 'No Gyro';
+		document.getElementById("orient").innerHTML = _tr("No Gyro");
 	}
 	formatValue("ang_a",event.alpha);
 	formatValue("ang_b",event.beta);
@@ -1825,11 +1837,11 @@ function toggleUI(link_id,ui_id)
 	var ui = document.getElementById(ui_id);
 	if(ui.style.display == "none") {
 		ui.style.display="inline";
-		document.getElementById(link_id).innerHTML = "[hide]";
+		document.getElementById(link_id).innerHTML = _tr("[hide]");
 	}
 	else {
 		ui.style.display="none";
-		document.getElementById(link_id).innerHTML = "[edit]";
+		document.getElementById(link_id).innerHTML = _tr("[edit]");
 	}
 }
 
@@ -2002,7 +2014,7 @@ function selectWatchList(index)
 	if(index < 0 || index >= global_watchlist.lists.length) {
 		findTargetByName();
 		document.getElementById("wl_ctl").style.display = 'none';
-		document.getElementById("wl_sel").innerHTML = "None";
+		document.getElementById("wl_sel").innerHTML = _tr("None");
 		global_watchlist.current_list = -1;
 		global_watchlist.current_item = -1;
         global_watchlist.current_index = -1;
@@ -2285,6 +2297,53 @@ function saveMagVal(val,name)
 {
     window.localStorage.setItem('mag_' + name, '' + val);
 }
+
+function langSelect()
+{
+    global_lang = document.getElementById('lang_select').value;
+    translateAll();
+}
+
+function _tr(x)
+{
+    var d = i18n_dicts[global_lang] || {};
+    var tr = d[x] || x
+    return tr;
+}
+
+function translateAll()
+{
+    var trs = document.getElementsByClassName('tr');
+    if(g_original == null) {
+        g_original = []
+        for(var i=0;i<trs.length;i++) {
+            var orig = trs[i].innerHTML;
+            g_original.push(orig);
+        }
+    }
+    for(var i=0;i<trs.length;i++) {
+        trs[i].innerHTML = _tr(g_original[i]);
+    }
+    var is_rtl = _tr("LTR") == 'RTL';
+    var rtl = document.getElementsByClassName('r2l');
+    for(var i=0;i<rtl.length;i++)
+        rtl[i].dir= is_rtl ? 'rtl' : 'ltr';
+    var ltr = document.getElementsByClassName('l2r');
+    for(var i=0;i<ltr.length;i++)
+        ltr[i].dir='ltr';
+    document.getElementById("search_field_main").value = _tr("search");
+    var mans = document.getElementsByClassName('manual_section');
+    for(var i=0;i<mans.length;i++)
+        mans[i].style.display = 'none';
+    var lang = document.getElementById('lang_select').value;
+    var manual = document.getElementById('manual_tr_' + lang);
+    if(!manual)
+        manual = document.getElementById('manual_tr_en');
+    manual.style.display = 'block';
+}
+
+
+
 function configSaveMag()
 {
     var opts = [
@@ -2320,7 +2379,8 @@ function setupConfigurableElements()
     configureCheckboxOption('Ne_checked',true,(v) => { global_show_obj.Ne = v; });
     configureCheckboxOption('Ca_checked',true,(v) => { global_show_obj.Ca = v; });
     configureCheckboxOption('U_checked',true,(v) => { global_show_obj.U = v; });
-    configureCheckboxOption('wiki_info_opt','day',(v) => { });
+    configureValueOption('wiki_info_opt','day',(v) => { wikiInfoConfig(); });
+    configureValueOption('lang_select','en',(v) => { langSelect(); });
 
     // turn off by default on iOS
     var agent = navigator.userAgent
@@ -2328,8 +2388,9 @@ function setupConfigurableElements()
     configureCheckboxOption('pinch_zoom',!iOS,(v) => { global_allow_pinch_zoom = v; });
 }
 
-setupGyros();
 setupConfigurableElements();
+translateAll()
+setupGyros();
 configSaveMag();
 // global drawing stuff
 var canvas = document.getElementById('myCanvas');

@@ -1,0 +1,285 @@
+# #-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#. #-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from tags_filtered.json
+#, fuzzy
+msgid ""
+msgstr ""
+"#-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 3.6.0\n"
+
+#: astrohopper.html:587 astrohopper.html:2334
+msgid "search"
+msgstr ""
+
+#: astrohopper.html:715
+msgid "Aligned"
+msgstr ""
+
+#: astrohopper.html:715
+msgid "Not Aligned"
+msgstr ""
+
+#: astrohopper.html:747
+msgid "Select Star"
+msgstr ""
+
+#: astrohopper.html:1564
+msgid "No Gyro"
+msgstr ""
+
+#: astrohopper.html:1840
+msgid "[hide]"
+msgstr ""
+
+#: astrohopper.html:1844 [9]
+msgid "[edit]"
+msgstr ""
+
+#: astrohopper.html:2017 [21]
+msgid "None"
+msgstr ""
+
+#: astrohopper.html:2327
+msgid "LTR"
+msgstr ""
+
+#: [0]
+msgid ""
+"Connect the smartphone to the optical tube such that its top points to the "
+"viewing direction and it lies flat on the tube."
+msgstr ""
+
+#: [1]
+msgid "Settings"
+msgstr ""
+
+#: [2]
+msgid ""
+"Then tap <button class=\"ui_but\">Align</button> and tap on the alignment "
+"star on the map as usual."
+msgstr ""
+
+#: [3]
+msgid "Show Tutorial"
+msgstr ""
+
+#: [4]
+msgid "Quick Start Guide"
+msgstr ""
+
+#: [5]
+msgid "Next &gt;"
+msgstr ""
+
+#: [6]
+msgid "No Geolocation"
+msgstr ""
+
+#: [7]
+msgid "Stars"
+msgstr ""
+
+#: [8]
+msgid "Save"
+msgstr ""
+
+#: [10]
+msgid "Small UI"
+msgstr ""
+
+#: [11]
+msgid "GPS Override"
+msgstr ""
+
+#: [12]
+msgid "Bring them home now!"
+msgstr ""
+
+#: [13]
+msgid "Never"
+msgstr ""
+
+#: [14]
+msgid ""
+"Point the telescope to an easily identifiable star or planet <strong>nearby</"
+"strong> an object you want to find. For example in order to find M41 or M47, "
+"point the telescope to Sirius — this is going to be the <em>alignment star</"
+"em>."
+msgstr ""
+
+#: [15]
+msgid "Enable Device Orientation"
+msgstr ""
+
+#: [16]
+msgid "Planets"
+msgstr ""
+
+#: [17]
+msgid "Don't show on startup"
+msgstr ""
+
+#: [18]
+msgid ""
+"When the telescope is pointing to the alignment star tap <button "
+"class=\"ui_but\">Align</button> button and tap on the alignment star on the "
+"map. Once the application is aligned, it tracks the telescope movement using "
+"smartphone's sensors."
+msgstr ""
+
+#: [19]
+msgid "Galaxies"
+msgstr ""
+
+#: [20]
+msgid "Lon:"
+msgstr ""
+
+#: [22]
+msgid ""
+"For detailed instruction and troubleshooting please refer to the <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[Video&nbsp;Tutorial]</a>\n"
+"          and to the integrated manual via:"
+msgstr ""
+
+#: [23]
+msgid "Full S."
+msgstr ""
+
+#: [24]
+msgid "Night"
+msgstr ""
+
+#: [25]
+msgid "DSO"
+msgstr ""
+
+#: [26]
+msgid "Star Names"
+msgstr ""
+
+#: [27]
+msgid ""
+"If you can't see the alignment star on the map, there may be a common "
+"compass accuracy problem."
+msgstr ""
+
+#: [28]
+msgid "Open Clusters"
+msgstr ""
+
+#: [29]
+msgid "Nebulae"
+msgstr ""
+
+#: [30]
+msgid "Wiki"
+msgstr ""
+
+#: [31]
+msgid "Align on DSO"
+msgstr ""
+
+#: [32]
+msgid "Glob. Clusters"
+msgstr ""
+
+#: [33]
+msgid "Always"
+msgstr ""
+
+#: [34]
+msgid ""
+"Once aligned, tap on the object you want to find (for example M41, M47) and "
+"follow the direction line on the map till you reach the target. Now you can "
+"observe the object you selected."
+msgstr ""
+
+#: [35]
+msgid "Constellations"
+msgstr ""
+
+#: [36]
+msgid "Day Only"
+msgstr ""
+
+#: [37]
+msgid "FOV"
+msgstr ""
+
+#: [38]
+msgid "Keep Screen On"
+msgstr ""
+
+#: [39]
+msgid ""
+"It is recommended to repeat alignment for each new target you want to find"
+msgstr ""
+
+#: [40]
+msgid "Align"
+msgstr ""
+
+#: [41]
+msgid ""
+"In such a case tap on <button class=\"incdec_but manual_background\">&nbsp;</"
+"button> to switch to manual mode and scroll the map left\n"
+"           or right till you see the alignment star."
+msgstr ""
+
+#: [42]
+msgid "Lat:"
+msgstr ""
+
+#: [43]
+msgid "Pinch Zoom"
+msgstr ""
+
+#: [44]
+msgid "Stand with Israel against terror!"
+msgstr ""
+
+#: [45]
+msgid "List"
+msgstr ""
+
+#: [46]
+msgid "Discard"
+msgstr ""
+
+#: [47]
+msgid "&lt; Prev"
+msgstr ""
+
+#: [48]
+msgid "User Objects"
+msgstr ""
+
+#: [49]
+msgid "Font"
+msgstr ""
