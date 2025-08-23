@@ -1,0 +1,291 @@
+# #-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+#. #-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from tags_filtered.json
+# Artyom Beilis <artyomtnk@yahoo.com>, 2025.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 17:54+0300\n"
+"PO-Revision-Date: 2025-08-23 17:55+0300\n"
+"Last-Translator: Artyom Beilis <artyomtnk@yahoo.com>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
+"Language: he_IL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: astrohopper.html:710
+msgid "Aligned"
+msgstr "מאופס"
+
+#: astrohopper.html:710
+msgid "Not Aligned"
+msgstr "לא מאופס"
+
+#: astrohopper.html:742
+msgid "Select Star"
+msgstr "בחר כוכב"
+
+#: astrohopper.html:1559
+msgid "No Gyro"
+msgstr "אין ג'ירו"
+
+#: astrohopper.html:1835
+msgid "[hide]"
+msgstr "[הסתר]"
+
+#: astrohopper.html:1839 [11]
+msgid "[edit]"
+msgstr "[ערוך]"
+
+#: astrohopper.html:2319
+msgid "LTR"
+msgstr "RTL"
+
+#: [0]
+msgid ""
+"When the telescope is pointing to the alignment star tap <button "
+"class=\"ui_but\">Align</button> button and tap on the alignment star on the "
+"map. Once the application is aligned, it tracks the telescope movement using "
+"smartphone's sensors."
+msgstr ""
+"כשהטלסקופ מכוון לכוכב האיפוס לחצו על כפתור<button class=\"ui_but\">אפס</"
+"button> ואז לחצו על כוכב האיפוס במפה. ברגע שהאפליקציה מאופסת, היא תעקוב אחרי "
+"תנועת הטלסקופ בעזרת חיישני הטלפון החכם."
+
+#: [1]
+msgid "No Geolocation"
+msgstr "אין מיקום גיאוגרפי"
+
+#: [2]
+msgid ""
+"In such a case tap on <button class=\"incdec_but manual_background\">&nbsp;</"
+"button> to switch to manual mode and scroll the map left\n"
+"           or right till you see the alignment star."
+msgstr ""
+"במצב זה, לחצו על כפתור <button class=\"incdec_but manual_background\">&nbsp;"
+"</button> כדי לעבור למצב ידני וגלגלו את המפה ימינה או שמאלה עד שכוכב האיפוס "
+"יופיע על גבי המפה."
+
+#: [3]
+msgid ""
+"It is recommended to repeat alignment for each new target you want to find"
+msgstr "מומלץ לאפס מחדש לאחר כל מטרה שמצאתם."
+
+#: [4]
+msgid "Stars"
+msgstr "כוכבים"
+
+#: [5]
+msgid "Align"
+msgstr "אפס"
+
+#: [6]
+msgid "Wiki"
+msgstr "ויקי"
+
+#: [7]
+msgid "Galaxies"
+msgstr "גלקסיות"
+
+#: [8]
+msgid "Nebulae"
+msgstr "ערפיליות"
+
+#: [9]
+msgid "DSO"
+msgstr "DSO"
+
+#: [10]
+msgid "Don't show on startup"
+msgstr "אל תציג בעלייה"
+
+#: [12]
+msgid "User Objects"
+msgstr "אובייקטים של משתמש"
+
+#: [13]
+msgid "Constellations"
+msgstr "קבוצות כוכבים"
+
+#: [14]
+msgid ""
+"Connect the smartphone to the optical tube such that its top points to the "
+"viewing direction and it lies flat on the tube."
+msgstr ""
+"חברו את הטלפון החכם לטלסקופ בצורה כזו שהחלק העליון פונה בכיוון הצפייה ושוכב "
+"בצורה ישירה על הצינור האופטי"
+
+#: [15]
+msgid "Keep Screen On"
+msgstr "שמור מסך דולק"
+
+#: [16]
+msgid "Font"
+msgstr "גופן"
+
+#: [17]
+msgid "Enable Device Orientation"
+msgstr "אפשר גישה למידע על כיוון המכשיר"
+
+#: [18]
+msgid ""
+"Point the telescope to an easily identifiable star or planet <strong>nearby</"
+"strong> an object you want to find. For example in order to find M41 or M47, "
+"point the telescope to Sirius — this is going to be the <em>alignment star</"
+"em>."
+msgstr ""
+"תכוונו את הטלסקופ לכוכב שקל לזהותו <strong>בקרבה</strong> לאובייקט אותו "
+"מחפשים. לדוגמה כדי לאתר את M41 או את M47 כוונו את הטלסקופ לסיריוס. זה יהיה "
+"<em>כוכב האיפוס </em>."
+
+#: [19]
+msgid "Quick Start Guide"
+msgstr "מדריך להתחלה מהירה"
+
+#: [20]
+msgid "Small UI"
+msgstr "ממשק קטן"
+
+#: [21]
+msgid "Never"
+msgstr "לעולם לא"
+
+#: [22]
+msgid "Settings"
+msgstr "הגדרות"
+
+#: [23]
+msgid "Full S."
+msgstr "מסך מ."
+
+#: [24]
+msgid "Discard"
+msgstr "השלך"
+
+#: [25]
+msgid "Align on DSO"
+msgstr "אפס על DSO"
+
+#: [26]
+msgid "Glob. Clusters"
+msgstr "צבירים כדוריים"
+
+#: [27]
+msgid "Next &gt;"
+msgstr "הבא &gt;"
+
+#: [28]
+msgid ""
+"If you can't see the alignment star on the map, there may be a common "
+"compass accuracy problem."
+msgstr ""
+"אם כוכב האיפוס לא נראה על המפה, ייתכן וישנה בעיית דיוק מצפן שנפוצה מאוד."
+
+#: [29]
+msgid "Day Only"
+msgstr "רק ביום"
+
+#: [30]
+msgid "Show Tutorial"
+msgstr "הצג מדריך "
+
+#: [31]
+msgid ""
+"For detailed instruction and troubleshooting please refer to the <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[Video&nbsp;Tutorial]</a>\n"
+"          and to the integrated manual via:\n"
+"            <button class=\"incdec_but settings_background\">&nbsp;</"
+"button>&nbsp;→&nbsp;<button class=\"incdec_but\">?</button>\n"
+"        "
+msgstr ""
+"להוראות מפורטות ופתרון בעית אנא צפה ב<a href=\"https://youtu.be/"
+"AtArqBLWWJ8\">[מדריך&nbsp;מצולם]</a>\n"
+"ומדריך מובנה דרך כפתור<button class=\"incdec_but\">?</button>"
+
+#: [32]
+msgid "&lt; Prev"
+msgstr "&lt; קודם"
+
+#: [33]
+msgid "Open Clusters"
+msgstr "צבירים פתוחים"
+
+#: [34]
+msgid "Pinch Zoom"
+msgstr "זום בצביטה"
+
+#: [35]
+msgid "Stand with Israel against terror!"
+msgstr "עמדו לצד ישראל כנגד טרור"
+
+#: [36]
+msgid ""
+"Once aligned, tap on the object you want to find (for example M41, M47) and "
+"follow the direction line on the map till you reach the target. Now you can "
+"observe the object you selected."
+msgstr ""
+"אחרי האיפוס לחצו על האובייקט אתם מחפשים (למשל M41 או M47) ואז עקבו אחרי הקוו "
+"המופיע על המפה עד שתגיעו למטרה. כעת ניתן לצפון באובייקט שבחרתם."
+
+#: [37]
+msgid "Star Names"
+msgstr "שמות כוכבים"
+
+#: [38]
+msgid "Save"
+msgstr "שמור"
+
+#: [39]
+msgid ""
+"Then tap <button class=\"ui_but\">Align</button> and tap on the alignment "
+"star on the map as usual."
+msgstr "ואז לחצו על כפתור <button class=\"ui_but\">אפס</button> כרגיל"
+
+#: [40]
+msgid "Planets"
+msgstr "כוכבי־לכת"
+
+#: [41]
+msgid "None"
+msgstr "כלום"
+
+#: [42]
+msgid "Always"
+msgstr "תמיד"
+
+#: [43]
+msgid "Lat:"
+msgstr "קו־רוחב"
+
+#: [44]
+msgid "Bring them home now!"
+msgstr "החזירו אותם הביתה"
+
+#: [45]
+msgid "Night"
+msgstr "לילה"
+
+#: [46]
+msgid "FOV"
+msgstr "שדה"
+
+#: [47]
+msgid "List"
+msgstr "רשימת צפיה"
+
+#: [48]
+msgid "Lon:"
+msgstr "קו־אורך"
+
+#: [49]
+msgid "GPS Override"
+msgstr "מיקום ידני"
