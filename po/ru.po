@@ -1,0 +1,311 @@
+# #-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+#. #-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from tags_filtered.json
+# Artyom Beilis <artyomtnk@yahoo.com>, 2025.
+msgid ""
+msgstr ""
+"#-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"PO-Revision-Date: 2025-08-24 09:15+0300\n"
+"Last-Translator: Artyom Beilis <artyomtnk@yahoo.com>\n"
+"Language-Team: English <kde-i18n-doc@kde.org>\n"
+"Language: en_IL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 21.12.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: astrohopper.html:587 astrohopper.html:2334
+msgid "search"
+msgstr "поиск"
+
+#: astrohopper.html:715
+msgid "Aligned"
+msgstr "Выровнено"
+
+#: astrohopper.html:715
+msgid "Not Aligned"
+msgstr "Не выровнено"
+
+#: astrohopper.html:747
+msgid "Select Star"
+msgstr "Выбрать звезду"
+
+#: astrohopper.html:1564
+msgid "No Gyro"
+msgstr "Нет гироскопа"
+
+#: astrohopper.html:1840
+msgid "[hide]"
+msgstr "[скрыть]"
+
+#: astrohopper.html:1844 [9]
+msgid "[edit]"
+msgstr "ред."
+
+#: astrohopper.html:2017 [21]
+msgid "None"
+msgstr "Нет"
+
+#: astrohopper.html:2327
+msgid "LTR"
+msgstr "LTR"
+
+#: [0]
+msgid ""
+"Connect the smartphone to the optical tube such that its top points to the "
+"viewing direction and it lies flat on the tube."
+msgstr ""
+"Подключите смартфон к оптической трубе так, чтобы его верхняя часть была"
+" направлена ​​в сторону "
+"наблюдения, и он лежал плашмя на трубе."
+
+#: [1]
+msgid "Settings"
+msgstr "Настройки"
+
+#: [2]
+msgid ""
+"Then tap <button class=\"ui_but\">Align</button> and tap on the alignment "
+"star on the map as usual."
+msgstr ""
+"Затем нажмите <button class=\"ui_but\">Выров.</button> и коснитесь звезды"
+" выравнивания на карте, как обычно."
+
+#: [3]
+msgid "Show Tutorial"
+msgstr "Показать руководство"
+
+#: [4]
+msgid "Quick Start Guide"
+msgstr "Краткое руководство"
+
+#: [5]
+msgid "Next &gt;"
+msgstr "Далее &gt;"
+
+#: [6]
+msgid "No Geolocation"
+msgstr "Нет геолокации"
+
+#: [7]
+msgid "Stars"
+msgstr "Звёзды"
+
+#: [8]
+msgid "Save"
+msgstr "Сохранить"
+
+#: [10]
+msgid "Small UI"
+msgstr "Мал. интер."
+
+#: [11]
+msgid "GPS Override"
+msgstr "Переопределение GPS"
+
+#: [12]
+msgid "Bring them home now!"
+msgstr "Верните их домой!"
+
+#: [13]
+msgid "Never"
+msgstr "Никогда"
+
+#: [14]
+msgid ""
+"Point the telescope to an easily identifiable star or planet <strong>nearby</"
+"strong> an object you want to find. For example in order to find M41 or M47, "
+"point the telescope to Sirius — this is going to be the <em>alignment star</"
+"em>."
+msgstr ""
+"Наведите телескоп на легко идентифицируемую звезду или планету <strong>рядом<"
+"/strong> "
+"с объектом, который вы хотите найти. Например, чтобы найти M41 или M47, "
+"наведите телескоп на Сириус — это будет <em>звезда выравнивания</em>"
+
+#: [15]
+msgid "Enable Device Orientation"
+msgstr "Включить датчики"
+
+#: [16]
+msgid "Planets"
+msgstr "Планеты"
+
+#: [17]
+msgid "Don't show on startup"
+msgstr "Не показывать при запуске"
+
+#: [18]
+msgid ""
+"When the telescope is pointing to the alignment star tap <button "
+"class=\"ui_but\">Align</button> button and tap on the alignment star on the "
+"map. Once the application is aligned, it tracks the telescope movement using "
+"smartphone's sensors."
+msgstr ""
+"Когда телескоп направлен на звезду выравнивания, нажмите кнопку <button"
+" class=\"ui_but\">Выров.</button> "
+"и коснитесь звезды выравнивания на карте. "
+"После выравнивания приложение отслеживает движение телескопа с помощью "
+"датчиков смартфона."
+
+#: [19]
+msgid "Galaxies"
+msgstr "Галактики"
+
+#: [20]
+msgid "Lon:"
+msgstr "Долгота:"
+
+#: [22]
+msgid ""
+"For detailed instruction and troubleshooting please refer to the <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[Video&nbsp;Tutorial]</a>\n"
+"          and to the integrated manual via:"
+msgstr ""
+"Подробные инструкции и рекомендации по устранению неполадок см. <a"
+" href=\"https://youtu.be/AtArqBLWWJ8\">[Видеоурок]</a>"
+"и встроенное руководстве"
+
+#: [23]
+msgid "Full S."
+msgstr "Полный экран"
+
+#: [24]
+msgid "Night"
+msgstr "Ночь"
+
+#: [25]
+msgid "DSO"
+msgstr "DSO"
+
+#: [26]
+msgid "Star Names"
+msgstr "Названия звёзд"
+
+#: [27]
+msgid ""
+"If you can't see the alignment star on the map, there may be a common "
+"compass accuracy problem."
+msgstr ""
+"Если вы не видите звезду выравнивания на карте, возможно, имеется"
+" распространённая проблема с точностью компаса."
+
+#: [28]
+msgid "Open Clusters"
+msgstr "Рассеянные скопления"
+
+#: [29]
+msgid "Nebulae"
+msgstr "Туманности"
+
+#: [30]
+msgid "Wiki"
+msgstr "Вики"
+
+#: [31]
+msgid "Align on DSO"
+msgstr "Выровнять по DSO"
+
+#: [32]
+msgid "Glob. Clusters"
+msgstr "Шар. скопления"
+
+#: [33]
+msgid "Always"
+msgstr "Всегда"
+
+#: [34]
+msgid ""
+"Once aligned, tap on the object you want to find (for example M41, M47) and "
+"follow the direction line on the map till you reach the target. Now you can "
+"observe the object you selected."
+msgstr ""
+"После выравнивания нажмите на нужный объект (например, M41, M47) и следуйте"
+" указателю на карте, пока не достигнете цели. Теперь вы можете "
+"наблюдать за выбранным объектом."
+
+#: [35]
+msgid "Constellations"
+msgstr "Созвездия"
+
+#: [36]
+msgid "Day Only"
+msgstr "Только денём"
+
+#: [37]
+msgid "FOV"
+msgstr "Поле зрения"
+
+#: [38]
+msgid "Keep Screen On"
+msgstr "Не выключать экран"
+
+#: [39]
+msgid ""
+"It is recommended to repeat alignment for each new target you want to find"
+msgstr ""
+"Рекомендуется повторять выравнивание для каждой новой цели, которую вы хотите"
+" найти"
+
+#: [40]
+msgid "Align"
+msgstr "Выров."
+
+#: [41]
+msgid ""
+"In such a case tap on <button class=\"incdec_but manual_background\">&nbsp;</"
+"button> to switch to manual mode and scroll the map left\n"
+"           or right till you see the alignment star."
+msgstr ""
+"В таком случае нажмите на <button class=\"incdec_but manual_background\""
+">&nbsp;</button>, чтобы перейти в ручной режим, и прокрутите карту влево"
+"или вправо, пока не увидите звезду выравнивания."
+
+#: [42]
+msgid "Lat:"
+msgstr "Широта:"
+
+#: [43]
+msgid "Pinch Zoom"
+msgstr "Масштабирование щипком"
+
+#: [44]
+msgid "Stand with Israel against terror!"
+msgstr "Встаньте на сторону Израиля в борьбе с террором!"
+
+#: [45]
+msgid "List"
+msgstr "Список"
+
+#: [46]
+msgid "Discard"
+msgstr "Отменить"
+
+#: [47]
+msgid "&lt; Prev"
+msgstr "&lt; Предыдущий\""
+
+#: [48]
+msgid "User Objects"
+msgstr "Пользовательские объекты"
+
+#: [49]
+msgid "Font"
+msgstr "Шрифт"
