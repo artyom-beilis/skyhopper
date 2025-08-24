@@ -1,0 +1,309 @@
+# #-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#. #-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from tags_filtered.json
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"PO-Revision-Date: 2025-08-24 14:50+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: Ladislav Heller <ladislav.heller@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.7\n"
+
+#: astrohopper.html:587 astrohopper.html:2334
+msgid "search"
+msgstr "keresés"
+
+#: astrohopper.html:715
+msgid "Aligned"
+msgstr "Betanítva"
+
+#: astrohopper.html:715
+msgid "Not Aligned"
+msgstr "Nincs betanítva"
+
+#: astrohopper.html:747
+msgid "Select Star"
+msgstr "Válassz csillagot"
+
+#: astrohopper.html:1564
+msgid "No Gyro"
+msgstr "Nincs giroszkóp"
+
+#: astrohopper.html:1840
+msgid "[hide]"
+msgstr "[elrejt]"
+
+#: astrohopper.html:1844 [9]
+msgid "[edit]"
+msgstr "[szerkeszt]"
+
+#: astrohopper.html:2017 [21]
+msgid "None"
+msgstr "Nincs"
+
+#: astrohopper.html:2327
+msgid "LTR"
+msgstr "LTR"
+
+#: [0]
+msgid ""
+"Connect the smartphone to the optical tube such that its top points to the "
+"viewing direction and it lies flat on the tube."
+msgstr ""
+"Csatlakoztasd az okostelefont a távcső tubusához olyan módon,\n"
+"hogy az eszköz felső éle arra nézzen, amerre a távcső\n"
+"és az eszköz a tubuson feküdjön."
+
+#: [1]
+msgid "Settings"
+msgstr "Beállítások"
+
+#: [2]
+msgid ""
+"Then tap <button class=\"ui_but\">Align</button> and tap on the alignment "
+"star on the map as usual."
+msgstr ""
+"Ezután bökj a <button class=\"ui_but\">Betanítás</button> gombra\n"
+"és válassz ki egy referencia csillagot a képernyőről."
+
+#: [3]
+msgid "Show Tutorial"
+msgstr "Bemutató megjelenítése"
+
+#: [4]
+msgid "Quick Start Guide"
+msgstr "Gyorstalpaló"
+
+#: [5]
+msgid "Next &gt;"
+msgstr "Következő &gt;"
+
+#: [6]
+msgid "No Geolocation"
+msgstr "Pozíció-meghatározás nem elérhető"
+
+#: [7]
+msgid "Stars"
+msgstr "Csillagok"
+
+#: [8]
+msgid "Save"
+msgstr "Mentés"
+
+#: [10]
+msgid "Small UI"
+msgstr "Kisebb UI"
+
+#: [11]
+msgid "GPS Override"
+msgstr "GPS felülbírálás"
+
+#: [12]
+msgid "Bring them home now!"
+msgstr "Hozzuk haza őket!"
+
+#: [13]
+msgid "Never"
+msgstr "Soha"
+
+#: [14]
+msgid ""
+"Point the telescope to an easily identifiable star or planet <strong>nearby</"
+"strong> an object you want to find. For example in order to find M41 or M47, "
+"point the telescope to Sirius — this is going to be the <em>alignment star</"
+"em>."
+msgstr ""
+"Állj rá a távcsővel egy könnyen azonosítható csillagra vagy bolygóra ami a "
+"célobjektum <strong>közelében</strong> található.\n"
+"Például az M41 vagy M47 megtalálásához, állj rá a Szíriusz csillagra - ez "
+"lesz a <em>referencia csillag</em> a betanításnál."
+
+#: [15]
+msgid "Enable Device Orientation"
+msgstr "Eszköz orientáció engedélyezése"
+
+#: [16]
+msgid "Planets"
+msgstr "Bolygók"
+
+#: [17]
+msgid "Don't show on startup"
+msgstr "Ne mutasd indításkor"
+
+#: [18]
+msgid ""
+"When the telescope is pointing to the alignment star tap <button "
+"class=\"ui_but\">Align</button> button and tap on the alignment star on the "
+"map. Once the application is aligned, it tracks the telescope movement using "
+"smartphone's sensors."
+msgstr ""
+"Amint a távcső a referencia csillagra néz és az a látómező közepén van, bökj "
+"a <button class=\"ui_but\">Betanítás</button> gombra, majd a referencia "
+"csillagra a képernyőn.\n"
+"Miután a betanítás megtörtént, az applikáció képes lesz követni a távcső "
+"elfordulásást az okostelefon szenzorai segítségével."
+
+#: [19]
+msgid "Galaxies"
+msgstr "Galaxisok"
+
+#: [20]
+msgid "Lon:"
+msgstr "Hosszúság:"
+
+#: [22]
+msgid ""
+"For detailed instruction and troubleshooting please refer to the <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[Video&nbsp;Tutorial]</a>\n"
+"          and to the integrated manual via:"
+msgstr ""
+"Részletes információkért és hibaelhárításért katt ide: <a href=\"https://"
+"youtu.be/AtArqBLWWJ8\">[Bemutató&nbsp;video]</a>,\n"
+"beépített használati utasítás:"
+
+#: [23]
+msgid "Full S."
+msgstr "Teljes képer."
+
+#: [24]
+msgid "Night"
+msgstr "Éjszakai"
+
+#: [25]
+msgid "DSO"
+msgstr "Mélyég"
+
+#: [26]
+msgid "Star Names"
+msgstr "Csillagnevek"
+
+#: [27]
+msgid ""
+"If you can't see the alignment star on the map, there may be a common "
+"compass accuracy problem."
+msgstr ""
+"Ha nem látszik a betanításhoz szükséges referencia csillag a képernyőn, "
+"probléma lehet az eszköz iránytű érzékelőjével."
+
+#: [28]
+msgid "Open Clusters"
+msgstr "Nyílthalmazok"
+
+#: [29]
+msgid "Nebulae"
+msgstr "Ködök"
+
+#: [30]
+msgid "Wiki"
+msgstr "Wiki"
+
+#: [31]
+msgid "Align on DSO"
+msgstr "Betanítás mélyégre"
+
+#: [32]
+msgid "Glob. Clusters"
+msgstr "Gömbhalmazok"
+
+#: [33]
+msgid "Always"
+msgstr "Mindig"
+
+#: [34]
+msgid ""
+"Once aligned, tap on the object you want to find (for example M41, M47) and "
+"follow the direction line on the map till you reach the target. Now you can "
+"observe the object you selected."
+msgstr ""
+"Betanítás után bökj a kívánt célpontra (például M41, M47), kövesd a zöld "
+"segédvonalat és a képernyőn megjelenő utasításokat, amíg el nem éred a "
+"célpontot. Most már megfigyelheted a célpontot a távcsőben."
+
+#: [35]
+msgid "Constellations"
+msgstr "Csillagképek"
+
+#: [36]
+msgid "Day Only"
+msgstr "Csak nappali"
+
+#: [37]
+msgid "FOV"
+msgstr "Látómező"
+
+#: [38]
+msgid "Keep Screen On"
+msgstr "Képernyő mindig be"
+
+#: [39]
+msgid ""
+"It is recommended to repeat alignment for each new target you want to find"
+msgstr ""
+"Ajánlott megismételni a betanítást minden új megfigyelni kívánt célponthoz."
+
+#: [40]
+msgid "Align"
+msgstr "Betanítás"
+
+#: [41]
+msgid ""
+"In such a case tap on <button class=\"incdec_but manual_background\">&nbsp;</"
+"button> to switch to manual mode and scroll the map left\n"
+"           or right till you see the alignment star."
+msgstr ""
+"Ilyen esetben bökj a <button class=\"incdec_but manual_background\">Kéz&nbsp;"
+"</button> gombra a kézi görgetéshez\n"
+"és görgesd a csillagtérképet balra/jobbra amíg a referencia csillag meg nem "
+"jelenik."
+
+#: [42]
+msgid "Lat:"
+msgstr "Szélesség:"
+
+#: [43]
+msgid "Pinch Zoom"
+msgstr "Kétujjas nagyítás"
+
+#: [44]
+msgid "Stand with Israel against terror!"
+msgstr "Állj Izrael mellé a terror ellen!"
+
+#: [45]
+msgid "List"
+msgstr "Lista"
+
+#: [46]
+msgid "Discard"
+msgstr "Mégsem"
+
+#: [47]
+msgid "&lt; Prev"
+msgstr "&lt; Előző"
+
+#: [48]
+msgid "User Objects"
+msgstr "Felhasználói objektumok"
+
+#: [49]
+msgid "Font"
+msgstr "Betűméret"
