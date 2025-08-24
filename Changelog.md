@@ -1,4 +1,4 @@
-2025-08-25: v1.0.15
+2025-08-24: v1.0.15
 
 - Added translation to Hungarian: thanks to Ladislav Heller (laheller)
 - Fixed manual appearing in Hebrew back to Englisj
