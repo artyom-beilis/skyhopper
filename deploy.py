@@ -28,7 +28,7 @@ def make_manual(lang = None):
         md  = markdown.Markdown(extensions=['toc'])
         html = md.convert(text)
     
-    if lang is not None:
+    if lang is None:
         with open("manual.html", "w",encoding="utf-8") as output_file:
             with open('header.html','r') as f:
                 output_file.write(f.read())
@@ -53,7 +53,8 @@ def png_encode(path):
 def combine_manuals(mans):
     res = []
     for lang in mans:
-        res.append("<div id='manual_tr_%s' class='r2l manual_section'>\n%s\n</div>\n" % (lang,mans[lang]))
+        cls = 'l2r' if lang == 'en' else 'r2l'
+        res.append("<div id='manual_tr_%s' class='%s manual_section'>\n%s\n</div>\n" % (lang,cls,mans[lang]))
     return '\n'.join(res)
 
 def embed(manual,version):
