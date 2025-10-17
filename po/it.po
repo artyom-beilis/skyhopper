@@ -80,10 +80,10 @@ msgstr "Impostazioni"
 
 #: [2]
 msgid ""
-"Then tap <button class=\"ui_but\">Align</button> and tap on the alignment "
+"Then tap <button class=\"ui_but\">Allinea</button> and tap on the alignment "
 "star on the map as usual."
 msgstr ""
-"Poi tocca il pulsante <button class=\"ui_but\">Align</button> e seleziona la "
+"Poi tocca il pulsante <button class=\"ui_but\">Allinea</button> e seleziona la "
 "stella di allineamento sulla mappa come di consueto."
 
 #: [3]

@@ -23,7 +23,7 @@ Quando AstroHopper si avvia, viene mostrata una Guida Rapida. Puoi anche ottener
 
 
 1. Allinea il telescopio con una stella o un pianeta facilmente identificabile, situato vicino all’oggetto che vuoi osservare
-2. Tocca il pulsante `[Align]` in alto a sinistra dello schermo 
+2. Tocca il pulsante `[Allinea]` in alto a sinistra dello schermo 
 3. Tocca la stella o il pianeta che hai selezionato. Verrà avviato un timer di 3 secondi per assicurarsi che non ci siano vibrazioni. Dopo 3 secondi, l’applicazione sarà allineata all’oggetto selezionato. Comparirà il messaggio “Allineato” e una croce al centro dello schermo indicherà sulla mappa la direzione di puntamento del telescopio.
 4. Tocca l’oggetto che vuoi osservare oppure digita il suo nome nel campo di ricerca presente nel menu Impostazioni (accessibile tramite il pulsante ingranaggio `⚙`). Verrà mostrata una linea di direzione che indica come muovere il telescopio; inoltre, le variazioni di altitudine e azimut saranno visibili rispettivamente sul lato destro e nella parte inferiore dello schermo
 5. Muovi il telescopio finché questi valori non si avvicinano allo zero — a questo punto il telescopio sarà puntato sull’oggetto desiderato
@@ -75,7 +75,7 @@ Se questo non funziona con il tuo browser, disinstalla l’app e reinstallala da
 
 ## Troubleshooting 
 
--   _l cielo mostrato nell’app è diverso da quello reale?_
+-   _Il cielo mostrato nell’app è diverso da quello reale?_
 
     Assicurati che il browser fornisca le informazioni corrette sulla posizione.
 Se non lo fa, comparirà il messaggio “Nessuna geolocalizzazione”.
@@ -119,11 +119,11 @@ Prova di nuovo. Se il problema persiste prova le seguenti soluzioni:
     - Chrome: impostazioni ->accessibilità -> forza zoom -> disattiva
     - Firefox:impostazioni -> accessibilità -> abilita sempre zoom -> disattiva
     - Samsung Browser: impostazioni ->aspetto -> zoom manuale -> disattiva
-    - Edge: impostazioni -> dimensioni carattere -> zoom su tutti i siti -> disattiva oppure impostazioni -> ccessibilità -> zoom su tutti i siti web -> disattiva
+    - Edge: impostazioni -> dimensioni carattere -> zoom su tutti i siti -> disattiva oppure impostazioni -> accessibilità -> zoom su tutti i siti web -> disattiva
 
     Sfortunatamente, su iOS non è possibile disabilitare lo zoom completo della pagina web.
 
-## Controls
+## Controlli
 
 - Lato sinistro, dall’alto verso il basso:
 
@@ -134,7 +134,7 @@ Prova di nuovo. Se il problema persiste prova le seguenti soluzioni:
 - Lato destro, dall’alto verso il basso (da destra a sinistra)
 
     - `⚙` - pulsante delle impostazioni
-    - Casella di ricerca oggetti, consente di inserire il nome o il codice di un oggetto. Una volta trovato, premi Invio sulla tastiera. Nota: se vuoi ripetere la stessa ricerca, tocca l’icona della “lente d’ingrandimento”, che riporterà l’app sull’oggetto selezionato..
+    - Casella di ricerca oggetti, consente di inserire il nome o il codice di un oggetto. Una volta trovato, premi Invio sulla tastiera. Nota: se vuoi ripetere la stessa ricerca, tocca l’icona della “lente d’ingrandimento”, che riporterà l’app sull’oggetto selezionato.
     - `✋` - passa alla modalità manuale, "_bussola_" passa alla modalità bussola, "_bussola barrata_" - indica che la bussola non è disponibile, quindi si può usare solo la modalità manuale.
     - `W` - appare quando viene selezionato un oggetto con nome; toccandolo si apre la pagina Wikipedia relativa all’oggetto (richiede connessione Internet).
 
@@ -185,7 +185,7 @@ Puoi modificare questo comportamento nel menu Impostazioni “Wiki”.
 ## Lista di Osservazione
 
 L’utente può creare in anticipo una lista personalizzata di oggetti da osservare, così da poterli sfogliare facilmente durante la notte.
-Nel menu "Settings" è presente l’opzione `List`, che include il controllo `[edit]` per aprire lo strumento di modifica della lista.
+Nel menu "Impostazioni" è presente l’opzione `Elenco`, che include il controllo `[modifica]` per aprire lo strumento di modifica della lista.
 
 Una watch list è composta da un semplice elenco di nomi di oggetti, separati da spazi, a capo o virgole.
 Ecco un esempio della lista “predefinita”:
@@ -198,8 +198,7 @@ Ecco un esempio della lista “predefinita”:
      M50 M44 M45
     doublestars: Polaris, "Cor Caroli"
 
-È inoltre possibile aggiungere commenti tra parentesi tonde `(` e `)` per spiegare o identificare meglio l’oggetto.
-. Il commento verrà mostrato nell’interfaccia utente quando l’oggetto viene selezionato, ad esempio:
+È inoltre possibile aggiungere commenti tra parentesi tonde `(` e `)` per spiegare o identificare meglio l’oggetto. Il commento verrà mostrato nell’interfaccia utente quando l’oggetto viene selezionato, ad esempio:
 
     Galaxies: M31 (Andromeda), M64 (Black Eye)
 
@@ -219,7 +218,7 @@ Sia RA che DEC possono essere espressi in gradi decimali (0-360 per RA and -90 +
 - RA: `170.6358` oppure `11:22:32.6` oppure `11h 22m 32.6s` oppure `11h 22' 32.6''` oppure `11 22′ 32.6″` oppure  `11 22 32.6`, `11:32`
 - DEC: `-87.3757` oppure `-87:22:32.6` oppure `-87d 22m 32.6s` oppure `-87d 22' 32.6''` oppure `-87° 22′ 32.6″` oppure `-87 22 32.6`, `-87:22`
 
-This is an example of such a list:
+Questo è un esempio di tale elenco:
 
     V1405,23h 24m 48s, +61° 11′ 15″
     Pluto,19:55:16,-22:13:42
@@ -236,7 +235,7 @@ Quando gli oggetti da osservare si trovano vicino ai poli celesti e il salto (ho
 Per questo motivo, l’app potrebbe non funzionare in modo affidabile con montature equatoriali.
 Si consiglia l’uso con montature altazimutali (Alt-Az).
 
-## Known Issues
+## Problemi Noti
 
 - Lo zoom con le dita (pinch zoom) non funziona correttamente su iOS, poiché non è possibile disattivare lo zoom del browser
 - Su dispositivi iOS, il pinch zoom o il doppio tap ingrandiscono l’intera schermata anche quando non dovrebbero
