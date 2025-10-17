@@ -1,3 +1,7 @@
+2025-10-17: v1.0.17
+
+- Added tanslation of the manual to Italian by Michele Marchi
+
 2025-10-17: v1.0.16
 
 - Added translation to Italian: thanks to Michele Marchi
