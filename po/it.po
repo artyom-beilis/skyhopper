@@ -1,0 +1,310 @@
+# #-#-#-#-#  astrohopper.pot (PACKAGE VERSION)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#. #-#-#-#-#  tags.pot (PACKAGE VERSION)  #-#-#-#-#
+#. extracted from tags_filtered.json
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"PO-Revision-Date: 2025-10-17 10:03+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+#: astrohopper.html:587 astrohopper.html:2334
+msgid "search"
+msgstr "cerca"
+
+#: astrohopper.html:715
+msgid "Aligned"
+msgstr "Allineato"
+
+#: astrohopper.html:715
+msgid "Not Aligned"
+msgstr "Non Allineato"
+
+#: astrohopper.html:747
+msgid "Select Star"
+msgstr "Seleziona Stella"
+
+#: astrohopper.html:1564
+msgid "No Gyro"
+msgstr "Nessun Giroscopio"
+
+#: astrohopper.html:1840
+msgid "[hide]"
+msgstr "[nascondi]"
+
+#: astrohopper.html:1844 [9]
+msgid "[edit]"
+msgstr "[modifica]"
+
+#: astrohopper.html:2017 [21]
+msgid "None"
+msgstr "Nessuno"
+
+#: astrohopper.html:2327
+msgid "LTR"
+msgstr "LTR"
+
+#: [0]
+msgid ""
+"Connect the smartphone to the optical tube such that its top points to the "
+"viewing direction and it lies flat on the tube."
+msgstr ""
+"Collega lo smartphone al tubo ottico in modo che la parte superiore sia "
+"orientata nella direzione di osservazione e che aderisca perfettamente al "
+"tubo."
+
+#: [1]
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: [2]
+msgid ""
+"Then tap <button class=\"ui_but\">Align</button> and tap on the alignment "
+"star on the map as usual."
+msgstr ""
+"Poi tocca il pulsante <button class=\"ui_but\">Align</button> e seleziona la "
+"stella di allineamento sulla mappa come di consueto."
+
+#: [3]
+msgid "Show Tutorial"
+msgstr "Mostra Tutorial"
+
+#: [4]
+msgid "Quick Start Guide"
+msgstr "Guida rapida"
+
+#: [5]
+msgid "Next &gt;"
+msgstr "Avanti &gt;"
+
+#: [6]
+msgid "No Geolocation"
+msgstr "Nessuna Geolocalizzazione"
+
+#: [7]
+msgid "Stars"
+msgstr "Stelle"
+
+#: [8]
+msgid "Save"
+msgstr "Salva"
+
+#: [10]
+msgid "Small UI"
+msgstr "Interfaccia Ridotta"
+
+#: [11]
+msgid "GPS Override"
+msgstr "Sovrascrittura GPS"
+
+#: [12]
+msgid "Bring them home now!"
+msgstr "Riportateli a casa!"
+
+#: [13]
+msgid "Never"
+msgstr "Mai"
+
+#: [14]
+msgid ""
+"Point the telescope to an easily identifiable star or planet <strong>nearby</"
+"strong> an object you want to find. For example in order to find M41 or M47, "
+"point the telescope to Sirius — this is going to be the <em>alignment star</"
+"em>."
+msgstr ""
+"Punta il telescopio verso una stella o un pianeta facilmente riconoscibile "
+"<strong>vicino</strong> all’oggetto che desideri osservare. Ad esempio, per "
+"trovare M41 o M47, punta il telescopio verso Sirio - questa sarà la "
+"<em>stella di allineamento</em>."
+
+#: [15]
+msgid "Enable Device Orientation"
+msgstr "Abilita Orientamento del Dispositivo"
+
+#: [16]
+msgid "Planets"
+msgstr "Pianeti"
+
+#: [17]
+msgid "Don't show on startup"
+msgstr "Non mostrare all’avvio"
+
+#: [18]
+msgid ""
+"When the telescope is pointing to the alignment star tap <button "
+"class=\"ui_but\">Align</button> button and tap on the alignment star on the "
+"map. Once the application is aligned, it tracks the telescope movement using "
+"smartphone's sensors."
+msgstr ""
+"Quando il telescopio è puntato sulla stella di allineamento, tocca il "
+"pulsante <button class=\\\"ui_but\\\">Align</button> e poi tocca la stella "
+"di allineamento sulla mappa. Una volta completato l’allineamento, "
+"l’applicazione seguirà i movimenti del telescopio utilizzando i sensori "
+"dello smartphone."
+
+#: [19]
+msgid "Galaxies"
+msgstr "Galassie"
+
+#: [20]
+msgid "Lon:"
+msgstr "Long:"
+
+#: [22]
+msgid ""
+"For detailed instruction and troubleshooting please refer to the <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[Video&nbsp;Tutorial]</a>\n"
+"          and to the integrated manual via:"
+msgstr ""
+"Per istruzioni dettagliate e per la risoluzione dei problemi, consulta il <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[Video&nbsp;Tutorial]</a>\n"
+"          e il manuale integrato tramite:"
+
+#: [23]
+msgid "Full S."
+msgstr "Schermo Int."
+
+#: [24]
+msgid "Night"
+msgstr "Notte"
+
+#: [25]
+msgid "DSO"
+msgstr "DSO"
+
+#: [26]
+msgid "Star Names"
+msgstr "Nomi delle Stelle"
+
+#: [27]
+msgid ""
+"If you can't see the alignment star on the map, there may be a common "
+"compass accuracy problem."
+msgstr ""
+"Se non riesci a vedere la stella di allineamento sulla mappa, potrebbe "
+"esserci un comune problema di precisione della bussola."
+
+#: [28]
+msgid "Open Clusters"
+msgstr "Ammassi Aperti"
+
+#: [29]
+msgid "Nebulae"
+msgstr "Nebulose"
+
+#: [30]
+msgid "Wiki"
+msgstr "Wiki"
+
+#: [31]
+msgid "Align on DSO"
+msgstr "Allinea su DSO"
+
+#: [32]
+msgid "Glob. Clusters"
+msgstr "Ammassi Glob."
+
+#: [33]
+msgid "Always"
+msgstr "Sempre"
+
+#: [34]
+msgid ""
+"Once aligned, tap on the object you want to find (for example M41, M47) and "
+"follow the direction line on the map till you reach the target. Now you can "
+"observe the object you selected."
+msgstr ""
+"Una volta completato l’allineamento, tocca l’oggetto che desideri trovare "
+"(ad esempio M41 o M47) e segui la linea di direzione sulla mappa fino a "
+"raggiungere il bersaglio. Ora puoi osservare l’oggetto che hai selezionato."
+
+#: [35]
+msgid "Constellations"
+msgstr "Costellazioni"
+
+#: [36]
+msgid "Day Only"
+msgstr "Solo di Giorno"
+
+#: [37]
+msgid "FOV"
+msgstr "FOV"
+
+#: [38]
+msgid "Keep Screen On"
+msgstr "Mantieni Schermo Attivo"
+
+#: [39]
+msgid ""
+"It is recommended to repeat alignment for each new target you want to find"
+msgstr ""
+"Si consiglia di ripetere l’allineamento per ogni nuovo bersaglio che "
+"desideri trovare"
+
+#: [40]
+msgid "Align"
+msgstr "Allinea"
+
+#: [41]
+msgid ""
+"In such a case tap on <button class=\"incdec_but manual_background\">&nbsp;</"
+"button> to switch to manual mode and scroll the map left\n"
+"           or right till you see the alignment star."
+msgstr ""
+"In questo caso, tocca il pulsante  <button class=\"incdec_but "
+"manual_background\">&nbsp;</button> per passare alla modalità manuale e "
+"scorri la mappa verso sinistra\n"
+"           o verso destra finché non vedi la stella di allineamento."
+
+#: [42]
+msgid "Lat:"
+msgstr "Lat:"
+
+#: [43]
+msgid "Pinch Zoom"
+msgstr "Zoom con le Dita"
+
+#: [44]
+msgid "Stand with Israel against terror!"
+msgstr "Sostieni Israele contro il terrorismo!"
+
+#: [45]
+msgid "List"
+msgstr "Elenco"
+
+#: [46]
+msgid "Discard"
+msgstr "Annulla"
+
+#: [47]
+msgid "&lt; Prev"
+msgstr "&lt; Prec"
+
+#: [48]
+msgid "User Objects"
+msgstr "Oggetti Utente"
+
+#: [49]
+msgid "Font"
+msgstr "Font"

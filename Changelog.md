@@ -1,3 +1,8 @@
+2025-10-17: v1.0.16
+
+- Added translation to Italian: thanks to Michele Marchi
+- fixed missing translation tag on the last item in the tutorial
+
 2025-08-24: v1.0.15
 
 - Added translation to Hungarian: thanks to Ladislav Heller (laheller)
