@@ -1,3 +1,7 @@
+2025-10-17: v1.0.19
+
+- Italian translation dictionary fixes
+
 2025-10-17: v1.0.18
 
 - Italian translation fixes by Michele Marchi
