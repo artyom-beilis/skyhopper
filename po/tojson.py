@@ -19,7 +19,7 @@ for file in glob.glob('po/*.po'):
     fd.close()
 
 with open('po/messages.js','w', encoding='utf8') as js:
-    js.write('var i18n_dicts = ');
+    js.write('var i18n_dicts = ')
     json.dump(res,js,indent=4,ensure_ascii=False)
     js.write('\n')
 

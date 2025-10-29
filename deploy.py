@@ -63,14 +63,14 @@ def embed(manual,version):
     urlpng=re.compile(r'^(.*)url\(([a-z0-9_\-]*\.png)\)(.*)$')
     urlpng2=re.compile(r'^(.*<img.*)src="([a-z0-9_\-\/]*\.png)"(.*)$')
     
-    with open("astrohopper.html","r") as f, open("astrohopper_deploy.html","w") as out:
+    with open("astrohopper.html","r", encoding="utf-8") as f, open("astrohopper_deploy.html","w", encoding="utf-8") as out:
         for line in f.readlines():
             m = script.match(line)
             v = ver.match(line)
             u = urlpng.match(line)
             u2 = urlpng2.match(line)
             if m:
-                with open(m.group(1),"r") as inline:
+                with open(m.group(1),"r", encoding="utf-8") as inline:
                     line = inline.read()
                     out.write('<script>\n')
                     out.write(line)
@@ -92,10 +92,12 @@ def embed(manual,version):
                 out.write(line)
 
 def deploy_files(target):
-    copyf('astrohopper_deploy.html',target + "/astrohopper.html");
-    copyf('sw_deploy.js',target + "/sw.js");
-    for f in ['LICENSE','COPYING.md','manual.html','manifest.json']:
-        copyf(f,target+ "/" + f)
+    copyf('astrohopper_deploy.html', os.path.join(target, "astrohopper.html"))
+    copyf('sw_deploy.js', os.path.join(target, "sw.js"))
+
+    for f in ['LICENSE', 'COPYING.md', 'manual.html', 'manifest.json']:
+        copyf(f, os.path.join(target, f))
+
 
 def add_ga():
     print("Adding Google Analytics to the file")
@@ -112,9 +114,15 @@ def main():
     ver = get_ver()
     manuals = dict()
     manuals["en"] = make_manual()
-    for man in glob.glob("po/README_*.md"):
-        lang = man.replace('po/README_','').replace('.md','')
+
+    for man in glob.glob(os.path.join("po", "README_*.md")):
+        # Extract just the filename
+        filename = os.path.basename(man)
+        # Remove the prefix and extension
+        lang = filename.replace('README_', '').replace('.md', '')
+        print(lang)
         manuals[lang] = make_manual(lang)
+
     embed(combine_manuals(manuals),ver)
     embed_service_worker(ver)
     if len(sys.argv) >= 2:
