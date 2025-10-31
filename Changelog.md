@@ -1,4 +1,4 @@
-2025-10-31: v1.0.30
+2025-10-31: v1.0.20
 
 - Fix by Viziteu Mihai (Skiuileuf) of IOS PWA White Header Fix
 
