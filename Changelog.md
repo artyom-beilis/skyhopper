@@ -1,3 +1,7 @@
+2025-10-31: v1.0.30
+
+- Fix by Viziteu Mihai (Skiuileuf) of IOS PWA White Header Fix
+
 2025-10-17: v1.0.19
 
 - Italian translation dictionary fixes

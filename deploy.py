@@ -120,7 +120,9 @@ def main():
         filename = os.path.basename(man)
         # Remove the prefix and extension
         lang = filename.replace('README_', '').replace('.md', '')
-        print(lang)
+        if len(lang) < 2 or len(lang) > 3:
+            continue
+        print("  Manual for ",lang)
         manuals[lang] = make_manual(lang)
 
     embed(combine_manuals(manuals),ver)
