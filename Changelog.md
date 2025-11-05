@@ -1,3 +1,7 @@
+2025-11-05: v1.0.21
+
+- Added French translation, thanks to Fabien Poirier
+
 2025-10-31: v1.0.20
 
 - Fix by Viziteu Mihai (Skiuileuf) of IOS PWA White Header Fix
