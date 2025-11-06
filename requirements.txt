@@ -1,0 +1,2 @@
+Markdown==3.3.6
+translate-toolkit==3.6.0
