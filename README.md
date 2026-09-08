@@ -145,6 +145,7 @@ You can usually update the installed version of AstroHopper by refreshing the pa
     - Small UI Mode - optimize for small screen: make buttons smaller, move field of view controls to settings menu
     - Full Screen - switch application to full screen
     - Night Mode - enable or disable red-night mode screen
+    - Show horizon - display the level horizon with N/E/S/W labels and dim objects below it. The line marks 0 degrees altitude; it does not include terrain, buildings or trees.
     - In "Small Screen Mode" only: Field of view - modify with `+`, `-` to adjust 
     - Maximum star magnitude to display/align on - adjust with `+`, `-` controls
     - Maximum apparent magnitude of DSO objects to be displayed - modify with `+`, `-` controls

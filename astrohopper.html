@@ -342,7 +342,7 @@ input[type=submit] { width:10mm;}
 </tr>
 <tr>
     <td>
-        &nbsp;
+        <input class="dso_selector" id="show_horizon_checked" type="checkbox" checked="checked" /><label for="show_horizon_checked" class="tr">Show horizon</label>
     </td>
     <td>
         <span class="tr">Wiki</span>:
@@ -396,6 +396,8 @@ vsop87a_full_velocities = vsop87a_milli_velocities;
 var g_original = null;
 
 var global_day_style = {
+	horizon         : '#668c7e',
+	ground          : 'rgba(32,32,32,0.45)',
 	cross 		: 'blue',
 	constelations 	: 'yellow',
 	bearing 	: 'green',
@@ -417,6 +419,8 @@ var global_show_obj = {
 };
 
 var global_night_style = {
+	horizon         : '#992222',
+	ground          : 'rgba(20,0,0,0.45)',
 	cross 		: 'red',
 	constelations 	: '#880000',
 	bearing 	: 'red',
@@ -432,6 +436,7 @@ var global_style = global_day_style;
 
 var global_align_on_dso=false;
 var global_show_star_names=true;
+var global_show_horizon=true;
 var global_targets_list = [];
 var global_prev_xy=null;
 var global_start_zoom_size = null;
@@ -1190,6 +1195,93 @@ function plotStar(star,camRays,highlight)
 	return result;
 }
 
+// Project the level horizon (altitude zero) through the same camera as the stars.
+function horizonPosition(azimuth,camRays,in_fov=false)
+{
+    var angle = azimuth * degtorad;
+    var ray = [Math.sin(angle),Math.cos(angle),0];
+    return xyzTo2d({
+        x: -sprod(camRays[1],ray),
+        y: sprod(camRays[0],ray),
+        z: sprod(camRays[2],ray)
+    },in_fov);
+}
+
+// Close the visible horizon along the lower half of the projection's outer rim.
+// This shades the ground correctly even when alignment rotates the camera.
+function shadeBelowHorizon(camRays)
+{
+    var top = camRays[0], left = camRays[1], forward = camRays[2];
+    var heading = Math.atan2(forward[0],forward[1]);
+    context.fillStyle = global_style.ground;
+    context.beginPath();
+    function point(x,y,first=false) {
+        var p = xyzTo2d({x:x,y:y,z:1},false);
+        if(first)
+            context.moveTo(p.x*canvas.width,p.y*canvas.height);
+        else
+            context.lineTo(p.x*canvas.width,p.y*canvas.height);
+    }
+    var x,y;
+    for(var i=0;i<=180;i++) {
+        var az = heading + (i-90)*degtorad;
+        var ray = [Math.sin(az),Math.cos(az),0];
+        x = -sprod(left,ray);
+        y = sprod(top,ray);
+        point(x,y,i===0);
+    }
+    var end = Math.atan2(y,x);
+    var down = Math.atan2(-top[2],left[2]);
+    var direction = Math.sin(down-end) >= 0 ? 1 : -1;
+    for(var i=1;i<=180;i++) {
+        var angle = end + direction*i*degtorad;
+        point(Math.cos(angle),Math.sin(angle));
+    }
+    context.closePath();
+    context.fill();
+}
+
+function plotHorizon(camRays)
+{
+    if(!global_show_horizon)
+        return;
+    context.save();
+    shadeBelowHorizon(camRays);
+    context.strokeStyle = global_style.horizon;
+    context.fillStyle = global_style.horizon;
+    context.lineWidth = 1.25;
+    context.beginPath();
+    var previous = null;
+    for(var az = 0;az <= 360;az++) {
+        var point = horizonPosition(az,camRays);
+        if(point) {
+            if(previous)
+                context.lineTo(point.x*canvas.width,point.y*canvas.height);
+            else
+                context.moveTo(point.x*canvas.width,point.y*canvas.height);
+        }
+        // Break the path when the horizon passes behind the camera.
+        previous = point;
+    }
+    context.stroke();
+    context.font = largeF('Sans',4);
+    context.textAlign = 'center';
+    context.textBaseline = 'bottom';
+    var directions = [_tr('N'),_tr('E'),_tr('S'),_tr('W')];
+    for(var i=0;i<directions.length;i++) {
+        var point = horizonPosition(i*90,camRays,true);
+        if(!point)
+            continue;
+        var label = directions[i];
+        var inset = context.measureText(label).width/2 + 4;
+        var x = Math.max(inset,Math.min(canvas.width-inset,point.x*canvas.width));
+        var y = point.y*canvas.height - 7;
+        if(y >= context.measureText(label).actualBoundingBoxAscent + 4)
+            context.fillText(label,x,y);
+    }
+    context.restore();
+}
+
 function plotLines(camRays)
 {
 	if(!global_show_obj.Ca)
@@ -1398,6 +1490,7 @@ function plotStars()
 		plotCross();
 	}
 	plotLines(camRays);
+    plotHorizon(camRays);
 	plotAltAz(camRays[2]);
 	var passed = Date.now() - start;
 	if(passed > global_expected_frame_rate_ms / 2) {
@@ -2376,6 +2469,7 @@ function setupConfigurableElements()
     configureCheckboxOption('SWL_checked',false,toggleSWL)
     configureCheckboxOption('align_dso_checked',false,(v) => { global_align_on_dso = v; });
     configureCheckboxOption('show_star_names_checked',true,(v) => { global_show_star_names = v; });
+    configureCheckboxOption('show_horizon_checked',true,(v) => { global_show_horizon = v; });
     configureCheckboxOption('P_checked',true,(v) => { global_show_obj.P = v; });
     configureCheckboxOption('Oc_checked',true,(v) => { global_show_obj.Oc = v; });
     configureCheckboxOption('Gc_checked',true,(v) => { global_show_obj.Gc = v; });

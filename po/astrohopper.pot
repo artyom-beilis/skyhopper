@@ -283,3 +283,24 @@ msgstr ""
 #: [49]
 msgid "Font"
 msgstr ""
+
+#: astrohopper.html
+msgid "Show horizon"
+msgstr ""
+
+#. North, east, south and west labels on the horizon.
+#: astrohopper.html
+msgid "N"
+msgstr ""
+
+#: astrohopper.html
+msgid "E"
+msgstr ""
+
+#: astrohopper.html
+msgid "S"
+msgstr ""
+
+#: astrohopper.html
+msgid "W"
+msgstr ""
