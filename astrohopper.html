@@ -1574,24 +1574,25 @@ function gyroListener(event)
 }
 
 function deviceOrientationListener(event) {
-    var alpha;
-    if(Number.isFinite(event.webkitCompassHeading) && event.webkitCompassHeading >= 0 && event.webkitCompassHeading <= 360)
-        alpha = (360 - event.webkitCompassHeading) % 360;
-    else if(event.absolute === true && Number.isFinite(event.alpha) && event.alpha >= 0 && event.alpha < 360)
-        alpha = event.alpha;
-    else
-        return;
+	var heading;
+	var compassHeading = event.webkitCompassHeading;
+	if(Number.isFinite(compassHeading) && compassHeading >= 0 && compassHeading <= 360)
+		heading = (360 - compassHeading) % 360;
+	else if(event.absolute === true && Number.isFinite(event.alpha) && event.alpha >= 0 && event.alpha < 360)
+		heading = event.alpha;
+	else
+		return;
 
-    gdata.compass_alpha = alpha;
-    // Start compass mode only after an actual heading arrives.
-    if(!global_has_compass) {
-        global_has_compass = true;
-        compassMode();
-    }
-    else if(global_use_compass) {
-        gdata.alpha = alpha;
-    }
-    formatValue("ang_c",alpha);
+	gdata.compass_alpha = heading;
+	// Start compass mode only after an actual heading arrives.
+	if(!global_has_compass) {
+		global_has_compass = true;
+		compassMode();
+	}
+	else if(global_use_compass) {
+		gdata.alpha = heading;
+	}
+	formatValue("ang_c",heading);
 }
 
 
@@ -1707,20 +1708,20 @@ function dontPropMouseDown(lst,events_list)
 
 function setupOrientationEvents()
 {
-    if(window.DeviceOrientationEvent && 'ondeviceorientation' in window) {
-        window.addEventListener('deviceorientation',gyroListener);
-        window.addEventListener('deviceorientation',deviceOrientationListener);
-        if('ondeviceorientationabsolute' in window)
-            window.addEventListener('deviceorientationabsolute',deviceOrientationListener);
-        if(!global_has_compass) {
-            noCompass();
-            formatValue('ang_c',null);
-        }
-    }
-    else {
-        unsupported();
-    }
-    setUseGyro(false);
+	if(window.DeviceOrientationEvent && 'ondeviceorientation' in window) {
+		window.addEventListener('deviceorientation',gyroListener);
+		window.addEventListener('deviceorientation',deviceOrientationListener);
+		if('ondeviceorientationabsolute' in window)
+			window.addEventListener('deviceorientationabsolute',deviceOrientationListener);
+		if(!global_has_compass) {
+			noCompass();
+			formatValue('ang_c',null);
+		}
+	}
+	else {
+		unsupported();
+	}
+	setUseGyro(false);
 }
 
 function formatValue(uid,v)
@@ -2158,6 +2159,7 @@ function discardWL()
 
 function requestOrientationPermission()
 {
+	// Request absolute orientation so the browser can provide compass headings.
 	DeviceOrientationEvent.requestPermission(true).then(response => {
 		if (response == 'granted') {
 			document.getElementById("allow_orientation").style.display='none';
