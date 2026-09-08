@@ -207,7 +207,7 @@ input[type=submit] { width:10mm;}
     <iframe id="wiki_iframe" style="width:100%; height:100%"></iframe>
 </div>
 <div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
-<button class="ui_but tr" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
+<button class="ui_but tr" style="height:30mm" onclick="requestOrientationPermission();">Enable Device Orientation</button>
 </div>
 <div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
 <span style="position:absolute; right:1mm; top:1mm">
@@ -444,6 +444,7 @@ var global_expecting_select = null;
 var global_camera_projection = true;
 var global_expected_frame_rate_ms = 66;
 var global_use_compass = false;
+var global_has_compass = false;
 var global_dso_mag = parseInt(document.getElementById('dso_level_val').innerHTML);
 var global_large_font = 0;
 var global_lang = 'en';
@@ -1558,7 +1559,7 @@ function getLocation() {
 
 function gyroListener(event)
 {
-	if(!(event.alpha === null)) {
+	if([event.alpha,event.beta,event.gamma].every(Number.isFinite)) {
 		gdata.alpha_gyro = event.alpha;
 		gdata.beta = event.beta;
 		gdata.gamma = event.gamma;
@@ -1572,30 +1573,25 @@ function gyroListener(event)
 	formatValue("ang_g",event.gamma);
 }
 
-function deviceOrientationListenerIOS(event) {
-	if(!(event.webkitCompassHeading === null)) {
-        var abs_alpha = 360 - event.webkitCompassHeading;
-		if(global_use_compass)
-			gdata.alpha = abs_alpha;
-		gdata.compass_alpha = abs_alpha
-	    formatValue("ang_c",abs_alpha);
-	}
-	else {
-		noCompass();
-	    formatValue("ang_c",null);
-	}
-}
-
 function deviceOrientationListener(event) {
-	if(!(event.alpha === null)) {
-		if(global_use_compass)
-			gdata.alpha = event.alpha;
-		gdata.compass_alpha = event.alpha;
-	}
-	else {
-		noCompass();
-	}
-	formatValue("ang_c",event.alpha);
+    var alpha;
+    if(Number.isFinite(event.webkitCompassHeading) && event.webkitCompassHeading >= 0 && event.webkitCompassHeading <= 360)
+        alpha = (360 - event.webkitCompassHeading) % 360;
+    else if(event.absolute === true && Number.isFinite(event.alpha) && event.alpha >= 0 && event.alpha < 360)
+        alpha = event.alpha;
+    else
+        return;
+
+    gdata.compass_alpha = alpha;
+    // Start compass mode only after an actual heading arrives.
+    if(!global_has_compass) {
+        global_has_compass = true;
+        compassMode();
+    }
+    else if(global_use_compass) {
+        gdata.alpha = alpha;
+    }
+    formatValue("ang_c",alpha);
 }
 
 
@@ -1610,7 +1606,7 @@ function noCompass()
 function manualMode()
 {
 	global_use_compass = false;
-	gdata.alpha_user_offset = gdata.alpha;
+	gdata.alpha_user_offset = Number.isFinite(gdata.alpha) ? gdata.alpha : 0;
 	gdata.alpha = 0;
 	document.getElementById("compass_button").style.display="inline";
 	document.getElementById("hand_button").style.display="none";
@@ -1621,6 +1617,7 @@ function compassMode()
 	global_use_compass = true;
 	gdata.alpha_user_offset = 0;
 	gdata.alpha = gdata.compass_alpha;
+	document.getElementById("nocompass_button").style.display="none";
 	document.getElementById("compass_button").style.display="none";
 	document.getElementById("hand_button").style.display="inline";
 }
@@ -1708,43 +1705,22 @@ function dontPropMouseDown(lst,events_list)
 
 
 
-function setupiOSOrientationEvents()
-{
-	if (window.DeviceOrientationEvent) {
-		if(('ondeviceorientation' in window)) {
-			window.addEventListener("deviceorientation", deviceOrientationListenerIOS);
-			window.addEventListener("deviceorientation",gyroListener);
-			compassMode();
-		}
-		else {
-			unsupported();
-		}
-	} else {
-		unsupported();
-	}
-	setUseGyro(false);
-}
-
-
 function setupOrientationEvents()
 {
-	if (window.DeviceOrientationEvent) {
-		if(('ondeviceorientationabsolute' in window)) {
-			window.addEventListener("deviceorientationabsolute", deviceOrientationListener);
-			window.addEventListener("deviceorientation",gyroListener);
-			compassMode();
-		}
-		else if(('ondeviceorientation' in window)) {
-			window.addEventListener("deviceorientation",gyroListener);
-			noCompass();
-		}
-		else {
-			unsupported();
-		}
-	} else {
-		unsupported();
-	}
-	setUseGyro(false);
+    if(window.DeviceOrientationEvent && 'ondeviceorientation' in window) {
+        window.addEventListener('deviceorientation',gyroListener);
+        window.addEventListener('deviceorientation',deviceOrientationListener);
+        if('ondeviceorientationabsolute' in window)
+            window.addEventListener('deviceorientationabsolute',deviceOrientationListener);
+        if(!global_has_compass) {
+            noCompass();
+            formatValue('ang_c',null);
+        }
+    }
+    else {
+        unsupported();
+    }
+    setUseGyro(false);
 }
 
 function formatValue(uid,v)
@@ -2180,13 +2156,12 @@ function discardWL()
 	toggleEditWL();
 }
 
-function iOSOrientation()
+function requestOrientationPermission()
 {
-	//Notification.requestPermission().then(response => {
-	DeviceOrientationEvent.requestPermission().then(response => {
+	DeviceOrientationEvent.requestPermission(true).then(response => {
 		if (response == 'granted') {
 			document.getElementById("allow_orientation").style.display='none';
-			setupiOSOrientationEvents();
+			setupOrientationEvents();
 		}
 	})
 	.catch(console.error)
@@ -2194,8 +2169,7 @@ function iOSOrientation()
 
 function setupGyros()
 {
-	//if (typeof window.Notification.requestPermission === 'function') {
-	if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+	if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission === 'function') {
 		document.getElementById("allow_orientation").style.display='inline';
 	}
 	else {
