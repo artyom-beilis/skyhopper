@@ -2,6 +2,8 @@
 
 - Fixed bug on some Android browsers Chrome/ Edge etc related to new API  hat is relevant for iPhone only
 
+Fixed https://github.com/artyom-beilis/skyhopper/issues/44
+
 
 2026-01-26: v1.0.22
 
