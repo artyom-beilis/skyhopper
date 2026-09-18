@@ -1,3 +1,10 @@
+
+
+2026-09-18: v1.0.23
+
+- Fixed bug on some Android browsers Chrome/ Edge etc related to new API  hat is relevant for iPhone only
+
+
 2026-01-26: v1.0.22
 
 - And thy children shall return to their own border.

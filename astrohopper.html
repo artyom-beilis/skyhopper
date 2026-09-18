@@ -2192,10 +2192,16 @@ function iOSOrientation()
 	.catch(console.error)
 }
 
+function isiPhone()
+{
+    return /iPhone/.test(navigator.userAgent);
+
+}
+
 function setupGyros()
 {
 	//if (typeof window.Notification.requestPermission === 'function') {
-	if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+	if (typeof window.DeviceOrientationEvent.requestPermission === 'function'  &&  isiPhone( )) {
 		document.getElementById("allow_orientation").style.display='inline';
 	}
 	else {
