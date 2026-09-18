@@ -91,7 +91,7 @@ You can usually update the installed version of AstroHopper by refreshing the pa
 
 -   _I move the telescope but only Altitude is changing. Azimuth is pointing to Polaris/North?_
 
-    Your browser may not support compass heading (for example Firefox) or you don't have such a sensor in the phone. A compass with a line crossing it will be shown.
+    Your browser may not support compass heading or you don't have such a sensor in the phone. A compass with a line crossing it will be shown.
     You can adjust azimuth manually by swiping the screen till you get required azimuth and then align.
 
 -   _I pointed my telescope to a star but the cell phone seems to point to a different direction?_
