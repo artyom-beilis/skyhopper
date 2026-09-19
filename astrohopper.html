@@ -2194,7 +2194,8 @@ function iOSOrientation()
 
 function isiPhone()
 {
-    return /iPhone/.test(navigator.userAgent);
+    const isModerniPad = /Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
+    return /iPhone|iPad/.test(navigator.userAgent) || isModerniPad; 
 
 }
 

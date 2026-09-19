@@ -1,3 +1,7 @@
+2026-09-19: v1.0.24
+
+- Fixed iOS recognition on iPads that prevented AH use with iPadMini
+
 2026-09-18: v1.0.23
 
 - Fixed bug on some Android browsers Chrome/ Edge etc related to new API  hat is relevant for iPhone only
