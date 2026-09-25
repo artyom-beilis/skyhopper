@@ -1,386 +1,808 @@
-<!DOCTYPE>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <title>AstroHopper - Web Application for Sky Navigation</title>
 <link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#04060b">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-</head>
 <style>
-body, td { margin:3mm 0 0 0; font-size: 5mm ; color:red ; font-family: sans; background-color:black }
-a:link {color: red;}
-a:visited { color: red; }
-a:active { color:red; }
-a:hover { color:red; }
-button { border-radius:2mm; height:10mm; font-size:5mm ; text-align:center; vertical-align: middle; background-color:black; color:red; border: 2px solid red }
-.comp_but, .incdec_but { width: 10mm ; height:10mm; font-size:5mm ; padding: 0 }
-.comp_but { float:right }
-.only_tiny { display : none }
-.only_tiny_tr { display : none }
-.only_full { display : inline }
-.only_tiny_b { display : none }
+/* ------------------------------------------------------------------
+   Theme tokens. Day theme is a dim "observatory" palette with a brass
+   accent; night theme is strictly red-on-black to keep dark adaptation.
+   ------------------------------------------------------------------ */
+:root {
+    --bg: #04060b;
+    --glass: rgba(14, 18, 28, 0.66);
+    --glass-strong: rgba(12, 15, 24, 0.9);
+    --sheet: #0b0e16;
+    --fill: rgba(255, 255, 255, 0.045);
+    --fill-2: rgba(255, 255, 255, 0.08);
+    --fill-3: rgba(255, 255, 255, 0.14);
+    --line: rgba(255, 255, 255, 0.08);
+    --line-2: rgba(255, 255, 255, 0.14);
+    --text: #ece8df;
+    --muted: #9097a6;
+    --faint: #5c6270;
+    --accent: #f0b35e;
+    --accent-ink: #1b1204;
+    --accent-soft: rgba(240, 179, 94, 0.14);
+    --accent-line: rgba(240, 179, 94, 0.45);
+    --good: #7fd6ad;
+    --warn: #f0b35e;
+    --knob: #f6f3ec;
+    --scrim: rgba(2, 3, 6, 0.55);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-display: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-l: env(safe-area-inset-left, 0px);
+    --safe-r: env(safe-area-inset-right, 0px);
+    --gap: 12px;
+    --ctl: 44px;
+}
+body.night {
+    --bg: #000;
+    --glass: rgba(14, 0, 0, 0.72);
+    --glass-strong: rgba(10, 0, 0, 0.94);
+    --sheet: #070000;
+    --fill: rgba(255, 45, 30, 0.06);
+    --fill-2: rgba(255, 45, 30, 0.1);
+    --fill-3: rgba(255, 45, 30, 0.18);
+    --line: rgba(255, 45, 30, 0.16);
+    --line-2: rgba(255, 45, 30, 0.28);
+    --text: #ff3b2f;
+    --muted: #b8261c;
+    --faint: #6e140e;
+    --accent: #ff3b2f;
+    --accent-ink: #000;
+    --accent-soft: rgba(255, 59, 47, 0.14);
+    --accent-line: rgba(255, 59, 47, 0.5);
+    --good: #ff3b2f;
+    --warn: #ff3b2f;
+    --knob: #000;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --shadow: none;
+}
+body.compact { --ctl: 36px; --gap: 8px; }
 
-#search_field_main_ok {
-    position:absolute;
-    top:31mm;
-    right:10%;
-    height:10mm;
-    border:0px;
-    margin-left:1mm;
-    display:none;
-    background-color: transparent;
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    overflow: hidden; overscroll-behavior: none;
+    background: var(--bg); color: var(--text);
+    font-family: var(--font); font-size: 15px; line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    -webkit-user-select: none; user-select: none;
+    -webkit-text-size-adjust: 100%;
+}
+input, textarea, select { -webkit-user-select: text; user-select: text; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+a, a:visited { color: var(--accent); }
+[hidden] { display: none !important; }
+
+#myCanvas { position: fixed; left: 0; top: 0; z-index: 0; touch-action: none; display: block; }
+
+.ico { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.ico.sm { width: 18px; height: 18px; }
+.ico.lg { width: 26px; height: 26px; }
+
+.glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: saturate(140%) blur(18px);
+    backdrop-filter: saturate(140%) blur(18px);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
 }
 
-#main_search_button {
-    position:absolute;
-    right:27mm;
-    margin:0;
-    top:3mm;
+.only_tiny { display: none; }
+body.compact .only_full { display: none !important; }
+body.compact .only_tiny { display: inline; }
+
+/* ------------------------------ buttons ------------------------------ */
+.icon-btn {
+    width: var(--ctl); height: var(--ctl); border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0; color: var(--text); flex: none;
+    transition: transform .12s ease, background-color .2s ease;
+}
+.icon-btn:active { transform: scale(0.94); }
+.icon-btn.plain { background: var(--fill); border: 1px solid var(--line); }
+.icon-btn.sm { width: 36px; height: 36px; }
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    height: 40px; padding: 0 16px; border-radius: 12px;
+    background: var(--fill-2); border: 1px solid var(--line); color: var(--text);
+    font-size: 14px; font-weight: 600; white-space: nowrap;
+    transition: transform .12s ease, background-color .2s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.btn.block { width: 100%; }
+.btn:disabled { opacity: .35; pointer-events: none; }
+.mini-btn {
+    height: 30px; padding: 0 12px; border-radius: 9px; border: 1px solid var(--line);
+    background: var(--fill); color: var(--accent); font-size: 13px; font-weight: 600; text-transform: capitalize;
 }
 
-#search_field_main {
-    position:absolute;
-    right:12mm;
-    top:3mm;
-    margin:0;
-    border-radius:2mm;
-    width:15mm;
-    padding-left:1mm;
-    font-size:66%;
+/* ------------------------------ top bar ------------------------------ */
+.topbar {
+    position: fixed; z-index: 2;
+    top: calc(var(--safe-t) + 10px); left: calc(var(--safe-l) + var(--gap)); right: calc(var(--safe-r) + var(--gap));
+    pointer-events: none;
+}
+.topbar > * { pointer-events: none; }
+.topbar .ui { pointer-events: auto; }
+.bar-row { display: flex; align-items: center; gap: 8px; }
+.bar-row + .bar-row { margin-top: 8px; flex-wrap: wrap; row-gap: 6px; }
+.search-pill {
+    flex: 1; min-width: 0; height: var(--ctl); border-radius: calc(var(--ctl) / 2);
+    display: flex; align-items: center; gap: 10px; padding: 0 16px;
+    color: var(--muted); text-align: start; font-size: 15px;
+}
+.search-pill .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.search-pill.has-value .txt { color: var(--text); font-weight: 600; }
+.chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 30px; padding: 0 12px; border-radius: 15px;
+    font-size: 13px; font-weight: 600; white-space: nowrap; color: var(--text);
+}
+.chip:empty { display: none; }
+.chip.warn { color: var(--warn); }
+.status-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); flex: none; transition: background-color .3s; }
+body.aligned .status-chip .dot { background: var(--good); box-shadow: 0 0 0 4px color-mix(in srgb, var(--good) 20%, transparent); }
+body.counting .status-chip { display: none; }
+body.selecting .status-chip { color: var(--accent); border-color: var(--accent-line); }
+body.selecting .status-chip .dot { background: var(--accent); animation: blink 1s ease-in-out infinite; }
+#sensors_chip { display: none; border: 1px solid var(--accent-line); }
+body.needs-sensors #sensors_chip { display: inline-flex; }
+#status { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+#status:empty { display: none; }
+
+.seg { display: none; margin-inline-start: auto; height: 34px; padding: 2px; border-radius: 17px; gap: 2px; }
+.seg.ready { display: inline-flex; }
+.seg button, .seg span {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    height: 28px; min-width: 38px; padding: 0 9px; border-radius: 14px; border: 0;
+    background: transparent; color: var(--muted); font-size: 12px; font-weight: 600;
+}
+.seg .active { background: var(--fill-3); color: var(--text); }
+.seg .ico { width: 17px; height: 17px; }
+.seg button { gap: 5px; }
+.seg #nocompass_button { display: none; }
+.seg.no-compass #compass_button, .seg.no-compass #hand_button { display: none; }
+.seg.no-compass #nocompass_button { display: inline-flex; color: var(--faint); }
+body.compact .seg .lbl { display: none; }
+
+/* ------------------------------ bottom dock ------------------------------ */
+.dock {
+    position: fixed; z-index: 2;
+    left: calc(var(--safe-l) + var(--gap)); right: calc(var(--safe-r) + var(--gap));
+    bottom: calc(var(--safe-b) + var(--gap));
+    display: flex; flex-direction: column; align-items: stretch; gap: 10px;
+    max-width: 560px; margin: 0 auto;
+    pointer-events: none;
+}
+.dock .ui { pointer-events: auto; }
+.hint {
+    align-self: center; max-width: 100%;
+    padding: 8px 14px; border-radius: 14px;
+    font-size: 13px; color: var(--muted); text-align: center;
+    animation: rise .35s ease both;
+}
+.hint:empty { display: none; }
+body.compact .hint { display: none; }
+
+.target-card { display: none; border-radius: 22px; padding: 14px 14px 14px 16px; animation: rise .3s ease both; }
+body.has-target .target-card, body.has-list .target-card { display: block; }
+.tc-head { display: flex; align-items: flex-start; gap: 8px; }
+.tc-titles { flex: 1; min-width: 0; padding-top: 2px; }
+.tc-name { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tc-meta { margin-top: 3px; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tc-meta .sep { opacity: .5; padding: 0 6px; }
+body:not(.has-target) .tc-head, body:not(.has-target) .tc-guide { display: none; }
+body.compact .tc-meta { display: none; }
+
+.tc-guide { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.g { position: relative; border-radius: 16px; padding: 10px 12px; background: var(--fill); border: 1px solid var(--line); transition: background-color .3s, border-color .3s; }
+.g .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.g .v { display: flex; align-items: center; gap: 6px; margin-top: 2px; font-family: var(--font-display); font-size: 30px; font-weight: 650; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.1; }
+.g .v .ico { width: 24px; height: 24px; color: var(--accent); stroke-width: 2.25; transition: transform .25s ease; }
+body.compact .g .v { font-size: 22px; }
+body.on-target .g { background: var(--accent-soft); border-color: var(--accent-line); }
+.on-target-badge { display: none; }
+body.on-target .on-target-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-inline-start: 6px; padding: 1px 8px; border-radius: 10px; vertical-align: 2px;
+    background: var(--accent); color: var(--accent-ink); font-family: var(--font); font-size: 11px; font-weight: 700; letter-spacing: .02em;
 }
 
-#search_field_main:focus {
-    position:absolute;
-    right:10%;
-    left:10%;
-    top:31mm;
-    padding:0;
-    width:80%;
-    font-size:100%;
+.wl-row { display: none; align-items: center; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+body.has-list .wl-row { display: flex; }
+body.has-list:not(.has-target) .wl-row { margin-top: 0; padding-top: 0; border-top: 0; }
+.wl-row .name { flex: 1; min-width: 0; text-align: center; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wl-row .list-title { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+.dock-row { display: flex; align-items: center; gap: 8px; }
+.align-btn {
+    position: relative; height: 54px; padding: 0 20px 0 15px; border-radius: 27px; border: 0;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--accent); color: var(--accent-ink);
+    font-size: 16px; font-weight: 700; letter-spacing: .01em;
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 28%, transparent);
+    transition: transform .12s ease;
+}
+.align-btn:active { transform: scale(0.96); }
+.align-btn .ico { width: 24px; height: 24px; stroke-width: 2; }
+body.selecting .align-btn::after {
+    content: ""; position: absolute; inset: -5px; border-radius: inherit;
+    border: 2px solid var(--accent); animation: pulse 1.4s ease-out infinite;
+}
+body.compact .align-btn { height: 44px; padding: 0 12px; }
+body.night .align-btn { box-shadow: none; }
+.altaz {
+    flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 11px; line-height: 1.45; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap;
+    text-shadow: 0 1px 6px var(--bg);
+}
+.altaz span { display: flex; gap: 6px; }
+.altaz b { color: var(--text); font-weight: 600; min-width: 6ch; text-align: end; }
+.zoom { direction: ltr; display: inline-flex; align-items: center; height: 46px; border-radius: 23px; padding: 0 3px; }
+.zoom button { width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--text); display: inline-flex; align-items: center; justify-content: center; }
+.zoom button:active { background: var(--fill-2); }
+.zoom .fov_val { min-width: 42px; text-align: center; font-size: 14px; font-weight: 650; font-variant-numeric: tabular-nums; }
+
+/* short, wide screens (phone in landscape): keep the map centre clear */
+@media (max-height: 540px) and (min-width: 600px) {
+    .dock { right: auto; width: min(360px, 44vw); margin: 0; gap: 8px; }
+    .target-card { padding: 10px 10px 10px 14px; border-radius: 18px; }
+    .tc-name { font-size: 18px; }
+    .tc-guide { margin-top: 8px; }
+    .g { padding: 6px 10px; border-radius: 12px; }
+    .g .v { font-size: 22px; }
+    .g .v .ico { width: 18px; height: 18px; }
+    .align-btn { height: 46px; }
+    .zoom { height: 42px; }
+    .hint { align-self: flex-start; }
 }
 
-
-.first_line_controls {
-    padding:0;
-    margin:1mm 1mm 1mm 1mm;
+/* ------------------------------ countdown ------------------------------ */
+.countdown-wrap {
+    position: fixed; z-index: 3; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 150px; height: 150px; border-radius: 50%;
+    display: none; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    pointer-events: none;
 }
+body.counting .countdown-wrap { display: flex; animation: pop .25s ease both; }
+.countdown-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.countdown-wrap circle { fill: none; stroke-width: 4; }
+.countdown-wrap .track { stroke: var(--line-2); }
+.countdown-wrap .prog { stroke: var(--accent); stroke-linecap: round; stroke-dasharray: 427; transition: stroke-dashoffset .1s linear; }
+#countdown { font-family: var(--font-display); font-size: 38px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.countdown-wrap .lbl { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .04em; }
 
-.manual_background {
-    background: url(manual-blk.png) no-repeat center center;
-    background-size: 10mm 10mm;
+/* ------------------------------ overlays ------------------------------ */
+.overlay {
+    position: fixed; inset: 0; z-index: 10;
+    background: var(--scrim);
+    opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s;
 }
+.overlay.open { opacity: 1; visibility: visible; transition: opacity .25s ease; }
+.sheet-head { display: flex; align-items: center; gap: 8px; padding: 16px 16px 12px 20px; }
+.sheet-head h2 { flex: 1; margin: 0; font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.sheet-head .sub { display: block; font-family: var(--font); font-size: 12px; font-weight: 500; color: var(--faint); letter-spacing: 0; }
 
-.compass_background {
-    background: url(compass-blk.png) no-repeat center center;
-    background-size: 10mm 10mm;
+/* settings: bottom sheet on phones, side panel on wide screens */
+.settings {
+    position: absolute; left: 0; right: 0; bottom: 0; max-height: 88dvh; max-height: 88vh;
+    display: flex; flex-direction: column;
+    background: var(--sheet); border: 1px solid var(--line); border-bottom: 0;
+    border-radius: 26px 26px 0 0; box-shadow: var(--shadow);
+    transform: translateY(100%); transition: transform .32s cubic-bezier(.2,.8,.2,1);
+    padding-bottom: var(--safe-b);
 }
-
-.wiki_background {
-    background: url(wiki.png) no-repeat center center;
-    background-size: 10mm 10mm;
+.overlay.open .settings { transform: none; }
+.settings::before { content: ""; display: block; width: 38px; height: 5px; border-radius: 3px; background: var(--fill-3); margin: 8px auto 0; }
+.sheet-body { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 4px 16px 24px; }
+@media (min-width: 760px) {
+    .settings { left: auto; top: 12px; right: 12px; bottom: 12px; width: 400px; max-height: none; border-radius: 24px; border-bottom: 1px solid var(--line); transform: translateX(calc(100% + 24px)); }
+    .settings::before { display: none; }
 }
+.group { margin-bottom: 20px; }
+.group > h3 { margin: 0 6px 8px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.card { background: var(--fill); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.item { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 14px; }
+.item + .item, .card > * + .item { border-top: 1px solid var(--line); }
+.item > .lbl { flex: 1; min-width: 0; font-size: 15px; }
+.item > .lbl small { display: block; color: var(--muted); font-size: 12px; }
+.item .val { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+label.item { cursor: pointer; }
 
-.search_background {
-    background: url(search.png) no-repeat center center;
-    background-size: 10mm 10mm;
+.stepper { direction: ltr; display: inline-flex; align-items: center; background: var(--fill-2); border-radius: 12px; }
+.stepper button { width: 40px; height: 36px; border: 0; background: transparent; color: var(--text); display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; }
+.stepper button:active { background: var(--fill-3); }
+.stepper .val { min-width: 58px; text-align: center; color: var(--text); font-weight: 600; font-size: 14px; }
+.stepper .val i { font-style: normal; color: var(--muted); font-weight: 500; }
+
+/* switch built on a real checkbox so all ids / change handlers stay intact */
+.switch input, .chip-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.sw { position: relative; width: 46px; height: 28px; border-radius: 14px; background: var(--fill-3); flex: none; transition: background-color .2s; }
+.sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--knob); opacity: .85; transition: transform .2s cubic-bezier(.2,.8,.2,1); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.switch input:checked + .sw { background: var(--accent); }
+.switch input:checked + .sw::after { transform: translateX(18px); opacity: 1; }
+[dir=rtl] .switch input:checked + .sw::after { transform: translateX(-18px); }
+[dir=rtl] .sw::after { left: auto; right: 3px; }
+.switch input:focus-visible + .sw { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.chip-toggle { position: relative; cursor: pointer; }
+.chip-body {
+    display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 12px;
+    border-radius: 14px; border: 1px solid var(--line); background: transparent; color: var(--muted);
+    font-size: 14px; font-weight: 600; transition: all .2s;
 }
+.chip-body svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.chip-toggle input:checked + .chip-body { background: var(--accent-soft); border-color: var(--accent-line); color: var(--text); }
+.chip-toggle input:checked + .chip-body svg { color: var(--accent); }
 
-.nocompass_background {
-    background: url(nocompass-blk.png) no-repeat center center;
-    background-size: 10mm 10mm;
+select, input[type=number], input[type=text], input[type=search], textarea {
+    background: var(--fill-2); border: 1px solid var(--line); border-radius: 10px; color: var(--text); outline: none;
 }
+select { height: 36px; padding: 0 10px; max-width: 55%; }
+select option { background: var(--sheet); color: var(--text); }
+input[type=number] { height: 40px; width: 100%; padding: 0 12px; font-variant-numeric: tabular-nums; }
+select:focus, input:focus, textarea:focus { border-color: var(--accent-line); }
+textarea { width: 100%; padding: 10px 12px; font-family: var(--font-mono); font-size: 13px; line-height: 1.5; resize: vertical; }
+.editor { padding: 12px 14px 14px; border-top: 1px solid var(--line); }
+.editor .fmt { margin: 0 0 8px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.editor .actions { display: flex; gap: 8px; margin-top: 10px; }
+.errors { font-size: 13px; color: var(--warn); }
+.errors:empty { display: none; }
+.errors ol { margin: 4px 0 0; padding-inline-start: 20px; }
 
-.settings_background {
-    background: url(settings-blk.png) no-repeat center center;
-    background-size: 10mm 10mm;
+.picker { direction: ltr; display: inline-flex; align-items: center; gap: 2px; }
+.picker .cur { min-width: 70px; max-width: 120px; text-align: center; font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.picker button { width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--fill-2); color: var(--text); display: inline-flex; align-items: center; justify-content: center; }
+
+.coords { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 14px 14px; }
+.grid2 label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); font-weight: 600; }
+.sub-head { padding: 12px 14px 4px; font-size: 13px; font-weight: 600; color: var(--muted); border-top: 1px solid var(--line); }
+.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.diag { font-family: var(--font-mono); font-size: 11px; color: var(--faint); line-height: 1.7; padding: 0 6px; }
+.diag span { color: var(--muted); }
+
+/* modal cards: quick start + orientation permission */
+.modal {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -46%) scale(.98);
+    width: min(520px, calc(100% - 28px)); max-height: calc(100% - 40px - var(--safe-t) - var(--safe-b));
+    display: flex; flex-direction: column;
+    background: var(--sheet); border: 1px solid var(--line); border-radius: 26px; box-shadow: var(--shadow);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
 }
-
-
-input[type=text], input[type=text]:focus, textarea, input[type=submit], input[type=number] {
-	border: 2px solid red;
-	color:red;
-	background-color:black;
+.overlay.open .modal { transform: translate(-50%, -50%); }
+.qs-body { overflow-y: auto; padding: 0 20px; }
+.qs-step { display: none; animation: fade .3s ease both; }
+.qs-step.active { display: block; }
+.qs-fig { display: flex; justify-content: center; align-items: center; height: min(30vh, 220px); margin: 0 0 14px; border-radius: 18px; background: #000; border: 1px solid var(--line); overflow: hidden; }
+.qs-fig img { max-height: 92%; max-width: 70%; object-fit: contain; }
+.qs-fig .big-ico { width: 84px; height: 84px; color: var(--accent); stroke-width: 1.25; }
+.qs-step p { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: var(--text); }
+.qs-step p strong, .qs-step p em { color: var(--accent); font-style: normal; font-weight: 700; }
+/* inline "key caps" for the buttons referenced inside translated tutorial text */
+.qs-step button, .qs-step .keycap {
+    display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+    height: 26px; min-width: 26px; padding: 0 9px; margin: 0 2px; border-radius: 8px;
+    border: 1px solid var(--accent-line); background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 700; pointer-events: none;
 }
+.manual_background, .settings_background { padding: 0 !important; width: 30px; }
+.manual_background::before, .settings_background::before { content: ""; width: 16px; height: 16px; background: currentColor; -webkit-mask: var(--mask) center / contain no-repeat; mask: var(--mask) center / contain no-repeat; }
+.manual_background { --mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1a5 5 0 0 1-4.2-2.3L3.6 13a1.5 1.5 0 0 1 2.4-1.8L8 13.5'/%3E%3C/svg%3E"); }
+.settings_background { --mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 7h9M17 7h3M4 17h3M11 17h9'/%3E%3Ccircle cx='15' cy='7' r='2'/%3E%3Ccircle cx='9' cy='17' r='2'/%3E%3C/svg%3E"); }
+.qs-foot { display: flex; align-items: center; gap: 10px; padding: 14px 20px 18px; border-top: 1px solid var(--line); }
+.qs-foot .dots { flex: 1; display: flex; gap: 6px; }
+.qs-foot .dots i { width: 7px; height: 7px; border-radius: 4px; background: var(--fill-3); transition: all .25s; }
+.qs-foot .dots i.on { width: 20px; background: var(--accent); }
+.qs-opt { display: flex; align-items: center; gap: 10px; padding: 0 20px 14px; font-size: 13px; color: var(--muted); }
+.qs-opt .sw { transform: scale(.85); }
 
+.perm { padding: 28px 24px 24px; text-align: center; }
+.perm .big-ico { display: block; margin: 0 auto; width: 56px; height: 56px; color: var(--accent); stroke-width: 1.4; }
+.perm h2 { margin: 12px 0 6px; font-family: var(--font-display); font-size: 22px; }
+.perm p { margin: 0 0 20px; color: var(--muted); }
+.perm .btn { height: 52px; font-size: 16px; }
+.perm .btn.ghost { margin-top: 8px; height: 44px; background: transparent; border-color: transparent; color: var(--muted); font-size: 14px; }
 
-input[type=text], input[type=text]:focus, input[type=submit], input[type=number] {
-	height:10mm;
-	font-size:5mm;
-        padding: 0;
-	vertical-align: middle; background-color:black; 
+/* wiki + manual: large reading panels */
+.panel {
+    position: absolute; inset: calc(var(--safe-t) + 12px) 12px calc(var(--safe-b) + 12px);
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--sheet); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow);
+    transform: translateY(16px); transition: transform .3s cubic-bezier(.2,.8,.2,1);
 }
+.overlay.open .panel { transform: none; }
+#wiki_iframe { flex: 1; width: 100%; border: 0; background: #fff; }
+.manual-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 0 22px 40px; -webkit-user-select: text; user-select: text; }
+.manual_section { max-width: 720px; margin: 0 auto; font-size: 15px; line-height: 1.65; color: var(--text); }
+.manual_section h1 { font-family: var(--font-display); font-size: 28px; line-height: 1.2; margin: 8px 0 16px; }
+.manual_section h2 { font-family: var(--font-display); font-size: 20px; margin: 32px 0 10px; padding-top: 18px; border-top: 1px solid var(--line); }
+.manual_section h3 { font-size: 16px; margin: 22px 0 8px; }
+.manual_section p, .manual_section li { color: var(--text); }
+.manual_section li { margin: 4px 0; }
+.manual_section code { font-family: var(--font-mono); font-size: .88em; padding: 1px 6px; border-radius: 6px; background: var(--fill-2); color: var(--accent); }
+.manual_section pre { background: var(--fill); border: 1px solid var(--line); border-radius: 12px; padding: 12px; overflow-x: auto; }
+.manual_section pre code { background: none; padding: 0; }
+.manual_section .toc { background: var(--fill); border: 1px solid var(--line); border-radius: 16px; padding: 10px 18px; font-size: 14px; }
+.manual_section .toc ul { padding-inline-start: 18px; margin: 4px 0; }
+.manual_section .toc a { text-decoration: none; }
+.manual_section table { border-collapse: collapse; }
+.manual_section td, .manual_section th { border: 1px solid var(--line); padding: 4px 8px; }
 
+/* ------------------------------ search ------------------------------ */
+.search-overlay { background: color-mix(in srgb, var(--bg) 70%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.search-box { position: absolute; top: calc(var(--safe-t) + 10px); left: calc(var(--safe-l) + var(--gap)); right: calc(var(--safe-r) + var(--gap)); max-width: 560px; margin: 0 auto; transform: translateY(-8px); transition: transform .25s ease; }
+.overlay.open .search-box { transform: none; }
+.search-field { display: flex; align-items: center; gap: 10px; height: 50px; padding: 0 6px 0 16px; border-radius: 25px; background: var(--sheet); border: 1px solid var(--accent-line); box-shadow: var(--shadow); color: var(--muted); }
+.search-field input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; font-size: 17px; color: var(--text); outline: none; padding: 0; }
+.search-field input::placeholder { color: var(--faint); }
+.search-field input::-webkit-search-cancel-button { display: none; }
+.results { list-style: none; margin: 10px 0 0; padding: 6px; border-radius: 20px; background: var(--sheet); border: 1px solid var(--line); box-shadow: var(--shadow); max-height: 60vh; overflow-y: auto; }
+.results:empty { display: none; }
+.results li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; cursor: pointer; }
+.results li:active, .results li.sel { background: var(--fill-2); }
+.results .glyph { width: 32px; height: 32px; border-radius: 10px; background: var(--fill); display: inline-flex; align-items: center; justify-content: center; color: var(--accent); flex: none; }
+.results .glyph svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.results .t { flex: 1; min-width: 0; }
+.results .n { font-weight: 650; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.results .m { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.results .empty { justify-content: center; color: var(--muted); font-size: 14px; cursor: default; }
+.search-tip { margin: 12px 6px 0; font-size: 12px; color: var(--faint); text-align: center; }
 
-input[type=submit] { width:10mm;}
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { from { opacity: 0; transform: translate(-50%, -50%) scale(.9); } to { opacity: 1; transform: translate(-50%, -50%); } }
+@keyframes pulse { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.18); } }
+@keyframes blink { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
+</head>
 <body>
-<canvas style="position:absolute; left:0; top:0; z-index:-1"  id="myCanvas" width="640" height="480"> </canvas>
-<div class="only_full">
-    <input id="search_field_main" class="search_field" autocomplete="off" type="text" value="search" onkeyup="mainSearchDoneCheck(event);" oninput="mainSearchFindTarget(this.value);" onfocus="mainSearchFocus();" onclick="mainSearchFocus();" onfocusout="mainSearchOnFocusChange(false);" onfocusin="mainSearchOnFocusChange(true)" />
-    <button class="incdec_but search_background" id="main_search_button" style="display:none; margin-right:1mm;" onclick="reShearchMain();">&nbsp;</button>
-    <button id="search_field_main_ok" ></button>
-</div>
-<p class="first_line_controls" >
-	<span class="only_full"><button class="ui_but tr" onclick="align();">Align</button></span>
-	<span class="only_tiny"><button class="incdec_but" onclick="align();">&#x25ce;</button></span>
-    <span id="countdown"></span>
-    <span class="only_tiny" id="alignment_tiny"></span><span class="only_full" id="alignment"></span> 
-	<button class="comp_but nocompass_background" id="nocompass_button" style="display:none">&nbsp;</button>
-	<button class="comp_but manual_background" id="hand_button" style="display:none;" onclick="manualMode();">&nbsp;</button>
-	<button class="comp_but compass_background" id="compass_button" style="display:none" onclick="compassMode();">&nbsp;</button>
-</p>
-<p class="first_line_controls only_full_b">
-		<button class="incdec_but" onclick="incFOV();">-</button>
-		<button class="incdec_but" onclick="decFOV();">+</button>
-		&angle;<span class="fov_val">60&deg;</span>
-		<button style="display:inline" class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
-</p>
-<p class="only_tiny_b first_line_controls"><button class="comp_but settings_background" onclick="showConfig('inline');">&nbsp;</button>
-</p>
-<p class="first_line_controls" style="display:none" id="wl_ctl"><button  class="incdec_but" onclick="watchListItemUpdate(-1);">&lt;</button> <button class="incdec_but" onclick="watchListItemUpdate(1);">&gt;</button><br/><i><span id="wl_target_name"></span></i></p>
-<p class="first_line_controls" style="display:none" id="show_info">
-    <button  class="incdec_but wiki_background" onclick="showObjectInfo();" >&nbsp;</button>
-</p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.2A7.8 7.8 0 0 1 9.8 4.5a7.8 7.8 0 1 0 9.7 9.7z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2"/><path d="M12 1.5v3.5M12 19v3.5M1.5 12H5M19 12h3.5"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+    <symbol id="i-compass-off" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-1.2 3M9.7 12.3l-1.2 3.2 3.2-1.2M4.5 4.5l15 15"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V6.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1a5 5 0 0 1-4.2-2.3L3.6 13a1.5 1.5 0 0 1 2.4-1.8L8 13.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.5 6l-6 6 6 6"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9.5 6l6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5.5 12h13"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4h-4"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.6.3-1 .8-1 1.5v.6M12 16.9v.1"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10.3 5 7.8 4.5 4 4.5v13c3.8 0 6.3.5 8 2 1.7-1.5 4.2-2 8-2v-13c-3.8 0-6.3.5-8 2zM12 6.5v13"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 1 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/><path d="M3 9c-1 2-1 4 0 6M21 9c1 2 1 4 0 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <!-- map symbol glyphs, drawn like the objects on the sky map -->
+    <symbol id="g-S" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
+    <symbol id="g-P" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M3 14.5c3-1 6-1.8 9-2.5s6-1.5 9-2.5"/></symbol>
+    <symbol id="g-Oc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" stroke-dasharray="1.2 3"/><circle cx="12" cy="12" r="2.5" stroke-dasharray="1.2 3"/></symbol>
+    <symbol id="g-Gc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5" stroke-dasharray="1.2 3"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/></symbol>
+    <symbol id="g-Ne" viewBox="0 0 24 24"><path d="M5 5c14 0 0 14 14 14"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></symbol>
+    <symbol id="g-Ga" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="4" transform="rotate(-45 12 12)"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/></symbol>
+    <symbol id="g-Ca" viewBox="0 0 24 24"><path d="M4 17l6-9 5 5 5-7"/><circle cx="4" cy="17" r="1.5" fill="currentColor"/><circle cx="10" cy="8" r="1.5" fill="currentColor"/><circle cx="15" cy="13" r="1.5" fill="currentColor"/><circle cx="20" cy="6" r="1.5" fill="currentColor"/></symbol>
+    <symbol id="g-U" viewBox="0 0 24 24"><path d="M12 4.5l7.5 7.5-7.5 7.5L4.5 12z"/></symbol>
+</svg>
 
-<p class="first_line_controls tr" id="gps">No Geolocation</p>
+<canvas id="myCanvas" width="640" height="480"></canvas>
+
+<!-- ========================= top bar ========================= -->
+<header class="topbar">
+    <div class="bar-row">
+        <button class="ui glass search-pill" id="search_open" onclick="openSearch();"><svg class="ico"><use href="#i-search"/></svg><span class="txt" id="search_label"></span></button>
+        <button class="ui glass icon-btn" id="night_button" onclick="toggleNightQuick();" title="Night"><svg class="ico"><use href="#i-moon"/></svg></button>
+        <button class="ui glass icon-btn" onclick="showConfig('inline');" title="Settings"><svg class="ico"><use href="#i-sliders"/></svg></button>
+    </div>
+    <div class="bar-row">
+        <span class="glass chip status-chip"><span class="dot"></span><span class="only_full" id="alignment"></span><span class="only_tiny" id="alignment_tiny"></span></span>
+        <span class="glass chip warn tr" id="gps">No Geolocation</span>
+        <span class="glass chip warn" id="orient"></span>
+        <button class="ui glass chip warn" id="sensors_chip" onclick="setOverlay('allow_orientation',true);"><svg class="ico sm"><use href="#i-phone"/></svg><span data-tr="Enable sensors"></span></button>
+        <div class="ui glass seg" id="heading_mode">
+            <button id="compass_button" onclick="if(!global_use_compass) compassMode();" title="Compass"><svg class="ico"><use href="#i-compass"/></svg><span class="lbl" data-tr="Compass"></span></button>
+            <button id="hand_button" onclick="if(global_use_compass) manualMode();" title="Manual"><svg class="ico"><use href="#i-hand"/></svg><span class="lbl" data-tr="Manual"></span></button>
+            <span id="nocompass_button" title="No compass"><svg class="ico"><use href="#i-compass-off"/></svg></span>
+        </div>
+    </div>
+    <p id="status"></p>
+</header>
+
 <div id="object_log" style="display:none">
 <p>Sirius:<span id="Sirius_alt"></span>, <span id="Sirius_az"></span></p>
 <p>Mars:<span id="Mars_alt"></span>, <span id="Mars_az"></span></p>
 <p>Rigel:<span id="Rigel_alt"></span>, <span id="Rigel_az"></span></p>
 <p>Jupiter:<span id="Jupiter_alt"></span>, <span id="Jupiter_az"></span></p>
 </div>
-<p class="first_line_controls" id="orient"></p>
-<p class="first_line_controls" id="status"></p>
-<div class="config_div r2l" id="quick_start" style="display:none; position:absolute; left:10%; top:10%; z-index:4 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ">
-    <span style="position:absolute; right:1mm; top:1mm">
-        <button class="incdec_but" onclick="qsHide()">X</button>
-    </span>
-    <h3 class="tr" style="text-align:center" >Quick Start Guide</h3>
-    <p><input class="dso_selector" id="qs_hide_1" type="checkbox" onchange="showOnStartup(!this.checked,1)" /><label for="qs_hide_1" class="tr" >Don't show on startup</label></p>
-    <div id="qs_1">
-        <p>
-            <button class="ui_but tr" disabled style="color:#800">&lt; Prev</button>
-            <button class="ui_but tr" onclick="qsShowHide(2,1)">Next &gt;</button>
-        
-        </p>
-        <img style="float:right" width="50%" src="images/qs_1_1.png" alt="Setup" />
-        <p class="tr">Connect the smartphone to the optical tube such that its top points to the viewing direction and it lies flat on the tube.</p>
+
+<!-- ========================= alignment countdown ========================= -->
+<div class="glass countdown-wrap" aria-live="polite">
+    <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="68"/><circle class="prog" id="countdown_ring" cx="75" cy="75" r="68"/></svg>
+    <span id="countdown"></span>
+    <span class="lbl" id="countdown_label"></span>
+</div>
+
+<!-- ========================= bottom dock ========================= -->
+<footer class="dock">
+    <div class="glass hint" id="hint"></div>
+    <section class="ui glass target-card" id="target_card">
+        <div class="tc-head">
+            <div class="tc-titles">
+                <div class="tc-name"><span id="tc_name"></span><span class="on-target-badge" id="on_target_badge"></span></div>
+                <div class="tc-meta" id="tc_meta"></div>
+            </div>
+            <button class="icon-btn plain sm" id="show_info" onclick="showObjectInfo();" style="display:none" title="Wikipedia"><svg class="ico sm"><use href="#i-info"/></svg></button>
+            <button class="icon-btn plain sm" onclick="clearTarget();" title="Clear"><svg class="ico sm"><use href="#i-close"/></svg></button>
+        </div>
+        <div class="tc-guide">
+            <div class="g"><div class="k" id="g_v_dir"></div><div class="v"><svg class="ico" id="g_v_arrow"><use href="#i-arrow"/></svg><span id="g_v_val"></span></div></div>
+            <div class="g"><div class="k" id="g_h_dir"></div><div class="v"><svg class="ico" id="g_h_arrow"><use href="#i-arrow"/></svg><span id="g_h_val"></span></div></div>
+        </div>
+        <div class="wl-row" id="wl_ctl">
+            <button class="icon-btn plain sm" onclick="watchListItemUpdate(-1);"><svg class="ico sm"><use href="#i-chev-l"/></svg></button>
+            <div class="name"><span class="list-title" id="wl_list_title"></span><span id="wl_target_name"></span></div>
+            <button class="icon-btn plain sm" onclick="watchListItemUpdate(1);"><svg class="ico sm"><use href="#i-chev-r"/></svg></button>
+        </div>
+    </section>
+    <div class="dock-row">
+        <button class="ui align-btn" onclick="align();"><svg class="ico"><use href="#i-target"/></svg><span class="only_full tr">Align</span></button>
+        <div class="altaz"><span>ALT <b id="hud_alt">&ndash;</b></span><span>AZ <b id="hud_az">&ndash;</b></span></div>
+        <div class="ui glass zoom only_full">
+            <button onclick="incFOV();" title="Zoom out"><svg class="ico sm"><use href="#i-minus"/></svg></button>
+            <span class="fov_val">60&deg;</span>
+            <button onclick="decFOV();" title="Zoom in"><svg class="ico sm"><use href="#i-plus"/></svg></button>
+        </div>
     </div>
-    <div id="qs_2" style="display:none;">
-        <p>
-            <button class="ui_but tr" onclick="qsShowHide(1,2)">&lt; Prev</button>
-            <button class="ui_but tr" onclick="qsShowHide(3,2)">Next &gt;</button>
-        </p>
-        <img style="float:right"  width="50%" src="images/qs_2_1.png" alt="Setup" />
+</footer>
+
+<!-- ========================= search ========================= -->
+<div class="overlay search-overlay" id="search_overlay" onclick="if(event.target===this) closeSearch();">
+    <div class="search-box">
+        <div class="search-field">
+            <svg class="ico"><use href="#i-search"/></svg>
+            <input id="search_field_main" class="search_field" type="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" oninput="onSearchInput(this.value);" onkeydown="onSearchKey(event);" />
+            <button class="icon-btn sm" onclick="closeSearch();" title="Close"><svg class="ico sm"><use href="#i-close"/></svg></button>
+        </div>
+        <ul class="results" id="search_results"></ul>
+        <p class="search-tip" id="search_tip">M31 · NGC 7000 · Vega · Jupiter</p>
+        <span id="find_status" hidden></span>
+    </div>
+</div>
+
+<!-- ========================= quick start ========================= -->
+<div class="overlay" id="quick_start">
+<div class="modal r2l">
+    <div class="sheet-head">
+        <h2 class="tr">Quick Start Guide</h2>
+        <button class="icon-btn plain sm" onclick="qsHide()" title="Close"><svg class="ico sm"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="qs-body">
+        <div class="qs-step" id="qs_1">
+            <div class="qs-fig"><img src="images/qs_1_1.png" alt="Setup" /></div>
+            <p class="tr">Connect the smartphone to the optical tube such that its top points to the viewing direction and it lies flat on the tube.</p>
+        </div>
+        <div class="qs-step" id="qs_2">
+            <div class="qs-fig"><img src="images/qs_2_1.png" alt="Setup" /></div>
         <p class="tr">Point the telescope to an easily identifiable star or planet <strong>nearby</strong> an object you want to find. For example in order to find M41 or M47, point the telescope to Sirius &mdash; this is going to be the <em>alignment star</em>.</p>
         <p class="tr">When the telescope is pointing to the alignment star tap <button class="ui_but">Align</button> button and tap on the alignment star on the map. Once the application is aligned, it tracks the telescope movement using smartphone's sensors.</p>
-    </div>
-    <div id="qs_3" style="display:none;">
-        <p>
-            <button class="ui_but tr" onclick="qsShowHide(2,3)">&lt; Prev</button>
-            <button class="ui_but tr" onclick="qsShowHide(4,3)">Next &gt;</button>
-        </p>
+        </div>
+        <div class="qs-step" id="qs_3">
+            <div class="qs-fig"><svg class="ico big-ico"><use href="#i-hand"/></svg></div>
         <p class="tr">If you can't see the alignment star on the map, there may be a common compass accuracy problem.</p>
         <p class="tr">In such a case tap on <button class="incdec_but manual_background">&nbsp;</button> to switch to manual mode and scroll the map left
            or right till you see the alignment star.</p>
         <p class="tr">Then tap <button class="ui_but">Align</button> and tap on the alignment star on the map as usual.</p>
-    </div>
-    <div id="qs_4" style="display:none;">
-        <p>
-            <button class="ui_but tr" onclick="qsShowHide(3,4)">&lt; Prev</button>
-            <button class="ui_but tr" disabled style="color:#800">Next &gt;</button>
-        </p>
-        <img style="float:right"  width="50%" src="images/qs_3_1.png" alt="Setup" />
+        </div>
+        <div class="qs-step" id="qs_4">
+            <div class="qs-fig"><img src="images/qs_3_1.png" alt="Setup" /></div>
         <p class="tr">Once aligned, tap on the object you want to find (for example M41, M47) and follow the direction line on the map till you reach the target. Now you can observe the object you selected.</p>
         <p class="tr">It is recommended to repeat alignment for each new target you want to find</p>
         <p><span class="tr">For detailed instruction and troubleshooting please refer to the <a href="https://youtu.be/AtArqBLWWJ8">[Video&nbsp;Tutorial]</a>
           and to the integrated manual via:</span> <button class="incdec_but settings_background">&nbsp;</button>&nbsp;&#8594;&nbsp;<button class="incdec_but">?</button>
         </p>
+        </div>
+    </div>
+    <label class="qs-opt switch"><input id="qs_hide_1" type="checkbox" onchange="showOnStartup(!this.checked,1)" /><span class="sw"></span><span class="tr">Don't show on startup</span></label>
+    <div class="qs-foot">
+        <div class="dots" id="qs_dots"><i></i><i></i><i></i><i></i></div>
+        <button class="btn" id="qs_prev" onclick="qsStep(-1)"><span class="tr">&lt; Prev</span></button>
+        <button class="btn primary" id="qs_next" onclick="qsStep(1)"><span class="tr">Next &gt;</span></button>
+        <button class="btn primary" id="qs_done" onclick="qsHide()" hidden><svg class="ico sm"><use href="#i-check"/></svg><span id="qs_done_label"></span></button>
     </div>
 </div>
-<div class="config_div" id="wiki_info" style="display:none; position:absolute; left:5%; top:5%; right:5%; bottom:5%; z-index:3; padding: 1% 1% 1% 1%; background:black; border: 1px solid red ">
-    <span style="position:absolute; right:1mm; top:1mm">
-        <button class="incdec_but" onclick="hideWiki();">X</button>
-    </span>
-    <iframe id="wiki_iframe" style="width:100%; height:100%"></iframe>
-</div>
-<div class="config_div" id="allow_orientation" style="display:none; position:absolute; left:10%; top:10%; z-index:3 ; padding: 1% 1% 1% 1%; width: 78%; background:black; border: 1px solid red ; text-align:center ">
-<button class="ui_but tr" style="height:30mm" onclick="iOSOrientation();">Enable Device Orientation</button>
-</div>
-<div class="config_div" id="config" style="display:none; position:absolute; left:5%; top:5%; z-index:2 ; padding: 1% 1% 1% 1%; width: 88%; background:black; border: 1px solid red ">
-<span style="position:absolute; right:1mm; top:1mm">
-<button class="incdec_but" onclick="showManual(true)">?</button>
-<button class="incdec_but" onclick="showConfig('none');">X</button>
-</span>
-<div class="r2l">
-<p style="text-align:center"><b><span  class="tr">Settings</span> (version)</b></p>
-<p>
-<button class="ui_but" onclick="resetAll();">&#x21bb;</button>
-<input class="dso_selector" id="small_screen" type="checkbox" /><label for="small_screen" class="tr" >Small UI</label> 
-<input class="dso_selector" id="NM_checked" type="checkbox"  /><label for="NM_checked" class="tr">Night</label>
-<input class="dso_selector" id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)"        /><label for="FS_checked" class="tr">Full S.</label>
-</p><p>
-<input class="dso_selector" id="SWL_checked" type="checkbox" onchange="toggleSWL(this.checked)" /><label for="SWL_checked" class="tr">Keep Screen On</label>
-</p>
-<p>
-    <select id="lang_select">
-        <option value="en">English</option>
-        <option value="fr">Français</option>
-        <option value="he">עברית</option>
-        <option value="hu">Magyar</option>
-        <option value="it">Italiano</option>
-        <option value="ru">Русский</option>
-        <option value="uk">Українська</option>
-    </select>
-</p>
-<table>
-<tr class="only_tiny_tr">
-	<td class="tr">FOV</td>
-	<td>
-		<button class="incdec_but" onclick="incFOV();">-</button> <button class="incdec_but" onclick="decFOV();">+</button>
-	</td>
-	<td>
-		&angle;<span class="fov_val">60&deg;</span>
-	</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td class="tr">Stars</td>
-	<td>
-		<button class="incdec_but" onclick="starMagUpdate(-1);">-</button> <button class="incdec_but" onclick="starMagUpdate(1);">+</button>
-	</td>
-	<td>
-		<i>m&leq;</i><span id="mag_val">4</span>
-	</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td class="tr">DSO</td>
-	<td>
-		<button class="incdec_but" onclick="dsoMagUpdate(-1);">-</button> <button class="incdec_but" onclick="dsoMagUpdate(1)">+</button>
-	</td>
-	<td>
-		<i>m&leq;</i><span id="dso_level_val">5</span>
-	</td>
-	<td>&nbsp;</td>
-</tr>
-<tr>
-	<td class="tr">List</td>
-	<td>
-		<button  class="incdec_but" onclick="prevWatchList();">&lt;</button> <button class="incdec_but" onclick="nextWatchList()">&gt;</button>
-	</td>
-	<td class="tr" id="wl_sel">None</td>
-	<td>
-		<a class="tr" id="list_edit_toggle" href="javascript:toggleEditWL()">[edit]</a>
-	</td>
-</tr>
-<tr>
-	<td class="tr">Font</td>
-	<td>
-		<button class="incdec_but" onclick="incDecLF(-1);">-</button> <button class="incdec_but" onclick="incDecLF(1)">+</button>
-	</td>
-	<td>
-		<i>+</i><span id="lf_val">0</span><i>mm</i>
-	</td>
-	<td>&nbsp;</td>
-</tr>
-</table>
-
-<div class='l2r' id="wl_edit" style="display:none;">
-	<p>name: dso1, dso2, dso3, &#x2026;</p>
-	<p>
-	    <textarea id="user_wl" style="width:80%" rows="5"></textarea>
-	</p>
-	<p><button class="ui_but tr" onclick="saveWL();" >Save</button> <button class="ui_but tr" onclick="discardWL();" >Discard</button></p>
-	<p id="wl_errors"></p>
-</div>
-<form onsubmit="return hideSettingIfSelectionOk()" >
-<p> <input id="search_field" type="text" oninput="findTargetByName(this.value)" onclick="this.value='';" onfocus="findTargetByName(this.value)" style="width:30%" /> <input type="submit" value="&#x2315;"/> <b><span style="float:right" id="find_status"><span></b></p>
-</form>
-<table style="width:100%">
-<tr>
-    <td>
-        <input class="dso_selector" id="align_dso_checked"  type="checkbox" /><label for="align_dso_checked" class="tr" >Align on DSO</label>
-    </td>
-    <td>
-        <input class="dso_selector" id="show_star_names_checked"  type="checkbox" checked="checked" onchange="global_show_star_names = this.checked;" /><label for="show_star_names_checked" class="tr" >Star Names</label>
-    </td>
-</tr>
-<tr>
-    <td>
-        <input class="dso_selector" id="Oc_checked" type="checkbox" checked="checked" /><label for="Oc_checked" class="tr">Open Clusters</label>
-    </td>
-    <td>
-        <input class="dso_selector" id="Gc_checked" type="checkbox" checked="checked" /><label for="Gc_checked" class="tr">Glob. Clusters</label>
-    </td>
-</tr>
-<tr>
-    <td>
-        <input class="dso_selector" id="Ne_checked" type="checkbox" checked="checked" /><label for="Ne_checked" class="tr">Nebulae</label>
-    </td>
-    <td>
-        <input class="dso_selector" id="Ga_checked" type="checkbox" checked="checked" /><label for="Ga_checked" class="tr">Galaxies</label>
-    </td>
-</tr>
-<tr>
-    <td>
-        <input class="dso_selector" id="P_checked"  type="checkbox" checked="checked" /><label for="P_checked"  class="tr">Planets</label>
-    </td>
-    <td>
-        <input class="dso_selector" id="Ca_checked" type="checkbox" checked="checked" /><label for="Ca_checked" class="tr">Constellations</label>
-    </td>
-</tr>
-<tr>
-    <td>
-        <input class="dso_selector" id="qs_hide_2" type="checkbox" checked="checked" onchange="showOnStartup(this.checked,2);" /><label for="qs_hide_2" class="tr">Show Tutorial</label>
-    </td>
-    <td>
-        <input class="dso_selector" id="pinch_zoom" type="checkbox" checked="checked" /><label for="pinch_zoom" class="tr">Pinch Zoom</label>
-    </td>
-</tr>
-<tr>
-    <td>
-        &nbsp;
-    </td>
-    <td>
-        <span class="tr">Wiki</span>:
-        <select id="wiki_info_opt">
-            <option value="no" class="tr">Never</option>
-            <option selected value="day" class="tr">Day Only</option>
-            <option value="always" class="tr">Always</option>
-        </select>
-    </td>
-</tr>
-</table>
-<p><input class="dso_selector" id="U_checked" type="checkbox" checked="checked" /><label for="U_checked" class="tr">User Objects</label> <a class="tr" id="edit_user_dso" href="javascript:toggleEditDSO();">[edit]</a></p>
-<div class='l2r' id="dso_edit" style="display:none;">
-<p>Name,RA(hh:mm:ss),DE(±dd:mm:ss)</p>
-<p>
-    <textarea id="user_dso" style="width:80%" rows="5"></textarea>
-</p>
-<p><button class="ui_but tr" onclick="saveUserDSO();" >Save</button> <button class="ui_but tr" onclick="discardUserDSO();" >Discard</button></p>
-<p id="dso_errors"></p>
-</div>
-<hr>
-<div class="l2r">
-    <p><button class="incdec_but" onclick="requestGeolocation();">&#x21bb;</button> GPS: <span id="lat">Unknown</span>, <span id="lon">Unknown</span></p>
-    <p>&#x03B1;=<span id="ang_a"></span> &#x03B2;=<span id="ang_b"></span> &#x03B3;=<span id="ang_g"></span> C=<span id="ang_c"></span> UTC=<span id="utc_time"></span></p>
-</div>
-<table>
-<th><td colspan="2" style="text-align:left" class="tr">GPS Override</td></th>
-<tr><td class="tr">Lat:</td><td><input type="number" min="-90" max=90" value="" id="manual_lat" oninput="updateManualLatLon()"></td></tr>
-<tr><td class="tr">Lon:</td><td><input type="number" min="-180" max=180" value="" id="manual_lon" oninput="updateManualLatLon()"></td></tr>
-</table>
-</div> <!-- RTL div -->
 </div>
 
-<div style="position:absolute; left:0; top:0; z-index:5; width:100%; background:black; display:none;" id="manual">
-<span style="float:right; margin-right: 2mm; margin-top:2mm">
-<button class="incdec_but" onclick="showManual(false);">X</button>
-</span>
+<!-- ========================= wikipedia ========================= -->
+<div class="overlay" id="wiki_info" onclick="if(event.target===this) hideWiki();">
+    <div class="panel">
+        <div class="sheet-head">
+            <h2>Wikipedia</h2>
+            <button class="icon-btn plain sm" onclick="hideWiki();" title="Close"><svg class="ico sm"><use href="#i-close"/></svg></button>
+        </div>
+        <iframe id="wiki_iframe"></iframe>
+    </div>
+</div>
+
+<!-- ========================= iOS motion permission ========================= -->
+<div class="overlay" id="allow_orientation">
+    <div class="modal perm">
+        <svg class="ico big-ico"><use href="#i-phone"/></svg>
+        <h2>AstroHopper</h2>
+        <p id="allow_orientation_text"></p>
+        <button class="btn primary block tr" onclick="iOSOrientation();">Enable Device Orientation</button>
+        <button class="btn block ghost" onclick="dismissOrientationPrompt();" data-tr="Not now"></button>
+    </div>
+</div>
+
+<!-- ========================= settings ========================= -->
+<div class="overlay" id="config" onclick="if(event.target===this) showConfig('none');">
+<aside class="settings r2l">
+    <div class="sheet-head">
+        <h2><span class="tr">Settings</span><span class="sub" id="app_ver"> (version)</span></h2>
+        <button class="icon-btn plain sm" onclick="showManual(true)" title="Manual"><svg class="ico sm"><use href="#i-help"/></svg></button>
+        <button class="icon-btn plain sm" onclick="showConfig('none');" title="Close"><svg class="ico sm"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="sheet-body">
+
+    <section class="group">
+        <h3 data-tr="Map"></h3>
+        <div class="card">
+            <div class="item"><span class="lbl tr">FOV</span>
+                <div class="stepper"><button onclick="incFOV();"><svg class="ico sm"><use href="#i-minus"/></svg></button><span class="val fov_val">60&deg;</span><button onclick="decFOV();"><svg class="ico sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+            <div class="item"><span class="lbl tr">Stars</span>
+                <div class="stepper"><button onclick="starMagUpdate(-1);"><svg class="ico sm"><use href="#i-minus"/></svg></button><span class="val"><i>m&le;</i><span id="mag_val">4</span></span><button onclick="starMagUpdate(1);"><svg class="ico sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+            <div class="item"><span class="lbl tr">DSO</span>
+                <div class="stepper"><button onclick="dsoMagUpdate(-1);"><svg class="ico sm"><use href="#i-minus"/></svg></button><span class="val"><i>m&le;</i><span id="dso_level_val">5</span></span><button onclick="dsoMagUpdate(1)"><svg class="ico sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+            <div class="item"><span class="lbl tr">Font</span>
+                <div class="stepper"><button onclick="incDecLF(-1);"><svg class="ico sm"><use href="#i-minus"/></svg></button><span class="val"><i>+</i><span id="lf_val">0</span><i>mm</i></span><button onclick="incDecLF(1)"><svg class="ico sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+            <label class="item switch"><span class="lbl tr">Star Names</span><input id="show_star_names_checked" type="checkbox" checked="checked" /><span class="sw"></span></label>
+        </div>
+    </section>
+
+    <section class="group">
+        <h3 data-tr="Show on map"></h3>
+        <div class="chips">
+            <label class="chip-toggle"><input id="P_checked" type="checkbox" checked="checked" /><span class="chip-body"><svg><use href="#g-P"/></svg><span class="tr">Planets</span></span></label>
+            <label class="chip-toggle"><input id="Ca_checked" type="checkbox" checked="checked" /><span class="chip-body"><svg><use href="#g-Ca"/></svg><span class="tr">Constellations</span></span></label>
+            <label class="chip-toggle"><input id="Oc_checked" type="checkbox" checked="checked" /><span class="chip-body"><svg><use href="#g-Oc"/></svg><span class="tr">Open Clusters</span></span></label>
+            <label class="chip-toggle"><input id="Gc_checked" type="checkbox" checked="checked" /><span class="chip-body"><svg><use href="#g-Gc"/></svg><span class="tr">Glob. Clusters</span></span></label>
+            <label class="chip-toggle"><input id="Ne_checked" type="checkbox" checked="checked" /><span class="chip-body"><svg><use href="#g-Ne"/></svg><span class="tr">Nebulae</span></span></label>
+            <label class="chip-toggle"><input id="Ga_checked" type="checkbox" checked="checked" /><span class="chip-body"><svg><use href="#g-Ga"/></svg><span class="tr">Galaxies</span></span></label>
+            <label class="chip-toggle"><input id="U_checked" type="checkbox" checked="checked" /><span class="chip-body"><svg><use href="#g-U"/></svg><span class="tr">User Objects</span></span></label>
+        </div>
+    </section>
+
+    <section class="group">
+        <h3 data-tr="Observing"></h3>
+        <div class="card">
+            <label class="item switch"><span class="lbl tr">Align on DSO</span><input id="align_dso_checked" type="checkbox" /><span class="sw"></span></label>
+            <div class="item"><span class="lbl tr">List</span>
+                <div class="picker">
+                    <button onclick="prevWatchList();"><svg class="ico sm"><use href="#i-chev-l"/></svg></button>
+                    <span class="cur tr" id="wl_sel">None</span>
+                    <button onclick="nextWatchList()"><svg class="ico sm"><use href="#i-chev-r"/></svg></button>
+                </div>
+                <button class="mini-btn" id="list_edit_toggle" onclick="toggleEditWL()"></button>
+            </div>
+            <div class="editor l2r" id="wl_edit" style="display:none;">
+                <p class="fmt">name: dso1, dso2, dso3, &#x2026;</p>
+                <textarea id="user_wl" rows="5" placeholder="Winter: M41, M47, M46 (open clusters), M42"></textarea>
+                <div class="actions"><button class="btn primary tr" onclick="saveWL();">Save</button> <button class="btn tr" onclick="discardWL();">Discard</button></div>
+                <p class="errors" id="wl_errors"></p>
+            </div>
+            <div class="item"><span class="lbl tr">User Objects</span>
+                <button class="mini-btn" id="edit_user_dso" onclick="toggleEditDSO();"></button>
+            </div>
+            <div class="editor l2r" id="dso_edit" style="display:none;">
+                <p class="fmt">Name,RA(hh:mm:ss),DE(&plusmn;dd:mm:ss)</p>
+                <textarea id="user_dso" rows="5" placeholder="Comet,05:35:17,-05:23:28"></textarea>
+                <div class="actions"><button class="btn primary tr" onclick="saveUserDSO();">Save</button> <button class="btn tr" onclick="discardUserDSO();">Discard</button></div>
+                <div class="errors" id="dso_errors"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="group">
+        <h3 data-tr="Display"></h3>
+        <div class="card">
+            <label class="item switch"><span class="lbl tr">Night</span><input id="NM_checked" type="checkbox" /><span class="sw"></span></label>
+            <label class="item switch"><span class="lbl tr">Small UI</span><input id="small_screen" type="checkbox" /><span class="sw"></span></label>
+            <label class="item switch"><span class="lbl tr" id="fs_label">Full S.</span><input id="FS_checked" type="checkbox" onchange="toggleFS(this.checked)" /><span class="sw"></span></label>
+            <label class="item switch"><span class="lbl tr">Keep Screen On</span><input id="SWL_checked" type="checkbox" onchange="toggleSWL(this.checked)" /><span class="sw"></span></label>
+            <label class="item switch"><span class="lbl tr">Pinch Zoom</span><input id="pinch_zoom" type="checkbox" checked="checked" /><span class="sw"></span></label>
+            <div class="item"><span class="lbl tr">Wiki</span>
+                <select id="wiki_info_opt">
+                    <option value="no" class="tr">Never</option>
+                    <option selected value="day" class="tr">Day Only</option>
+                    <option value="always" class="tr">Always</option>
+                </select>
+            </div>
+            <div class="item"><span class="lbl" data-tr="Language"></span>
+                <select id="lang_select">
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="he">עברית</option>
+                    <option value="hu">Magyar</option>
+                    <option value="it">Italiano</option>
+                    <option value="ru">Русский</option>
+                    <option value="uk">Українська</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <section class="group">
+        <h3 data-tr="Location"></h3>
+        <div class="card l2r">
+            <div class="item"><svg class="ico sm" style="color:var(--accent)"><use href="#i-pin"/></svg><span class="lbl coords">GPS <span id="lat">Unknown</span>, <span id="lon">Unknown</span></span>
+                <button class="icon-btn plain sm" onclick="requestGeolocation();" title="Refresh"><svg class="ico sm"><use href="#i-refresh"/></svg></button>
+            </div>
+            <div class="sub-head tr">GPS Override</div>
+            <div class="grid2">
+                <label><span class="tr">Lat:</span><input type="number" inputmode="decimal" min="-90" max="90" step="any" value="" id="manual_lat" oninput="updateManualLatLon()" placeholder="-33.87"></label>
+                <label><span class="tr">Lon:</span><input type="number" inputmode="decimal" min="-180" max="180" step="any" value="" id="manual_lon" oninput="updateManualLatLon()" placeholder="151.21"></label>
+            </div>
+        </div>
+    </section>
+
+    <section class="group">
+        <h3 data-tr="Help"></h3>
+        <div class="card" style="margin-bottom:10px">
+            <label class="item switch"><span class="lbl tr">Show Tutorial</span><input id="qs_hide_2" type="checkbox" checked="checked" onchange="showOnStartup(this.checked,2);" /><span class="sw"></span></label>
+        </div>
+        <div class="btn-grid">
+            <button class="btn" onclick="showConfig('none'); qsShow();"><svg class="ico sm"><use href="#i-play"/></svg><span class="tr">Quick Start Guide</span></button>
+            <button class="btn" onclick="showManual(true)"><svg class="ico sm"><use href="#i-book"/></svg><span data-tr="Manual"></span></button>
+        </div>
+        <button class="btn block" style="margin-top:8px" onclick="resetAll(); showConfig('none');"><svg class="ico sm"><use href="#i-reset"/></svg><span data-tr="Reset target and alignment"></span></button>
+    </section>
+
+    <div class="diag l2r">
+        &#x03B1; <span id="ang_a"></span> &nbsp; &#x03B2; <span id="ang_b"></span> &nbsp; &#x03B3; <span id="ang_g"></span> &nbsp; C <span id="ang_c"></span> &nbsp; UTC <span id="utc_time"></span>
+    </div>
+    </div>
+</aside>
+</div>
+
+<!-- ========================= manual ========================= -->
+<div class="overlay" id="manual">
+<div class="panel">
+    <div class="sheet-head">
+        <h2 data-tr="Manual"></h2>
+        <button class="icon-btn plain sm" onclick="showManual(false);" title="Close"><svg class="ico sm"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="manual-body">
 MANUAL
+    </div>
+</div>
 </div>
 
 <script src="vsop87a_combined.js"></script>
@@ -396,13 +818,17 @@ vsop87a_full_velocities = vsop87a_milli_velocities;
 var g_original = null;
 
 var global_day_style = {
-	cross 		: 'blue',
-	constelations 	: 'yellow',
-	bearing 	: 'green',
-	star		: 'white',
-	altaz		: 'red',
-	target		: 'cyan',
-	align		: 'magenta'
+	background	: '#04060b',
+	cross 		: 'rgba(236,232,223,0.85)',
+	constelations 	: 'rgba(118,146,205,0.34)',
+	constelation_names : 'rgba(146,168,220,0.62)',
+	bearing 	: '#f0b35e',
+	star		: '#f4efe6',
+	dso		: '#a9bdf2',
+	label		: 'rgba(236,232,223,0.72)',
+	altaz		: '#9097a6',
+	target		: '#f0b35e',
+	align		: '#6fd6c2'
 };
 
 var global_show_obj = {
@@ -417,13 +843,17 @@ var global_show_obj = {
 };
 
 var global_night_style = {
-	cross 		: 'red',
-	constelations 	: '#880000',
-	bearing 	: 'red',
-	star		: 'red',
-	altaz		: 'red',
-	target		: 'red',
-	align		: '#AA0000'
+	background	: '#000000',
+	cross 		: '#ff3b2f',
+	constelations 	: '#5c0c07',
+	constelation_names : '#8f160e',
+	bearing 	: '#ff3b2f',
+	star		: '#ff3b2f',
+	dso		: '#e0271c',
+	label		: '#c2241a',
+	altaz		: '#b8261c',
+	target		: '#ff5a4e',
+	align		: '#a81b12'
 };
 
 
@@ -471,43 +901,60 @@ var global_status = "";
 
 var global_watchlist = null;
 
-function showManual(v)
+/* ---------------------------------------------------------------------
+ * UI layer: overlays, heads-up display and search. None of this changes
+ * how positions, alignment or sensors are computed.
+ * ------------------------------------------------------------------- */
+
+function setOverlay(id,open)
 {
-	document.getElementById('manual').style.display = v ? 'inline' : 'none';
+	document.getElementById(id).classList.toggle('open',!!open);
 }
 
+function showManual(v)
+{
+	setOverlay('manual',v);
+}
+
+var global_qs_step = 1;
+var global_qs_pending = false;
+var global_qs_steps = 4;
 
 function qsHide()
 {
-    document.getElementById('quick_start').style.display = 'none';
+    setOverlay('quick_start',false);
 }
 
-function qsShowHide(show_id,hide_id)
+function qsShow()
 {
-    document.getElementById('qs_' + hide_id).style.display = 'none';
-    document.getElementById('qs_' + show_id).style.display = 'inline';
+    qsGo(1);
+    setOverlay('quick_start',true);
 }
 
-function setDisplayByClass(cls,value)
+function qsGo(n)
 {
-	var el = document.getElementsByClassName(cls);
-	for(var i=0;i<el.length;i++) {
-		el[i].style.display = value;
-	}
+    global_qs_step = Math.max(1,Math.min(global_qs_steps,n));
+    for(var i=1;i<=global_qs_steps;i++) {
+        document.getElementById('qs_' + i).classList.toggle('active',i == global_qs_step);
+    }
+    var dots = document.getElementById('qs_dots').children;
+    for(var i=0;i<dots.length;i++) {
+        dots[i].classList.toggle('on',i + 1 == global_qs_step);
+    }
+    var last = global_qs_step == global_qs_steps;
+    document.getElementById('qs_prev').disabled = global_qs_step == 1;
+    document.getElementById('qs_next').hidden = last;
+    document.getElementById('qs_done').hidden = !last;
+}
+
+function qsStep(d)
+{
+    qsGo(global_qs_step + d);
 }
 
 function smallScreen(v)
 {
-	var tiny = v ? 'inline' : 'none';
-	var tiny_tr = v ? 'table-row' : 'none';
-	var tiny_b = v ? 'block' : 'none';
-	var full = v ? 'none' : 'inline';
-	var full_b = v ? 'none' : 'block';
-	setDisplayByClass('only_tiny_tr',tiny_tr);
-	setDisplayByClass('only_tiny',tiny);
-	setDisplayByClass('only_tiny_b',tiny_b);
-	setDisplayByClass('only_full',full);
-	setDisplayByClass('only_full_b',full_b);
+	document.body.classList.toggle('compact',!!v);
 }
 
 
@@ -519,13 +966,14 @@ function showStatus(v)
 
 function showConfig(v)
 {
-	document.getElementById('config').style.display = v;
+	setOverlay('config',v != 'none');
 }
 
+var global_canvas_font = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
 
-function largeF(n,s)
+function largeF(n,s,weight)
 {
-    return (s+global_large_font) + "mm " +n;
+    return (weight ? weight + ' ' : '') + (s+global_large_font) + "mm " + global_canvas_font;
 }
 
 function toggleFS(fs)
@@ -554,15 +1002,6 @@ async function toggleSWL(swl) {
 }
 
 
-function hideSettingIfSelectionOk()
-{
-	var value = document.getElementById("search_field").value;
-	if(findTargetByName(value)) {
-		showConfig('none')
-	}
-	return false;
-}
-
 function normalizeName(name)
 {
     name = name.toUpperCase()
@@ -574,56 +1013,263 @@ function normalizeName(name)
     return name;
 }
 
-function reShearchMain()
+// Never called: lists strings used through data-tr attributes and
+// variables so that xgettext (make_dict.sh) extracts them for translators.
+function uiStringsForTranslators()
 {
-    findTargetByName(document.getElementById('search_field_main').value);
+    return [
+        _tr("Map"), _tr("Show on map"), _tr("Observing"), _tr("Display"), _tr("Location"), _tr("Help"),
+        _tr("Manual"), _tr("Compass"), _tr("Language"), _tr("Reset target and alignment"),
+        _tr("Not now"), _tr("Enable sensors"),
+        _tr("Star"), _tr("Planet"), _tr("Open Cluster"), _tr("Globular Cluster"), _tr("Galaxy"),
+        _tr("Nebula"), _tr("User Object"), _tr("Constellation"),
+        _tr("Up"), _tr("Down"), _tr("Left"), _tr("Right")
+    ];
 }
 
-function mainSearchOnFocusChange(val)
+var global_type_names = {
+    'S'  : 'Star',
+    'P'  : 'Planet',
+    'Oc' : 'Open Cluster',
+    'Gc' : 'Globular Cluster',
+    'Ga' : 'Galaxy',
+    'Ne' : 'Nebula',
+    'U'  : 'User Object',
+    'Ca' : 'Constellation'
+};
+
+function objectMeta(st)
 {
-    if(!val) {
-        var isOk = document.getElementById('search_field_main_ok');
-        isOk.style.display = 'none';
-        var el =  document.getElementById('search_field_main');
-        var content = el.value;
-        reShearchMain();
-        if(content.trim()=='') {
-            el.value=_tr("search");
-        }
-    }
-    var but = document.getElementById('main_search_button');
-    if(!val && global_target_index >= 0) {
-        but.style.display='inline';
-    }
-    else {
-        but.style.display='none';
-    }
+    var parts = [_tr(global_type_names[st.t] || st.t)];
+    if(st.AM !== undefined && st.AM != -1)
+        parts.push('m ' + st.AM.toFixed(1));
+    if(st.s)
+        parts.push(formatSize(st.s));
+    return parts;
 }
 
-function mainSearchOnSubmit()
+var global_search_hits = [];
+var global_search_sel = 0;
+
+function openSearch()
+{
+    var el = document.getElementById('search_field_main');
+    el.value = '';
+    renderSearchResults('');
+    setOverlay('search_overlay',true);
+    el.focus();
+}
+
+function closeSearch()
 {
     document.getElementById('search_field_main').blur();
-    return false;
+    setOverlay('search_overlay',false);
 }
 
-function mainSearchDoneCheck(e)
+function onSearchInput(value)
 {
-    if(e.key == "Enter") {
-        mainSearchOnSubmit();
+    // live preview: same lookup the original search box performed on every keystroke
+    findTargetByName(value.trim());
+    renderSearchResults(value.trim());
+}
+
+function onSearchKey(e)
+{
+    if(e.key == 'Enter') {
+        if(global_search_hits.length > 0)
+            pickSearchResult(global_search_sel);
+        else if(global_target_index >= 0)
+            closeSearch();
+    }
+    else if(e.key == 'Escape') {
+        closeSearch();
+    }
+    else if(e.key == 'ArrowDown' || e.key == 'ArrowUp') {
+        if(global_search_hits.length == 0)
+            return;
+        var n = global_search_hits.length;
+        global_search_sel = (global_search_sel + (e.key == 'ArrowDown' ? 1 : -1) + n) % n;
+        var items = document.getElementById('search_results').children;
+        for(var i=0;i<items.length;i++)
+            items[i].classList.toggle('sel',i == global_search_sel);
+        e.preventDefault();
     }
 }
-function mainSearchFindTarget(name)
+
+function pickSearchResult(k)
 {
-    findTargetByName(name.trim());
-    var el = document.getElementById('search_field_main');
-    var isOk = document.getElementById('search_field_main_ok');
-    isOk.style.display = 'inline';
-    isOk.innerHTML= (global_target_index>=0) ? "✓" : "✗";;
+    if(k < 0 || k >= global_search_hits.length)
+        return;
+    selectTarget(global_search_hits[k]);
+    closeSearch();
 }
-function mainSearchFocus()
+
+function findSearchCandidates(query,limit)
 {
-    document.getElementById('search_field_main').value="";
-    event.stopPropagation();
+    var q = normalizeName(query);
+    var names = allstars_index_name.names;
+    var index = allstars_index_name.index;
+    var seen = {};
+    var prefix = [];
+    var inner = [];
+    for(var i=0;i<names.length;i++) {
+        var pos = names[i].indexOf(q);
+        if(pos < 0 || (pos > 0 && q.length < 3))
+            continue;
+        var idx = index[i];
+        if(seen[idx])
+            continue;
+        seen[idx] = true;
+        var hit = { idx: idx, exact: names[i] == q, len: names[i].length };
+        (pos == 0 ? prefix : inner).push(hit);
+    }
+    var order = function(a,b) {
+        if(a.exact != b.exact)
+            return a.exact ? -1 : 1;
+        return a.len - b.len;
+    };
+    prefix.sort(order);
+    inner.sort(order);
+    return prefix.concat(inner).slice(0,limit).map(function(h) { return h.idx; });
+}
+
+function renderSearchResults(query)
+{
+    var ul = document.getElementById('search_results');
+    ul.textContent = '';
+    global_search_hits = [];
+    global_search_sel = 0;
+    document.getElementById('search_tip').hidden = query != '';
+    if(query == '')
+        return;
+    global_search_hits = findSearchCandidates(query,8);
+    if(global_search_hits.length == 0) {
+        var li = document.createElement('li');
+        li.className = 'empty';
+        li.textContent = _tr('No objects found');
+        ul.appendChild(li);
+        return;
+    }
+    global_search_hits.forEach(function(idx,k) {
+        var st = allstars[idx];
+        var li = document.createElement('li');
+        if(k == 0)
+            li.className = 'sel';
+        li.innerHTML = '<span class="glyph"><svg><use href="#g-' + st.t + '"/></svg></span><span class="t"><div class="n"></div><div class="m"></div></span>';
+        li.querySelector('.n').textContent = st.name || '';
+        var meta = objectMeta(st);
+        if(st.n2)
+            meta.push(st.n2.join(', '));
+        li.querySelector('.m').textContent = meta.join(' · ');
+        li.addEventListener('click',function() { pickSearchResult(k); });
+        ul.appendChild(li);
+    });
+}
+
+function capitalize(text)
+{
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function clearTarget()
+{
+    selectTarget(-1);
+}
+
+/* heads-up display: synced from the render loop, touches the DOM only on change */
+var global_hud = { alt: 0, az: 0, v_dir: 'Up', v: 0, h_dir: 'Right', h: 0 };
+var global_hud_cache = {};
+
+function hudText(id,value)
+{
+    if(global_hud_cache[id] !== value) {
+        global_hud_cache[id] = value;
+        document.getElementById(id).textContent = value;
+    }
+}
+
+function hudClass(name,on)
+{
+    var key = 'class:' + name;
+    if(global_hud_cache[key] !== on) {
+        global_hud_cache[key] = on;
+        document.body.classList.toggle(name,on);
+    }
+}
+
+function hudHint(has_target,selecting,counting)
+{
+    if(counting)
+        return '';
+    if(selecting)
+        return _tr('Tap the star your telescope is pointing at');
+    if(!global_use_gyro && !has_target)
+        return _tr('Point the telescope at a bright star, then tap Align');
+    if(global_use_gyro && !has_target)
+        return _tr('Tap an object on the map or search to set a target');
+    return '';
+}
+
+function renderHud()
+{
+    var has_target = global_target_index >= 0 && global_target_index < allstars.length;
+    var selecting = global_expecting_select == selectAlignWithTimer;
+    var cd = document.getElementById('countdown').innerHTML;
+    var counting = cd != '';
+    var has_list = !!(global_watchlist && global_watchlist.current_list >= 0);
+
+    hudClass('has-target',has_target);
+    hudClass('aligned',global_use_gyro);
+    hudClass('selecting',selecting);
+    hudClass('counting',counting);
+    hudClass('has-list',has_list);
+
+    hudText('hud_alt',global_hud.alt.toFixed(1) + '°');
+    hudText('hud_az',global_hud.az.toFixed(1) + '°');
+    hudText('hint',hudHint(has_target,selecting,counting));
+
+    if(counting) {
+        var left = parseFloat(cd) || 0;
+        document.getElementById('countdown_ring').style.strokeDashoffset = (427 * (1 - left / 3)).toFixed(1);
+    }
+
+    var label = document.getElementById('search_label');
+    if(has_target) {
+        var st = allstars[global_target_index];
+        var name = st.name || _tr(global_type_names[st.t] || '');
+        hudText('search_label',name);
+        hudText('tc_name',name);
+        var meta = objectMeta(st);
+        if(st.n2)
+            meta.push(st.n2.join(', '));
+        hudText('tc_meta',meta.join(' · '));
+        hudText('g_v_dir',_tr(global_hud.v_dir));
+        hudText('g_h_dir',_tr(global_hud.h_dir));
+        hudText('g_v_val',global_hud.v.toFixed(1) + '°');
+        hudText('g_h_val',global_hud.h.toFixed(1) + '°');
+        var v_rot = global_hud.v_dir == 'Up' ? 0 : 180;
+        var h_rot = global_hud.h_dir == 'Right' ? 90 : -90;
+        if(global_hud_cache.v_rot !== v_rot) {
+            global_hud_cache.v_rot = v_rot;
+            document.getElementById('g_v_arrow').style.transform = 'rotate(' + v_rot + 'deg)';
+        }
+        if(global_hud_cache.h_rot !== h_rot) {
+            global_hud_cache.h_rot = h_rot;
+            document.getElementById('g_h_arrow').style.transform = 'rotate(' + h_rot + 'deg)';
+        }
+        hudClass('on-target',global_use_gyro && global_hud.v < 0.5 && global_hud.h < 0.5);
+    }
+    else {
+        hudText('search_label',capitalize(_tr('search')));
+        hudClass('on-target',false);
+    }
+    if(global_hud_cache.label_value !== has_target) {
+        global_hud_cache.label_value = has_target;
+        label.parentNode.classList.toggle('has-value',has_target);
+    }
+    if(has_list) {
+        hudText('wl_list_title',global_watchlist.names[global_watchlist.current_list]);
+    }
 }
 
 function findTargetByName(name ='')
@@ -1060,12 +1706,12 @@ function plotStar(star,camRays,highlight)
 		size = 10;
 	}
 	else {
-		color = global_style.star;
+		color = (star.t == 'S' || star.t == 'P') ? global_style.star : global_style.dso;
 	}
 	if(star.t == 'S')
 		context.fillStyle = color;
 	else
-		context.fillStyle = 'black';
+		context.fillStyle = global_style.background;
 	var pix_x = pos.x * canvas.width;
 	var pix_y = pos.y * canvas.height;
 	result = { x: pix_x, y:pix_y , index:-1};
@@ -1128,7 +1774,7 @@ function plotStar(star,camRays,highlight)
 			context.lineTo(pix_x+size,pix_y);
 			context.lineTo(pix_x,pix_y-size);
 			context.lineTo(pix_x-size,pix_y);
-			context.fillStyle = 'black';
+			context.fillStyle = global_style.background;
 			context.fill();
 			context.stroke();
 		}
@@ -1140,12 +1786,15 @@ function plotStar(star,camRays,highlight)
 	}
 	if(star.name || highlight >= 2) {
 		if(star.t == 'Ca') {
-			color = global_style.constelations;
+			color = global_style.constelation_names;
+		}
+		else if(highlight < 2) {
+			color = global_style.label;
 		}
 		context.strokeStyle = color;
 		context.fillStyle = color;
 		if(star.t == 'Ca') {
-			context.font = largeF('Sans',4);
+			context.font = largeF('Sans',3.4,'italic 300');
 			context.textBaseline = 'middle';
 			context.textAlign = 'center';
 			context.fillText(star.name,pix_x,pix_y)
@@ -1157,7 +1806,7 @@ function plotStar(star,camRays,highlight)
 			let text_extra = [];
             let name_extra = [];
 			if(highlight > 1) {
-				context.font = largeF("Sans",6);
+				context.font = largeF("Sans",5,'600');
 				if(highlight == 3) {
 					if(star.AM != -1)
 						text_extra.push("m=" + star.AM.toFixed(1));
@@ -1175,9 +1824,12 @@ function plotStar(star,camRays,highlight)
 			context.textBaseline = 'bottom';
 			context.textAlign = 'start';
 			context.fillText(text,pix_x + size + 1,pix_y - size - 1)
+			if(highlight == 3) {
+				context.font = largeF("Sans",3.5);
+			}
 			if(text_extra) {
 				context.textBaseline = 'top';
-				context.fillText(text_extra.join(', '),pix_x + size + 1,pix_y - size/2 - 1)
+				context.fillText(text_extra.join(', '),pix_x + size + 1,pix_y + 1)
 				context.textBaseline = 'bottom';
 			}
             if(name_extra) {
@@ -1212,33 +1864,40 @@ function plotLines(camRays)
 
 function plotCross()
 {
+	var cx = canvas.width/2;
+	var cy = canvas.height/2;
+	context.save();
+	context.setLineDash([]);
 	context.strokeStyle = global_style.cross;
 	context.fillStyle = global_style.cross;
-	context.lineWidth = 3;
+	context.lineCap = 'round';
+	context.lineWidth = 1.5;
+	context.beginPath();
+	context.arc(cx,cy,14,0,2*Math.PI,false);
 	var dirs = [[1,0],[0,1],[-1,0],[0,-1]];
-	var length = 50;
-	var offset =10;
+	var length = 44;
+	var offset = 22;
 	for(var i=0;i<dirs.length;i++) {
-		context.moveTo(canvas.width/2 + offset*dirs[i][0],canvas.height/2 + offset*dirs[i][1]);
-		context.lineTo(canvas.width/2 + length*dirs[i][0],canvas.height/2 + length*dirs[i][1]);
+		context.moveTo(cx + offset*dirs[i][0],cy + offset*dirs[i][1]);
+		context.lineTo(cx + length*dirs[i][0],cy + length*dirs[i][1]);
 	}
 	context.stroke();
+	context.beginPath();
+	context.arc(cx,cy,1.8,0,2*Math.PI,false);
+	context.fill();
+	context.restore();
 }
 
 function plotBearing(xyz)
 {
-	context.beginPath();
-	context.strokeStyle = global_style.bearing;
-	context.fillStyle = global_style.bearing;
-	context.lineWidth = 5;
-	context.arc(canvas.width/2,canvas.height/2,10,0,2*Math.PI,false);
-	context.moveTo(canvas.width/2,canvas.height/2);
+	var cx = canvas.width/2;
+	var cy = canvas.height/2;
 	var dx = xyz.x;
 	var dy = -xyz.y;
 	var r = 1 / Math.sqrt(dx*dx+dy*dy);
 	dx = dx*r;
 	dy = dy*r;
-	var length = 100;
+	var length = 110;
 	var pos = xyzTo2d(xyz);
 	if(pos) {
 		var px = canvas.width * (pos.x - 0.5); 
@@ -1247,20 +1906,40 @@ function plotBearing(xyz)
 		if(dist < length)
 			length = dist;
 	}
-	context.lineTo(canvas.width/2 + dx * length,canvas.height/2 + dy * length);
-	var updn = (dy > 0 ? 'Down' : 'Up' ) + ' ' + Math.abs(Math.atan2(-xyz.y,xyz.z) / Math.PI * 180).toFixed(1) + '\u00b0';
-	var left = (dx > 0 ? 'Right' : 'Left' ) + ' ' + Math.abs(Math.atan2(xyz.x,xyz.z) / Math.PI * 180).toFixed(1) + '\u00b0';
-	context.stroke();
-	context.lineWidth = 0;
-	context.font = largeF('Serif',6);
+	// direction read-outs are shown in the target card (see renderHud)
+	global_hud.v_dir = dy > 0 ? 'Down' : 'Up';
+	global_hud.v = Math.abs(Math.atan2(-xyz.y,xyz.z) / Math.PI * 180);
+	global_hud.h_dir = dx > 0 ? 'Right' : 'Left';
+	global_hud.h = Math.abs(Math.atan2(xyz.x,xyz.z) / Math.PI * 180);
+
+	var ring = 12;
+	context.save();
+	context.setLineDash([]);
 	context.strokeStyle = global_style.bearing;
 	context.fillStyle = global_style.bearing;
-	context.textBaseline = 'middle';
-	context.textAlign = 'end';
-	context.fillText(updn,canvas.width - 5,canvas.height / 2)
-	context.textAlign = 'center';
-	context.textBaseline = 'bottom';
-	context.fillText(left,canvas.width/2,canvas.height - 5)
+	context.lineCap = 'round';
+	context.lineJoin = 'round';
+	context.lineWidth = 2;
+	context.beginPath();
+	context.arc(cx,cy,ring,0,2*Math.PI,false);
+	context.stroke();
+	if(length > ring + 4) {
+		var ex = cx + dx * length;
+		var ey = cy + dy * length;
+		context.lineWidth = 3;
+		context.beginPath();
+		context.moveTo(cx + dx * ring,cy + dy * ring);
+		context.lineTo(ex,ey);
+		if(length > ring + 20) {
+			var ang = Math.atan2(dy,dx);
+			var head = 11;
+			context.moveTo(ex - head * Math.cos(ang - 0.5),ey - head * Math.sin(ang - 0.5));
+			context.lineTo(ex,ey);
+			context.lineTo(ex - head * Math.cos(ang + 0.5),ey - head * Math.sin(ang + 0.5));
+		}
+		context.stroke();
+	}
+	context.restore();
 }			
 
 
@@ -1327,17 +2006,15 @@ function plotStars()
 {
 	var start=Date.now();
 	
-	if(canvas.width != document.body.clientWidth || canvas.height != document.body.clientHeight) {
-		canvas.width = document.body.clientWidth;
-		canvas.height = document.body.clientHeight;
-	}
+	resizeCanvas();
 	
 	global_targets_list=[];
 	gdata.time = Date.now();
     updateDebugTime(gdata.time);
 	var camRays = getCameraRays();
-	context.fillStyle = "black";
+	context.fillStyle = global_style.background;
 	context.fillRect(0, 0, canvas.width, canvas.height);
+	plotLines(camRays);
 	context.fillStyle = global_style.star;
 
 	for(var i=0;i<allstars.length;i++) {
@@ -1397,8 +2074,13 @@ function plotStars()
 	else if(global_use_gyro) {
 		plotCross();
 	}
-	plotLines(camRays);
 	plotAltAz(camRays[2]);
+	try {
+		renderHud();
+	}
+	catch(err) {
+		console.error(err);
+	}
 	var passed = Date.now() - start;
 	if(passed > global_expected_frame_rate_ms / 2) {
 		setTimeout(plotStars,global_expected_frame_rate_ms);
@@ -1413,17 +2095,32 @@ function plotAltAz(fwd)
 {
 	var alt = Math.asin(fwd[2]) / Math.PI * 180;
 	var az  = Math.atan2(fwd[0],fwd[1]) / Math.PI * 180;
-	alt = 'Alt:' + alt.toFixed(1);
 	if(az < 0)
 		az = 360 + az;
-	az  = 'Az:' + az.toFixed(1);
-	context.font = largeF('Sans',5);
-	context.textBaseline = 'bottom';
-	context.textAlign = 'end';
-	context.fillStyle = global_style.altaz;
-	context.fillText(alt,canvas.width - 5,canvas.height - 5)
-	context.textAlign = 'start';
-	context.fillText(az,5,canvas.height - 5)
+	// shown in the bottom dock (see renderHud)
+	global_hud.alt = alt;
+	global_hud.az = az;
+}
+
+// The canvas is rendered at device-pixel resolution for crisp stars while
+// all drawing code keeps working in CSS pixels through `canvas.width/height`.
+var global_dpr = 1;
+
+function resizeCanvas()
+{
+	var w = document.body.clientWidth;
+	var h = document.body.clientHeight;
+	var dpr = Math.min(window.devicePixelRatio || 1,2);
+	if(canvas.width == w && canvas.height == h && global_dpr == dpr)
+		return;
+	canvas.width = w;
+	canvas.height = h;
+	global_dpr = dpr;
+	canvas_element.width = Math.round(w * dpr);
+	canvas_element.height = Math.round(h * dpr);
+	canvas_element.style.width = w + 'px';
+	canvas_element.style.height = h + 'px';
+	context.setTransform(dpr,0,0,dpr,0,0);
 }
 
 function selectTarget(index)
@@ -1500,21 +2197,21 @@ function showHideInfoIcon()
 {
     var el = document.getElementById('show_info');
     if(isOpenWikiAllowed())
-        el.style.display='block';
+        el.style.display='';
     else
         el.style.display='none';
 }
 
 function hideWiki()
 {
-    document.getElementById('wiki_info').style.display = 'none';
+    setOverlay('wiki_info',false);
     document.getElementById('wiki_iframe').src = '';
 }
 
 function showWiki(url)
 {
     document.getElementById('wiki_iframe').src = url;
-    document.getElementById('wiki_info').style.display = 'inline';
+    setOverlay('wiki_info',true);
 }
 
 function formatLatLon(id,deg,pos,neg)
@@ -1599,12 +2296,19 @@ function deviceOrientationListener(event) {
 }
 
 
+function updateHeadingModeUI(has_compass)
+{
+	var seg = document.getElementById("heading_mode");
+	seg.classList.add("ready");
+	seg.classList.toggle("no-compass",!has_compass);
+	document.getElementById("compass_button").classList.toggle("active",global_use_compass);
+	document.getElementById("hand_button").classList.toggle("active",!global_use_compass);
+}
+
 function noCompass()
 {
 	global_use_compass = false;
-	document.getElementById("nocompass_button").style.display="inline";
-	document.getElementById("compass_button").style.display="none";
-	document.getElementById("hand_button").style.display="none";
+	updateHeadingModeUI(false);
 }
 
 function manualMode()
@@ -1612,8 +2316,7 @@ function manualMode()
 	global_use_compass = false;
 	gdata.alpha_user_offset = gdata.alpha;
 	gdata.alpha = 0;
-	document.getElementById("compass_button").style.display="inline";
-	document.getElementById("hand_button").style.display="none";
+	updateHeadingModeUI(true);
 }
 
 function compassMode()
@@ -1621,8 +2324,7 @@ function compassMode()
 	global_use_compass = true;
 	gdata.alpha_user_offset = 0;
 	gdata.alpha = gdata.compass_alpha;
-	document.getElementById("compass_button").style.display="none";
-	document.getElementById("hand_button").style.display="inline";
+	updateHeadingModeUI(true);
 }
 
 function manualDown(e)
@@ -1836,16 +2538,22 @@ function parseDEC(svalue)
 
 
 
+function editLabel(open)
+{
+	// reuse the existing "[edit]" / "[hide]" translations without the brackets
+	return _tr(open ? "[hide]" : "[edit]").replace(/^\s*\[(.*)\]\s*$/,'$1');
+}
+
 function toggleUI(link_id,ui_id)
 {
 	var ui = document.getElementById(ui_id);
 	if(ui.style.display == "none") {
-		ui.style.display="inline";
-		document.getElementById(link_id).innerHTML = _tr("[hide]");
+		ui.style.display="block";
+		document.getElementById(link_id).textContent = editLabel(true);
 	}
 	else {
 		ui.style.display="none";
-		document.getElementById(link_id).innerHTML = _tr("[edit]");
+		document.getElementById(link_id).textContent = editLabel(false);
 	}
 }
 
@@ -2007,7 +2715,8 @@ function markTarget()
         var item = global_watchlist.lists[global_watchlist.current_list][global_watchlist.current_item];
 		var name = item.name;
         var comment =  item.comment == "" ? "" : " (" + item.comment +")";
-		msgEl.innerHTML = global_target_index == -1 ? ("?" + name + "?") : (name + comment);
+		msgEl.textContent = (global_target_index == -1 ? ("?" + name + "?") : (name + comment))
+			+ "  " + (global_watchlist.current_item + 1) + "/" + global_watchlist.lists[global_watchlist.current_list].length;
 	}
 }	
 
@@ -2017,15 +2726,13 @@ function selectWatchList(index)
 {
 	if(index < 0 || index >= global_watchlist.lists.length) {
 		findTargetByName();
-		document.getElementById("wl_ctl").style.display = 'none';
 		document.getElementById("wl_sel").innerHTML = _tr("None");
 		global_watchlist.current_list = -1;
 		global_watchlist.current_item = -1;
         global_watchlist.current_index = -1;
 	}
 	else {
-		document.getElementById("wl_ctl").style.display = "inline";
-		document.getElementById("wl_sel").innerHTML = global_watchlist.names[index];
+		document.getElementById("wl_sel").textContent = global_watchlist.names[index];
 		global_watchlist.current_list = index;
 		global_watchlist.current_item = 0;
 		findTargetByName(global_watchlist.lists[index][0].name);
@@ -2185,18 +2892,33 @@ function iOSOrientation()
 	//Notification.requestPermission().then(response => {
 	DeviceOrientationEvent.requestPermission().then(response => {
 		if (response == 'granted') {
-			document.getElementById("allow_orientation").style.display='none';
+			setOverlay("allow_orientation",false);
+			document.body.classList.remove("needs-sensors");
 			setupiOSOrientationEvents();
+			if(global_qs_pending) {
+				global_qs_pending = false;
+				setOverlay('quick_start',true);
+			}
 		}
 	})
 	.catch(console.error)
+}
+
+function dismissOrientationPrompt()
+{
+	setOverlay("allow_orientation",false);
+	document.body.classList.add("needs-sensors");
+	if(global_qs_pending) {
+		global_qs_pending = false;
+		setOverlay('quick_start',true);
+	}
 }
 
 function setupGyros()
 {
 	//if (typeof window.Notification.requestPermission === 'function') {
 	if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
-		document.getElementById("allow_orientation").style.display='inline';
+		setOverlay("allow_orientation",true);
 	}
 	else {
 		setupOrientationEvents();
@@ -2206,7 +2928,17 @@ function setupGyros()
 function switchNightMode(is_night)
 {
 	global_style = is_night ? global_night_style : global_day_style;
+	document.body.classList.toggle('night',!!is_night);
+	document.querySelector('meta[name=theme-color]').setAttribute('content',global_style.background);
+	document.querySelector('#night_button use').setAttribute('href',is_night ? '#i-sun' : '#i-moon');
     showHideInfoIcon();
+}
+
+function toggleNightQuick()
+{
+	var cb = document.getElementById('NM_checked');
+	cb.checked = !cb.checked;
+	cb.dispatchEvent(new Event('change'));
 }
 
 
@@ -2335,7 +3067,26 @@ function translateAll()
     var ltr = document.getElementsByClassName('l2r');
     for(var i=0;i<ltr.length;i++)
         ltr[i].dir='ltr';
-    document.getElementById("search_field_main").value = _tr("search");
+    var extra = document.querySelectorAll('[data-tr]');
+    for(var i=0;i<extra.length;i++)
+        extra[i].textContent = _tr(extra[i].getAttribute('data-tr'));
+    document.getElementById("search_field_main").placeholder = capitalize(_tr("search"));
+    document.getElementById("countdown_label").textContent = _tr("Hold steady");
+    document.getElementById("qs_done_label").textContent = _tr("Done");
+    document.getElementById("on_target_badge").textContent = _tr("On target");
+    if(global_expecting_select === null || global_expecting_select == selectTarget)
+        setUseGyro(global_use_gyro);
+    document.getElementById("allow_orientation_text").textContent = _tr("AstroHopper uses the gyroscope and compass to track where your telescope is pointing.");
+    document.getElementById("list_edit_toggle").textContent = editLabel(document.getElementById("wl_edit").style.display != "none");
+    document.getElementById("edit_user_dso").textContent = editLabel(document.getElementById("dso_edit").style.display != "none");
+    var fs_label = document.getElementById("fs_label");
+    if(fs_label.innerHTML == "Full S.")
+        fs_label.textContent = "Full Screen"; // untranslated key is an abbreviation; spell it out
+    var ver = document.getElementById("app_ver");
+    var ver_text = ver.textContent.replace(/[()\s]/g,"");
+    if(/^\d/.test(ver_text))
+        ver.textContent = "v" + ver_text;
+    global_hud_cache = {};
     var mans = document.getElementsByClassName('manual_section');
     for(var i=0;i<mans.length;i++)
         mans[i].style.display = 'none';
@@ -2394,13 +3145,14 @@ function setupConfigurableElements()
 
 setupConfigurableElements();
 translateAll()
+setUseGyro(false);
 setupGyros();
 configSaveMag();
 // global drawing stuff
-var canvas = document.getElementById('myCanvas');
-canvas.width = document.body.clientWidth;
-canvas.height = document.body.clientHeight;
-var context = canvas.getContext('2d');
+var canvas_element = document.getElementById('myCanvas');
+var canvas = { width: 0, height: 0 };
+var context = canvas_element.getContext('2d');
+resizeCanvas();
 loadLatLon();
 setTimeout(getLocation,500)
 setTimeout(plotStars,1000)
@@ -2409,7 +3161,12 @@ loadWL();
 incDecLF(0);
 {
     let qs = getShowOnStartup();
-    document.getElementById('quick_start').style.display = qs ? 'inline' : 'none';
+    qsGo(1);
+    // on iOS ask for motion access first, the tutorial follows once granted
+    if(document.getElementById('allow_orientation').classList.contains('open'))
+        global_qs_pending = qs;
+    else
+        setOverlay('quick_start',qs);
     showOnStartup(qs,-1);
 }
 document.body.addEventListener('click',selectionEvent);
@@ -2417,7 +3174,7 @@ document.body.addEventListener('touchstart',manualDown);
 document.body.addEventListener('touchend',manualUp);
 document.body.addEventListener('touchcancel',manualUp);
 document.body.addEventListener('touchmove',manualMove);
-dontPropMouseDown(["ui_but","incdec_but","config_div","comp_but","search_field"],["click","touchstart","touchend","touchmove","touchcancel"]);
+dontPropMouseDown(["ui","overlay"],["click","touchstart","touchend","touchmove","touchcancel"]);
 global_expecting_select = selectTarget;
 
 window.addEventListener("load", () => {

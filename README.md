@@ -24,16 +24,16 @@ viewing direction.
 
 Before you attach the smartphone, open AstroHopper application and calibrate the compass using "8" like movements.
 The calibration will significantly improve compass direction accuracy.
-But if your compass fails to work properly, press the hand button `✋` to use Manual Mode.
+But if your compass fails to work properly, switch the `Compass | Manual` control at the top right to `✋ Manual`.
 
-When AstroHopper starts, a Quick Start Guide appears.  You can also get help by pressing the gear `⚙` button at upper right and then the `?` button. 
+When AstroHopper starts, a Quick Start Guide appears. You can reopen it, or this manual, from the Settings panel (the sliders button at the top right) under "Help".
 
 
 1. Align your telescope with an easily identifiable star or a planet near the object you want to observe
-2. Tap on `[Align]` button at top left of screen 
-3. Tap on the star or the planet you selected. A 3 sec timer is started to make sure there is no shaking. After 3 seconds the application is aligned on the selected object. "Aligned" message is shown and a cross appears in the center of the screen showing the viewing direction your telescope on the map.
-4. Tap on an object you want to observe or type its name in the search box in the Settings Menu (accessed via the gear `⚙` button). You will see a line showing the direction you need to move the telescope and the changes in altitude and azimuth are shown at the right and bottom part of the screen
-5. Move the telescope till these numbers are close to zero - at this point your telescope should point to the requested object
+2. Tap the `Align` button at the bottom left of the screen
+3. Tap on the star or the planet you selected. A 3 sec countdown ring appears to make sure there is no shaking - hold the telescope steady. After 3 seconds the application is aligned on the selected object. The status chip at the top shows "Aligned" and a reticle appears in the center of the screen showing the viewing direction of your telescope on the map.
+4. Tap on an object you want to observe, or tap the search bar at the top and type its name. An arrow from the center of the map points to the target, and a target card at the bottom shows how far to move the telescope: `Up`/`Down` and `Left`/`Right` in degrees
+5. Move the telescope till both numbers are close to zero - the card shows "On target" when you are within half a degree
 6. In order to move to next object - repeat the alignment process from the step 1 since the built-in cellphone gyros don't keep the accuracy for a long time or multiple movements
 
 Tutorial and Introduction Videos:
@@ -99,8 +99,8 @@ You can usually update the installed version of AstroHopper by refreshing the pa
     The compass of the cell phone may be significantly misaligned you may to do following:
 
     1. Move your cell phone in compass calibration/waving pattern to increase compass accuracy
-    2. Increase application's field of view by pressing `+` at the top left corner near value `∠60°` - default FOV.
-    3. You may switch to manual azimuth mode by pressing "hand" `✋` icon at the right side and adjust the azimuth manually
+    2. Increase application's field of view by pressing `−` on the zoom control at the bottom right (default FOV is `60°`).
+    3. You may switch to manual azimuth mode with the `Compass | Manual` control at the top right and adjust the azimuth manually by swiping the map
 
 -   _The screen becomes dim very fast and I don't have time to align/point the telescope?_
 
@@ -126,57 +126,45 @@ You can usually update the installed version of AstroHopper by refreshing the pa
 
 ## Controls
 
-- Left side, from top to bottom:
+- Top of the screen:
 
-    - Align button and status - pressing on it starts alignment process - you need to select a star or planet you aligning on to.
-    - Field of view - modify with `+`, `-` to adjust 
-    - If watch list is selected `<`,`>` controls for browsing watch list object. Selected object name is shown below
+    - Search bar - tap it and type an object name or code (`M31`, `NGC 7000`, `Vega`, `Jupiter`). Matching objects are listed as you type; tap one or press Enter to select it. When a target is selected its name is shown in the search bar.
+    - Moon/sun button - quick switch between red night mode and day mode
+    - Sliders button - opens the Settings panel
+    - Status chip - `Not Aligned`, `Select Star` (waiting for you to tap the alignment star) or `Aligned`
+    - `Compass | Manual` control - use compass heading or set azimuth manually by swiping the map. A crossed compass means no compass is available and manual mode is used.
+    - Warnings such as "No Geolocation" or, on iOS, "Enable sensors" appear as chips under the search bar
 
-- Right side, from top to bottom, right to left
+- Bottom of the screen:
 
-    - `⚙` - settings button
-    - Object search box, allows to enter object name or code. Once found press Enter on keyboard. Note if you want to do same search once again, press on the "Magnifing Glass" and it would return to the selected object.
-    - `✋` - switch to manual mode, "_compass_" switch to compass mode, "_compass crossed_" - no compass available use manual mode only
-    - `W` - appears when a named object selected - pressing on it opens Wikipedia page about the object, requires network.
+    - Target card - shown when a target is selected. It shows the object name, type, magnitude, size and alternative names, and how far to move the telescope: `Up`/`Down` and `Left`/`Right` in degrees. `ⓘ` opens the Wikipedia page about the object (requires network), `✕` clears the target.
+    - If a watch list is selected, `<` and `>` in the target card browse the list objects. The list name, the current object and its position in the list are shown between them.
+    - `Align` - starts the alignment process - you need to select a star or planet you are aligning on
+    - `ALT`/`AZ` - altitude and azimuth the telescope is currently pointing to
+    - Zoom control - `−` and `+` change the field of view
 
-- Settings Menu (accessed from gear `⚙` icon):
+- Settings panel:
 
-    - `↻` button - reset alignment and target
-    - Small UI Mode - optimize for small screen: make buttons smaller, move field of view controls to settings menu
-    - Full Screen - switch application to full screen
-    - Night Mode - enable or disable red-night mode screen
-    - In "Small Screen Mode" only: Field of view - modify with `+`, `-` to adjust 
-    - Maximum star magnitude to display/align on - adjust with `+`, `-` controls
-    - Maximum apparent magnitude of DSO objects to be displayed - modify with `+`, `-` controls
-    - Font size increase option to allow bigger fonts if needed
-    - Watch List selection and editing 
-    - Search target by name field
-    - Allow alignment using any DSO object. Use with care since it is hard to define a center of big DSO object like open cluster.
-    - Filtering of the Astronomical objects by type
-    - Enable/Disable pinch zoom
-    - Wiki information configuration
-    - Show quick-start tutorial on startup 
-    - User Added Objects List
-    - Status of geolocation and reload geolocation button
-    - Sensors information
+    - Map: field of view, maximum star magnitude, maximum DSO magnitude, font size increase and star names
+    - Show on map: filter objects by type - planets, constellations, open clusters, globular clusters, nebulae, galaxies and user objects
+    - Observing: allow alignment on any DSO (use with care since it is hard to define a center of a big DSO like an open cluster), watch list selection and editing, user objects editing
+    - Display: night mode, small UI mode, full screen, keep screen on, pinch zoom, Wikipedia info and language
+    - Location: geolocation status with a refresh button, and manual latitude/longitude override
+    - Help: show the tutorial on startup, open the Quick Start Guide or this manual, and reset target and alignment
+    - Sensor readings are shown at the bottom of the panel
 
 
 ## Controls in Small Screen Mode
 
-On screen controls:
+"Small UI" in the Settings panel makes all controls smaller and hides the text labels:
 
-- Left Top: `◎` - Align button with status: `✓` - aligned, `✗` - not aligned, `?` - select alignment star
-- If watch list is selected, on the left `<`,`>` controls for browsing watch list object. Selected object name is shown below
-- Right:
-
-    - Manual `✋` or "_compass_" mode
-    - Settings Menu: `⚙`
-
-- Left `W` - appears when a named object selected - pressing on it opens Wikipedia page about the object, requires network
+- `Align` becomes a round `◎` button and the status chip shows `✓` - aligned, `✗` - not aligned, `?` - select alignment star
+- The zoom control is hidden; change the field of view in the Settings panel
+- Hints and object details in the target card are hidden
 
 ## Wikipedia Page Info
 
-When `W` button appears you can tap on it and open a frame with Wikipedia page about the selected object.
+When the `ⓘ` button appears in the target card you can tap on it and open a panel with the Wikipedia page about the selected object.
 
 _Note:_ But be careful - the app has no control over style of the page and by default it would be black text over white page. It is something not desirable for night vision. To improve this, you can tweak your browser settings or use a specific browser extension such as [Dark Reader](https://darkreader.org), however white text or bright images may still disturb your night vision.
 
@@ -185,7 +173,7 @@ Thus by default the Wiki page info support is disabled in Night mode. You can ch
 ## Watch List
 
 A user can create a custom watch list in advance to browse them easily during the night.
-There is `List` option in "Settings" menu.  It has  `[edit]` control to open watch list editing tool.
+There is a `List` option in the "Observing" section of the Settings panel. It has an `Edit` button to open the watch list editing tool.
 
 A watch list is defined by a simple list of object names separated by space, new lines or commas. 
 For example below the "default" list:
@@ -204,13 +192,13 @@ It is possible to add user comment between `(` and `)` to explain the object id.
 
 _Note:_ if you adding a comment or use a name that contains spaces you need to add a comma `,` as a separator
 
-Lists can be selected by pressing `<` and `>` buttons in "Lists" control. When the list is selected two buttons `<` and `>` are shown in main screen under "Align" button. They allow browsing the objects forward and backward. The current selected object's name is shown under the controls.
+Lists can be selected by pressing `<` and `>` buttons in the "List" control. When a list is selected, `<` and `>` buttons are shown in the target card at the bottom of the main screen. They allow browsing the objects forward and backward. The list name, the currently selected object and its position in the list are shown between them.
 
 The watch lists are stored at your phone on per domain basis. They are kept even when you reopen the app. 
 
 ## User Objects
 
-This application does not contain every possible star or DSO. If you want to access objects that are not listed in the database you can add them via "User Objects" in settings menu.
+This application does not contain every possible star or DSO. If you want to access objects that are not listed in the database you can add them via "User Objects" in the "Observing" section of the Settings panel.
 
 User object are defined in CSV format when first column contains object name, second right ascension (RA) and the third the declination (DEC).
 Both RA and DEC can be given as decimal degrees (0-360 for RA and -90 +90 for DEC) or in hour/degree with minutes and seconds. Seconds may be omitted. Fields can be separated by spaces, by ":" or by appropriate symbols like "h", "m", "s", "d". For example 
