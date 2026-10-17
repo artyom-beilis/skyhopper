@@ -120,7 +120,7 @@ def main():
         filename = os.path.basename(man)
         # Remove the prefix and extension
         lang = filename.replace('README_', '').replace('.md', '')
-        if len(lang) < 2 or len(lang) > 3:
+        if not re.fullmatch(r'[a-z]{2,3}(?:_[A-Z]{2})?', lang):
             continue
         print("  Manual for ",lang)
         manuals[lang] = make_manual(lang)

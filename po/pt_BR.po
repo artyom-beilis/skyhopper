@@ -1,0 +1,293 @@
+# AstroHopper Brazilian Portuguese translation
+# Copyright (C) 2026 AstroHopper contributors
+# This file is distributed under the same license as the AstroHopper package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: AstroHopper\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-23 20:53+0300\n"
+"PO-Revision-Date: 2026-10-16 00:00-0400\n"
+"Last-Translator: \n"
+"Language-Team: Brazilian Portuguese\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: astrohopper.html:587 astrohopper.html:2334
+msgid "search"
+msgstr "Pesquisar"
+
+#: astrohopper.html:715
+msgid "Aligned"
+msgstr "Alinhado"
+
+#: astrohopper.html:715
+msgid "Not Aligned"
+msgstr "Não alinhado"
+
+#: astrohopper.html:747
+msgid "Select Star"
+msgstr "Selecionar estrela"
+
+#: astrohopper.html:1564
+msgid "No Gyro"
+msgstr "Sem giroscópio"
+
+#: astrohopper.html:1840
+msgid "[hide]"
+msgstr "[ocultar]"
+
+#: astrohopper.html:1844 [9]
+msgid "[edit]"
+msgstr "[editar]"
+
+#: astrohopper.html:2017 [21]
+msgid "None"
+msgstr "Nenhum"
+
+#: astrohopper.html:2327
+msgid "LTR"
+msgstr "LTR"
+
+#: [0]
+msgid ""
+"Connect the smartphone to the optical tube such that its top points to the "
+"viewing direction and it lies flat on the tube."
+msgstr ""
+"Conecte o smartphone ao tubo óptico de modo que a parte superior aponte na "
+"direção de observação e que o aparelho fique apoiado horizontalmente sobre o tubo."
+
+#: [1]
+msgid "Settings"
+msgstr "Configurações"
+
+#: [2]
+msgid ""
+"Then tap <button class=\"ui_but\">Align</button> and tap on the alignment "
+"star on the map as usual."
+msgstr ""
+"Em seguida, toque em <button class=\"ui_but\">Alinhar</button> e toque na "
+"estrela de alinhamento no mapa, como de costume."
+
+#: [3]
+msgid "Show Tutorial"
+msgstr "Mostrar tutorial"
+
+#: [4]
+msgid "Quick Start Guide"
+msgstr "Guia de início rápido"
+
+#: [5]
+msgid "Next &gt;"
+msgstr "Próximo &gt;"
+
+#: [6]
+msgid "No Geolocation"
+msgstr "Sem geolocalização"
+
+#: [7]
+msgid "Stars"
+msgstr "Estrelas"
+
+#: [8]
+msgid "Save"
+msgstr "Salvar"
+
+#: [10]
+msgid "Small UI"
+msgstr "UI compacta"
+
+#: [11]
+msgid "GPS Override"
+msgstr "Substituir GPS"
+
+#: [12]
+msgid "Bring them home now!"
+msgstr "Traga-os para casa agora!"
+
+#: [13]
+msgid "Never"
+msgstr "Nunca"
+
+#: [14]
+msgid ""
+"Point the telescope to an easily identifiable star or planet <strong>nearby</"
+"strong> an object you want to find. For example in order to find M41 or M47, "
+"point the telescope to Sirius — this is going to be the <em>alignment star</"
+"em>."
+msgstr ""
+"Aponte o telescópio para uma estrela ou planeta facilmente identificável "
+"<strong>próximo</strong> ao objeto que deseja localizar. Por exemplo, para "
+"localizar M41 ou M47, aponte o telescópio para Sírius — ela será a <em>estrela "
+"de alinhamento</em>."
+
+#: [15]
+msgid "Enable Device Orientation"
+msgstr "Ativar orientação do dispositivo"
+
+#: [16]
+msgid "Planets"
+msgstr "Planetas"
+
+#: [17]
+msgid "Don't show on startup"
+msgstr "Não mostrar ao iniciar"
+
+#: [18]
+msgid ""
+"When the telescope is pointing to the alignment star tap <button "
+"class=\"ui_but\">Align</button> button and tap on the alignment star on the "
+"map. Once the application is aligned, it tracks the telescope movement using "
+"smartphone's sensors."
+msgstr ""
+"Quando o telescópio estiver apontado para a estrela de alinhamento, toque no "
+"botão <button class=\"ui_but\">Alinhar</button> e, em seguida, na estrela de "
+"alinhamento no mapa. Após o alinhamento, o aplicativo acompanha o movimento "
+"do telescópio usando os sensores do smartphone."
+
+#: [19]
+msgid "Galaxies"
+msgstr "Galáxias"
+
+#: [20]
+msgid "Lon:"
+msgstr "Long.:"
+
+#: [22]
+msgid ""
+"For detailed instruction and troubleshooting please refer to the <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[Video&nbsp;Tutorial]</a>\n"
+"          and to the integrated manual via:"
+msgstr ""
+"Para instruções detalhadas e solução de problemas, consulte o <a "
+"href=\"https://youtu.be/AtArqBLWWJ8\">[tutorial&nbsp;em&nbsp;vídeo]</a>\n"
+"          e o manual integrado, acessível por:"
+
+#: [23]
+msgid "Full S."
+msgstr "Tela cheia"
+
+#: [24]
+msgid "Night"
+msgstr "Noturno"
+
+#: [25]
+msgid "DSO"
+msgstr "DSO"
+
+#: [26]
+msgid "Star Names"
+msgstr "Nomes das estrelas"
+
+#: [27]
+msgid ""
+"If you can't see the alignment star on the map, there may be a common "
+"compass accuracy problem."
+msgstr ""
+"Se a estrela de alinhamento não aparecer no mapa, pode haver um problema de "
+"precisão da bússola."
+
+#: [28]
+msgid "Open Clusters"
+msgstr "Aglomerados abertos"
+
+#: [29]
+msgid "Nebulae"
+msgstr "Nebulosas"
+
+#: [30]
+msgid "Wiki"
+msgstr "Wiki"
+
+#: [31]
+msgid "Align on DSO"
+msgstr "Alinhar em DSO"
+
+#: [32]
+msgid "Glob. Clusters"
+msgstr "Aglom. glob."
+
+#: [33]
+msgid "Always"
+msgstr "Sempre"
+
+#: [34]
+msgid ""
+"Once aligned, tap on the object you want to find (for example M41, M47) and "
+"follow the direction line on the map till you reach the target. Now you can "
+"observe the object you selected."
+msgstr ""
+"Após alinhar, toque no objeto que deseja localizar (por exemplo, M41 ou M47) "
+"e siga a linha de direção no mapa até chegar ao alvo. Agora você pode observar "
+"o objeto selecionado."
+
+#: [35]
+msgid "Constellations"
+msgstr "Constelações"
+
+#: [36]
+msgid "Day Only"
+msgstr "Somente de dia"
+
+#: [37]
+msgid "FOV"
+msgstr "FOV"
+
+#: [38]
+msgid "Keep Screen On"
+msgstr "Manter tela ligada"
+
+#: [39]
+msgid ""
+"It is recommended to repeat alignment for each new target you want to find"
+msgstr ""
+"Recomenda-se repetir o alinhamento para cada novo alvo que deseja localizar."
+
+#: [40]
+msgid "Align"
+msgstr "Alinhar"
+
+#: [41]
+msgid ""
+"In such a case tap on <button class=\"incdec_but manual_background\">&nbsp;</"
+"button> to switch to manual mode and scroll the map left\n"
+"           or right till you see the alignment star."
+msgstr ""
+"Nesse caso, toque em <button class=\"incdec_but manual_background\">&nbsp;</"
+"button> para mudar para o modo manual e deslize o mapa para a esquerda\n"
+"           ou para a direita até ver a estrela de alinhamento."
+
+#: [42]
+msgid "Lat:"
+msgstr "Lat.:"
+
+#: [43]
+msgid "Pinch Zoom"
+msgstr "Zoom de pinça"
+
+#: [44]
+msgid "Stand with Israel against terror!"
+msgstr "Apoie Israel contra o terrorismo!"
+
+#: [45]
+msgid "List"
+msgstr "Lista"
+
+#: [46]
+msgid "Discard"
+msgstr "Descartar"
+
+#: [47]
+msgid "&lt; Prev"
+msgstr "&lt; Anterior"
+
+#: [48]
+msgid "User Objects"
+msgstr "Objetos do usuário"
+
+#: [49]
+msgid "Font"
+msgstr "Fonte"
