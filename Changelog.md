@@ -1,3 +1,7 @@
+2026-10-21: v1.0.25
+
+- Added  Brazilian Portuguese translation by  Pablo Diasvieira
+ 
 2026-09-19: v1.0.24
 
 - Fixed iOS recognition on iPads that prevented AH use with iPadMini
